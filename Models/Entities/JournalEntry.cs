@@ -1,0 +1,36 @@
+using System;
+using System.ComponentModel.DataAnnotations;
+
+namespace AribONE.Models.Entities;
+
+public class JournalEntry
+{
+    public Guid Id { get; set; }
+
+    public DateTime CreatedAt { get; set; }
+
+    public Guid AccountId { get; set; }
+    public Account Account { get; set; }
+
+    public Guid? CustomerId { get; set; }
+    public Customer? Customer { get; set; }
+
+    public decimal Debit { get; set; }
+
+    public decimal Credit { get; set; }
+
+    public decimal Balance { get; set; }
+
+    [Required] public Dealing Dealing { get; set; }
+
+    public Guid RegNum { get; set; }
+
+    public bool Active { get; set; } = true;
+
+    public bool IsDeleted { get; set; }
+
+    [MaxLength(50)] public string Ship { get; set; } = string.Empty;
+
+    public Guid BranchId { get; set; }
+    public Branch Branch { get; set; }
+}
