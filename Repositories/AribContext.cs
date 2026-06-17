@@ -1,4 +1,5 @@
 using System;
+using AribONE.Interceptors;
 using AribONE.Models;
 using AribONE.Models.Entities;
 using Microsoft.EntityFrameworkCore;
@@ -28,6 +29,15 @@ public class AribContext : DbContext
     /// instead and never touch it. Keeps this UI-free library independent of the app.
     /// </summary>
     public static Func<string>? ConnectionStringProvider { get; set; }
+
+    /// <summary>
+    /// Supplies the active branch id for the <see cref="BranchIdInterceptor"/>. The
+    /// desktop app sets this to <c>() =&gt; Preference.Instance.Branch?.Id ?? Guid.Empty</c>
+    /// at startup (Branch is null until login / first-run company setup completes, so the
+    /// null-coalesce makes the interceptor skip stamping rather than throw). When the
+    /// provider itself is null (gateway, design-time) the interceptor is a no-op.
+    /// </summary>
+    public static Func<Guid>? BranchIdProvider { get; set; }
 
     // Entities
     public DbSet<Group> Groups { get; set; }
@@ -105,6 +115,7 @@ public class AribContext : DbContext
                          "The host must assign it once at startup before any " +
                          "parameterless new AribContext() is used.");
             options.UseSqlServer(cs);
+            options.AddInterceptors(new BranchIdInterceptor());
 #if DEBUG
             options.EnableSensitiveDataLogging();
 #endif
