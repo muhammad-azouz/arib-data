@@ -26,6 +26,11 @@ public static class SyncScope
     /// <summary>Bumped on every schema change that touches a synced table.
     /// The gateway refuses clients whose version differs (D11) so an outdated
     /// branch can never write an old shape into central.
+    /// Enforcement is deliberately EXACT equality (no backward-compatibility band):
+    /// a tolerance window (C2 / MinSupportedSchemaVersion) was considered and
+    /// intentionally deferred — it is only safe once migrations within the band are
+    /// guaranteed additive, which we don't commit to yet. Until then a version bump
+    /// is a fleet-wide flag day and a stale branch is told to update (HTTP 426).
     /// v2: gave the warehouse/order-scoped tables their own BranchId column so
     /// every synced row is pinned to the token's branch (no more join filters).</summary>
     public const int SchemaVersion = 2;
