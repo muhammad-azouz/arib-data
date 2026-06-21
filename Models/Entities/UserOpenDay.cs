@@ -10,7 +10,7 @@ public class UserOpenDay
 
     public DateTime Dt { get; set; }
 
-    [StringLength(50)] public string Name { get; set; }
+    [StringLength(50)] public required string Name { get; set; }
 
     public int DayIndex { get; set; }
 
@@ -34,5 +34,5 @@ public class UserOpenDay
 
     public bool IsFound { get; set; }
 
-    [Column(TypeName = "text")] public string Note { get; set; }
+    [Column(TypeName = "text")] public required string Note { get; set; }
 }

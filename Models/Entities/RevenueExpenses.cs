@@ -17,7 +17,7 @@ public class RevenueExpenses
     public string? Note { get; set; }
 
     public Guid AccountId { get; set; }
-    public Account Account { get; set; }
+    public Account Account { get; set; } = null!;
 
     public Guid? TreasuryId { get; set; }
     public Treasury? Treasury { get; set; }
@@ -29,7 +29,7 @@ public class RevenueExpenses
     public EWallet? Ewallet { get; set; }
 
     public Guid UserId { get; set; }
-    public User User { get; set; }
+    public User User { get; set; } = null!;
 
     public decimal Value { get; set; }
     public decimal Total { get; set; }
@@ -39,11 +39,11 @@ public class RevenueExpenses
     public int? WorkId { get; set; }
 
     public Guid CurrencyId { get; set; }
-    public Currency Currency { get; set; }
+    public Currency Currency { get; set; } = null!;
     public decimal CurrencyVal { get; set; }
 
     public PaymentMethod PaymentMethod { get; set; }
 
     public Guid BranchId { get; set; }
-    public Branch Branch { get; set; }
+    public Branch Branch { get; set; } = null!;
 }

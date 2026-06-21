@@ -10,7 +10,7 @@ public class Warehouse
 
     public int Num { get; set; }
 
-    [Required] public string Name { get; set; }
+    [Required] public required string Name { get; set; }
 
     public bool IsActive { get; set; }
 
@@ -21,8 +21,8 @@ public class Warehouse
     public string? Phone { get; set; }
 
     public Guid BranchId { get; set; }
-    public virtual Branch Branch { get; set; }
+    public virtual Branch Branch { get; set; } = null!;
 
-    public ICollection<Product> Products { get; set; }
-    public ICollection<WarehouseProductInventory> WarehouseProductInventories { get; set; }
+    public ICollection<Product> Products { get; set; } = null!;
+    public ICollection<WarehouseProductInventory> WarehouseProductInventories { get; set; } = null!;
 }

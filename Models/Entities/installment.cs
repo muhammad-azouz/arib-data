@@ -29,7 +29,7 @@ public class Installment
 
     public DateTime? ReceivedDt { get; set; }
 
-    [StringLength(250)] public string Note { get; set; }
+    [StringLength(250)] public required string Note { get; set; }
 
     public decimal Money { get; set; }
 
@@ -37,7 +37,7 @@ public class Installment
 
     public int ReRegNum { get; set; }
 
-    [StringLength(50)] public string MyUser { get; set; }
+    [StringLength(50)] public required string MyUser { get; set; }
 
     public decimal Counts { get; set; }
 

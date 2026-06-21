@@ -8,18 +8,18 @@ public class BillEntry
     public Guid Id { get; set; }
     public int Num { get; set; }
     public Guid BillId { get; set; }
-    public Bill Bill { get; set; }
+    public Bill Bill { get; set; } = null!;
     public DateTime CreatedAt { get; set; }
     public Guid WarehouseId { get; set; }
-    public Warehouse Warehouse { get; set; }
+    public Warehouse Warehouse { get; set; } = null!;
     public Guid ProductId { get; set; }
-    public Product Product { get; set; }
+    public Product Product { get; set; } = null!;
     public Guid UnitId { get; set; }
-    public UnitOfMeasure Unit { get; set; }
+    public UnitOfMeasure Unit { get; set; } = null!;
     public Guid? CustomerId { get; set; }
     public Customer? Customer { get; set; }
     public Guid BranchId { get; set; }
-    public Branch Branch { get; set; }
+    public Branch Branch { get; set; } = null!;
     [Precision(18, 3)] public decimal Qty { get; set; }
     [Precision(18, 3)] public decimal TotalQty { get; set; }
     [Precision(18, 2)] public decimal Price { get; set; }

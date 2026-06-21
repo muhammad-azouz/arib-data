@@ -16,9 +16,9 @@ public class CustomerDealing
 
     public int CustomerId { get; set; }
 
-    [StringLength(50)] public string Main { get; set; }
+    [StringLength(50)] public required string Main { get; set; }
 
-    [StringLength(50)] public string Currency { get; set; }
+    [StringLength(50)] public required string Currency { get; set; }
 
     public decimal CurrencyVal { get; set; }
 
@@ -30,11 +30,11 @@ public class CustomerDealing
 
     public int RegNum { get; set; }
 
-    [Column(TypeName = "text")] public string Note { get; set; }
+    [Column(TypeName = "text")] public required string Note { get; set; }
 
-    [StringLength(50)] public string Dealing { get; set; }
+    [StringLength(50)] public required string Dealing { get; set; }
 
-    [StringLength(50)] public string MyUser { get; set; }
+    [StringLength(50)] public required string MyUser { get; set; }
 
     public int BranchId { get; set; }
 }

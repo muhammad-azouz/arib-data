@@ -6,7 +6,7 @@ namespace AribONE.Models.Entities;
 
 public class OrderEntry : BillEntry
 {
-    public ICollection<OrderFulfillment> Fulfillments { get; set; }
+    public ICollection<OrderFulfillment> Fulfillments { get; set; } = null!;
 
     [NotMapped]
     public decimal NetReleasedQty => Fulfillments

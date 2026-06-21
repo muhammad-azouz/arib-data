@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace AribONE.Models.Entities;
 
@@ -11,6 +12,7 @@ public class ProductGroup : Group
     {
     }
 
+    [SetsRequiredMembers]
     public ProductGroup(Guid id, Guid parentId, string name, bool isActive, int num, int productCount) : this()
     {
         Id = id;
