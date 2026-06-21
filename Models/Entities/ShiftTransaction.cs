@@ -11,7 +11,7 @@ public class ShiftTransaction
     [Comment("user id")] public int OpenBy { get; set; }
 
     [Comment("the device who opens the shift")]
-    public string Pc { get; set; }
+    public required string Pc { get; set; }
 
     public DateTime OpenIn { get; set; }
     public DateTime CloseIn { get; set; }

@@ -15,13 +15,13 @@ public class Product
 
     public ProductKind ProductKind { get; set; }
 
-    public string Name { get; set; }
+    public required string Name { get; set; }
     public Guid? ImageId { get; set; }
 
     public Guid? GroupId { get; set; }
     public ProductGroup? Group { get; set; }
 
-    public ICollection<Warehouse> Warehouses { get; set; }
+    public ICollection<Warehouse> Warehouses { get; set; } = null!;
     public ICollection<WarehouseProductInventory> WarehouseProductInventories { get; set; }
 
 

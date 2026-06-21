@@ -8,7 +8,7 @@ public class Customer
     public Guid Id { get; set; }
     public int Num { get; set; }
     public CustomerType Type { get; set; }
-    [MaxLength(100)] [MinLength(3)] public string Name { get; set; }
+    [MaxLength(100)] [MinLength(3)] public required string Name { get; set; }
 
     public Guid? ImageId { get; set; }
     public Image? Image { get; set; }
@@ -18,7 +18,7 @@ public class Customer
     public decimal Debit { get; set; }
     public decimal Credit { get; set; }
     public decimal Balance { get; set; }
-    [MaxLength(12)] public string Phone1 { get; set; }
+    [MaxLength(12)] public required string Phone1 { get; set; }
     [MaxLength(12)] public string? Phone2 { get; set; }
     [MaxLength(12)] public string? Phone3 { get; set; }
     [MaxLength(50)] public string? Mail { get; set; }

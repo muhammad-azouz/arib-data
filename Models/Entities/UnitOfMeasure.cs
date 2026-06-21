@@ -8,8 +8,8 @@ public class UnitOfMeasure
     public Guid Id { get; set; }
 
     public Guid ProductId { get; set; }
-    public Product Product { get; set; }
-    public string Name { get; set; }
+    public Product Product { get; set; } = null!;
+    public required string Name { get; set; }
     public decimal ValSub { get; set; }
     public bool MasterBuy { get; set; } = true;
     public bool MasterSale { get; set; } = true;

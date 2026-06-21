@@ -7,7 +7,7 @@ namespace AribONE.Models.Entities;
 public abstract class Bill
 {
     public Guid Id { get; set; }
-    [StringLength(16)] public string Num { get; set; }
+    [StringLength(16)] public required string Num { get; set; }
     public int ShiftId { get; set; }
     public BillType Type { get; set; }
     public DateTime CreatedAt { get; set; }
@@ -15,13 +15,13 @@ public abstract class Bill
     public Guid? CustomerId { get; set; }
     public Customer? Customer { get; set; }
     public Guid UserId { get; set; }
-    public User User { get; set; }
+    public User User { get; set; } = null!;
 
     public Guid BranchId { get; set; }
-    public Branch Branch { get; set; }
-    public ICollection<BillEntry> BillEntries { get; set; }
+    public Branch Branch { get; set; } = null!;
+    public ICollection<BillEntry> BillEntries { get; set; } = null!;
 
-    [MaxLength(50)] public string warehouse { get; set; }
+    [MaxLength(50)] public required string warehouse { get; set; }
     [MaxLength(50)] public string? Ship { get; set; }
     [MaxLength(50)] public string? ShipAddress { get; set; }
     [MaxLength(12)] public string? ShipPhone1 { get; set; }

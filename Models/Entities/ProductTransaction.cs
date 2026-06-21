@@ -8,13 +8,13 @@ public class ProductTransaction
     public Guid Id { get; set; }
     public DateTime IssueDate { get; set; }
     public Guid ProductId { get; set; }
-    public Product Product { get; set; }
+    public Product Product { get; set; } = null!;
 
     public Guid? CustomerId { get; set; }
     public Customer? Customer { get; set; }
 
     public Guid WarehouseId { get; set; }
-    public Warehouse Warehouse { get; set; }
+    public Warehouse Warehouse { get; set; } = null!;
 
     public Dealing Dealing { get; set; }
 
@@ -34,5 +34,5 @@ public class ProductTransaction
     public Guid BranchId { get; set; }
     public Guid RegNum { get; set; }
     public Guid UserId { get; set; }
-    [MaxLength(30)] public string Pc { get; set; }
+    [MaxLength(30)] public required string Pc { get; set; }
 }

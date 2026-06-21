@@ -15,7 +15,7 @@ public class Treasury
     public decimal Balance { get; set; }
 
     public Guid BranchId { get; set; }
-    public Branch Branch { get; set; }
+    public Branch Branch { get; set; } = null!;
 
     public Guid AccountId { get; set; }
     public decimal OpeningBalance { get; set; }

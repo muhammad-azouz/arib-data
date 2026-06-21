@@ -33,7 +33,7 @@ public class InventoryAdjustment
     public Guid WarehouseId { get; set; }
 
     public Guid BranchId { get; set; }
-    public Branch Branch { get; set; }
+    public Branch Branch { get; set; } = null!;
 
     public decimal Total { get; set; }
 

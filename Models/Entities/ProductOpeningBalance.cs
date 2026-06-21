@@ -12,15 +12,15 @@ public class ProductOpeningBalance
     public Guid ToId { get; set; }
 
     public Guid WarehouseId { get; set; }
-    public Warehouse Warehouse { get; set; }
+    public Warehouse Warehouse { get; set; } = null!;
 
     public Guid BranchId { get; set; }
-    public Branch Branch { get; set; }
+    public Branch Branch { get; set; } = null!;
 
     public Guid ProductId { get; set; }
-    public Product Product { get; set; }
+    public Product Product { get; set; } = null!;
 
-    public string UnitName { get; set; }
+    public required string UnitName { get; set; }
 
     public DateTime IssueDate { get; set; }
 

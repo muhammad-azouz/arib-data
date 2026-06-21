@@ -23,11 +23,11 @@ public class Cash
     public Guid AccountId { get; set; }
     public Guid DiscountId { get; set; }
     public Guid CustomerId { get; set; }
-    public Customer Customer { get; set; }
+    public Customer Customer { get; set; } = null!;
     public DateTime CreatedAt { get; set; }
 
     public Guid CurrencyId { get; set; }
-    public Currency Currency { get; set; }
+    public Currency Currency { get; set; } = null!;
     public decimal CurrencyVal { get; set; }
 
     public decimal Value { get; set; }
@@ -48,8 +48,8 @@ public class Cash
     public Treasury? Treasury { get; set; }
 
     public Guid BranchId { get; set; }
-    public Branch Branch { get; set; }
+    public Branch Branch { get; set; } = null!;
 
     public Guid UserId { get; set; }
-    public User User { get; set; }
+    public User User { get; set; } = null!;
 }

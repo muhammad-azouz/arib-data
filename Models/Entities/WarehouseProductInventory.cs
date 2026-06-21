@@ -6,11 +6,11 @@ public class WarehouseProductInventory
 {
     public Guid Id { get; set; }
     public Guid ProductId { get; set; }
-    public Product Product { get; set; }
+    public Product Product { get; set; } = null!;
     public Guid WarehouseId { get; set; }
-    public Warehouse Warehouse { get; set; }
+    public Warehouse Warehouse { get; set; } = null!;
     public Guid BranchId { get; set; }
-    public Branch Branch { get; set; }
+    public Branch Branch { get; set; } = null!;
     public decimal TotalQty { get; set; }
     public decimal TotalCost { get; set; }
     public decimal UnitCost { get; set; }

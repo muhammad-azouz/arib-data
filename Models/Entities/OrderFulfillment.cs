@@ -8,7 +8,7 @@ public class OrderFulfillment
     public Guid Id { get; set; }
 
     public Guid OrderEntryId { get; set; }
-    public OrderEntry OrderEntry { get; set; }
+    public OrderEntry OrderEntry { get; set; } = null!;
 
     public Guid? SaleEntryId { get; set; }
     public SaleEntry? SaleEntry { get; set; }
@@ -25,5 +25,5 @@ public class OrderFulfillment
     public Guid FulfilledByUserId { get; set; }
 
     public Guid BranchId { get; set; }
-    public Branch Branch { get; set; }
+    public Branch Branch { get; set; } = null!;
 }

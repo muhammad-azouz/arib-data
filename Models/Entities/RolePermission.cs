@@ -9,6 +9,6 @@ public class RolePermission
     public Guid PermissionId { get; set; }
 
     // Navigation properties
-    public virtual Role Role { get; set; }
-    public virtual Permission Permission { get; set; }
+    public virtual Role Role { get; set; } = null!;
+    public virtual Permission Permission { get; set; } = null!;
 }

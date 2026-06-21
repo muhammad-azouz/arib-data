@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AribONE.Migrations
 {
     [DbContext(typeof(AribContext))]
-    [Migration("20260612152354_AccountBalanceColumnDefaults")]
-    partial class AccountBalanceColumnDefaults
+    [Migration("20260617144726_InitialMigrations")]
+    partial class InitialMigrations
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -102,7 +102,12 @@ namespace AribONE.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Accounts");
+                    b.ToTable("Accounts", t =>
+                        {
+                            t.HasTrigger("Accounts_dms_sync");
+                        });
+
+                    b.HasAnnotation("SqlServer:UseSqlOutputClause", false);
 
                     b.HasData(
                         new
@@ -5399,7 +5404,12 @@ namespace AribONE.Migrations
 
                     b.HasKey("Operand");
 
-                    b.ToTable("AccountOperands");
+                    b.ToTable("AccountOperands", t =>
+                        {
+                            t.HasTrigger("AccountOperands_dms_sync");
+                        });
+
+                    b.HasAnnotation("SqlServer:UseSqlOutputClause", false);
 
                     b.HasData(
                         new
@@ -5722,7 +5732,12 @@ namespace AribONE.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Areas");
+                    b.ToTable("Areas", t =>
+                        {
+                            t.HasTrigger("Areas_dms_sync");
+                        });
+
+                    b.HasAnnotation("SqlServer:UseSqlOutputClause", false);
                 });
 
             modelBuilder.Entity("AribONE.Models.Entities.Bank", b =>
@@ -5820,7 +5835,12 @@ namespace AribONE.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Banks");
+                    b.ToTable("Banks", t =>
+                        {
+                            t.HasTrigger("Banks_dms_sync");
+                        });
+
+                    b.HasAnnotation("SqlServer:UseSqlOutputClause", false);
                 });
 
             modelBuilder.Entity("AribONE.Models.Entities.BankTransaction", b =>
@@ -5901,7 +5921,12 @@ namespace AribONE.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("BankTransactions");
+                    b.ToTable("BankTransactions", t =>
+                        {
+                            t.HasTrigger("BankTransactions_dms_sync");
+                        });
+
+                    b.HasAnnotation("SqlServer:UseSqlOutputClause", false);
                 });
 
             modelBuilder.Entity("AribONE.Models.Entities.Bill", b =>
@@ -6065,11 +6090,16 @@ namespace AribONE.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Bills");
+                    b.ToTable("Bills", t =>
+                        {
+                            t.HasTrigger("Bills_dms_sync");
+                        });
 
                     b.HasDiscriminator<int>("Type");
 
-                    b.UseTphMappingStrategy();
+                    b
+                        .UseTphMappingStrategy()
+                        .HasAnnotation("SqlServer:UseSqlOutputClause", false);
                 });
 
             modelBuilder.Entity("AribONE.Models.Entities.BillEntry", b =>
@@ -6168,11 +6198,16 @@ namespace AribONE.Migrations
 
                     b.HasIndex("WarehouseId");
 
-                    b.ToTable("BillEntries");
+                    b.ToTable("BillEntries", t =>
+                        {
+                            t.HasTrigger("BillEntries_dms_sync");
+                        });
 
                     b.HasDiscriminator().HasValue("BillEntry");
 
-                    b.UseTphMappingStrategy();
+                    b
+                        .UseTphMappingStrategy()
+                        .HasAnnotation("SqlServer:UseSqlOutputClause", false);
                 });
 
             modelBuilder.Entity("AribONE.Models.Entities.Branch", b =>
@@ -6303,7 +6338,12 @@ namespace AribONE.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Cashes");
+                    b.ToTable("Cashes", t =>
+                        {
+                            t.HasTrigger("Cashes_dms_sync");
+                        });
+
+                    b.HasAnnotation("SqlServer:UseSqlOutputClause", false);
                 });
 
             modelBuilder.Entity("AribONE.Models.Entities.Company", b =>
@@ -6406,7 +6446,12 @@ namespace AribONE.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Currencies");
+                    b.ToTable("Currencies", t =>
+                        {
+                            t.HasTrigger("Currencies_dms_sync");
+                        });
+
+                    b.HasAnnotation("SqlServer:UseSqlOutputClause", false);
 
                     b.HasData(
                         new
@@ -6555,7 +6600,12 @@ namespace AribONE.Migrations
 
                     b.HasIndex("ImageId");
 
-                    b.ToTable("Customers");
+                    b.ToTable("Customers", t =>
+                        {
+                            t.HasTrigger("Customers_dms_sync");
+                        });
+
+                    b.HasAnnotation("SqlServer:UseSqlOutputClause", false);
                 });
 
             modelBuilder.Entity("AribONE.Models.Entities.CustomerTransaction", b =>
@@ -6628,7 +6678,12 @@ namespace AribONE.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("CustomerTransactions");
+                    b.ToTable("CustomerTransactions", t =>
+                        {
+                            t.HasTrigger("CustomerTransactions_dms_sync");
+                        });
+
+                    b.HasAnnotation("SqlServer:UseSqlOutputClause", false);
                 });
 
             modelBuilder.Entity("AribONE.Models.Entities.DailyProductCost", b =>
@@ -6639,6 +6694,9 @@ namespace AribONE.Migrations
 
                     b.Property<int>("BatchNumber")
                         .HasColumnType("int");
+
+                    b.Property<Guid>("BranchId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<decimal>("Cost")
                         .HasPrecision(18, 2)
@@ -6666,11 +6724,18 @@ namespace AribONE.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("BranchId");
+
                     b.HasIndex("ProductId");
 
                     b.HasIndex("WarehouseId");
 
-                    b.ToTable("DailyProductCosts");
+                    b.ToTable("DailyProductCosts", t =>
+                        {
+                            t.HasTrigger("DailyProductCosts_dms_sync");
+                        });
+
+                    b.HasAnnotation("SqlServer:UseSqlOutputClause", false);
                 });
 
             modelBuilder.Entity("AribONE.Models.Entities.EWallet", b =>
@@ -6727,7 +6792,12 @@ namespace AribONE.Migrations
 
                     b.HasIndex("BranchId");
 
-                    b.ToTable("EWallets");
+                    b.ToTable("EWallets", t =>
+                        {
+                            t.HasTrigger("EWallets_dms_sync");
+                        });
+
+                    b.HasAnnotation("SqlServer:UseSqlOutputClause", false);
                 });
 
             modelBuilder.Entity("AribONE.Models.Entities.EWalletTransaction", b =>
@@ -6799,7 +6869,12 @@ namespace AribONE.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("EWalletTransactions");
+                    b.ToTable("EWalletTransactions", t =>
+                        {
+                            t.HasTrigger("EWalletTransactions_dms_sync");
+                        });
+
+                    b.HasAnnotation("SqlServer:UseSqlOutputClause", false);
                 });
 
             modelBuilder.Entity("AribONE.Models.Entities.Group", b =>
@@ -6828,11 +6903,16 @@ namespace AribONE.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Groups");
+                    b.ToTable("Groups", t =>
+                        {
+                            t.HasTrigger("Groups_dms_sync");
+                        });
 
                     b.HasDiscriminator<string>("Kind").HasValue("Group");
 
-                    b.UseTphMappingStrategy();
+                    b
+                        .UseTphMappingStrategy()
+                        .HasAnnotation("SqlServer:UseSqlOutputClause", false);
                 });
 
             modelBuilder.Entity("AribONE.Models.Entities.Image", b =>
@@ -6851,7 +6931,12 @@ namespace AribONE.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Images");
+                    b.ToTable("Images", t =>
+                        {
+                            t.HasTrigger("Images_dms_sync");
+                        });
+
+                    b.HasAnnotation("SqlServer:UseSqlOutputClause", false);
                 });
 
             modelBuilder.Entity("AribONE.Models.Entities.InventoryAdjustment", b =>
@@ -6861,6 +6946,9 @@ namespace AribONE.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("AccountId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("BranchId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("CreatedAt")
@@ -6928,7 +7016,14 @@ namespace AribONE.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("InventoryAdjustments");
+                    b.HasIndex("BranchId");
+
+                    b.ToTable("InventoryAdjustments", t =>
+                        {
+                            t.HasTrigger("InventoryAdjustments_dms_sync");
+                        });
+
+                    b.HasAnnotation("SqlServer:UseSqlOutputClause", false);
                 });
 
             modelBuilder.Entity("AribONE.Models.Entities.JournalEntry", b =>
@@ -6986,13 +7081,21 @@ namespace AribONE.Migrations
 
                     b.HasIndex("CustomerId");
 
-                    b.ToTable("JournalEntries");
+                    b.ToTable("JournalEntries", t =>
+                        {
+                            t.HasTrigger("JournalEntries_dms_sync");
+                        });
+
+                    b.HasAnnotation("SqlServer:UseSqlOutputClause", false);
                 });
 
             modelBuilder.Entity("AribONE.Models.Entities.OrderFulfillment", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("BranchId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("FulfilledAt")
@@ -7019,13 +7122,20 @@ namespace AribONE.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("BranchId");
+
                     b.HasIndex("OrderEntryId");
 
                     b.HasIndex("ReSaleEntryId");
 
                     b.HasIndex("SaleEntryId");
 
-                    b.ToTable("OrderFulfillments");
+                    b.ToTable("OrderFulfillments", t =>
+                        {
+                            t.HasTrigger("OrderFulfillments_dms_sync");
+                        });
+
+                    b.HasAnnotation("SqlServer:UseSqlOutputClause", false);
                 });
 
             modelBuilder.Entity("AribONE.Models.Entities.Permission", b =>
@@ -7044,7 +7154,12 @@ namespace AribONE.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Permissions");
+                    b.ToTable("Permissions", t =>
+                        {
+                            t.HasTrigger("Permissions_dms_sync");
+                        });
+
+                    b.HasAnnotation("SqlServer:UseSqlOutputClause", false);
 
                     b.HasData(
                         new
@@ -7292,6 +7407,12 @@ namespace AribONE.Migrations
                             Id = new Guid("00000003-0000-7000-a000-000000000041"),
                             Description = "يمكنة عرض تقاريرالعملاء والموردين",
                             Name = "تقارير العملاء والموردين"
+                        },
+                        new
+                        {
+                            Id = new Guid("00000003-0000-7000-a000-000000000042"),
+                            Description = "تعديل المنتجات والأسعار والحسابات (يُسمح به للإدارة الرئيسية فقط على الفروع السحابية)",
+                            Name = "تعديل البيانات الرئيسية"
                         });
                 });
 
@@ -7356,7 +7477,12 @@ namespace AribONE.Migrations
 
                     b.HasIndex("GroupId");
 
-                    b.ToTable("Products");
+                    b.ToTable("Products", t =>
+                        {
+                            t.HasTrigger("Products_dms_sync");
+                        });
+
+                    b.HasAnnotation("SqlServer:UseSqlOutputClause", false);
                 });
 
             modelBuilder.Entity("AribONE.Models.Entities.ProductBarcode", b =>
@@ -7376,7 +7502,12 @@ namespace AribONE.Migrations
 
                     b.HasIndex("UnitOfMeasureId");
 
-                    b.ToTable("Barcodes");
+                    b.ToTable("Barcodes", t =>
+                        {
+                            t.HasTrigger("Barcodes_dms_sync");
+                        });
+
+                    b.HasAnnotation("SqlServer:UseSqlOutputClause", false);
                 });
 
             modelBuilder.Entity("AribONE.Models.Entities.ProductDefault", b =>
@@ -7433,7 +7564,12 @@ namespace AribONE.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ProductDefaults");
+                    b.ToTable("ProductDefaults", t =>
+                        {
+                            t.HasTrigger("ProductDefaults_dms_sync");
+                        });
+
+                    b.HasAnnotation("SqlServer:UseSqlOutputClause", false);
 
                     b.HasData(
                         new
@@ -7460,6 +7596,9 @@ namespace AribONE.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("BranchId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("FromId")
@@ -7503,11 +7642,18 @@ namespace AribONE.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("BranchId");
+
                     b.HasIndex("ProductId");
 
                     b.HasIndex("WarehouseId");
 
-                    b.ToTable("ProductOpeningBalances");
+                    b.ToTable("ProductOpeningBalances", t =>
+                        {
+                            t.HasTrigger("ProductOpeningBalances_dms_sync");
+                        });
+
+                    b.HasAnnotation("SqlServer:UseSqlOutputClause", false);
                 });
 
             modelBuilder.Entity("AribONE.Models.Entities.ProductTransaction", b =>
@@ -7516,7 +7662,7 @@ namespace AribONE.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("BrunchId")
+                    b.Property<Guid>("BranchId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<decimal>("Cost")
@@ -7592,7 +7738,12 @@ namespace AribONE.Migrations
 
                     b.HasIndex("WarehouseId");
 
-                    b.ToTable("ProductTransactions");
+                    b.ToTable("ProductTransactions", t =>
+                        {
+                            t.HasTrigger("ProductTransactions_dms_sync");
+                        });
+
+                    b.HasAnnotation("SqlServer:UseSqlOutputClause", false);
                 });
 
             modelBuilder.Entity("AribONE.Models.Entities.RevenueExpenses", b =>
@@ -7671,7 +7822,12 @@ namespace AribONE.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("RevenueExpenses");
+                    b.ToTable("RevenueExpenses", t =>
+                        {
+                            t.HasTrigger("RevenueExpenses_dms_sync");
+                        });
+
+                    b.HasAnnotation("SqlServer:UseSqlOutputClause", false);
                 });
 
             modelBuilder.Entity("AribONE.Models.Entities.Role", b =>
@@ -7690,7 +7846,12 @@ namespace AribONE.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Roles");
+                    b.ToTable("Roles", t =>
+                        {
+                            t.HasTrigger("Roles_dms_sync");
+                        });
+
+                    b.HasAnnotation("SqlServer:UseSqlOutputClause", false);
 
                     b.HasData(
                         new
@@ -7731,7 +7892,12 @@ namespace AribONE.Migrations
 
                     b.HasIndex("RoleId");
 
-                    b.ToTable("RolePermissions");
+                    b.ToTable("RolePermissions", t =>
+                        {
+                            t.HasTrigger("RolePermissions_dms_sync");
+                        });
+
+                    b.HasAnnotation("SqlServer:UseSqlOutputClause", false);
 
                     b.HasData(
                         new
@@ -7982,6 +8148,12 @@ namespace AribONE.Migrations
                         },
                         new
                         {
+                            Id = new Guid("00000004-0000-7000-a000-000000000071"),
+                            PermissionId = new Guid("00000003-0000-7000-a000-000000000042"),
+                            RoleId = new Guid("00000002-0000-7000-a000-000000000001")
+                        },
+                        new
+                        {
                             Id = new Guid("00000004-0000-7000-a000-000000000001"),
                             PermissionId = new Guid("00000003-0000-7000-a000-000000000001"),
                             RoleId = new Guid("00000002-0000-7000-a000-000000000002")
@@ -8209,7 +8381,12 @@ namespace AribONE.Migrations
 
                     b.HasIndex("BranchId");
 
-                    b.ToTable("Treasuries");
+                    b.ToTable("Treasuries", t =>
+                        {
+                            t.HasTrigger("Treasuries_dms_sync");
+                        });
+
+                    b.HasAnnotation("SqlServer:UseSqlOutputClause", false);
                 });
 
             modelBuilder.Entity("AribONE.Models.Entities.TreasuryTransaction", b =>
@@ -8278,7 +8455,12 @@ namespace AribONE.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("TreasuriesTransactions");
+                    b.ToTable("TreasuriesTransactions", t =>
+                        {
+                            t.HasTrigger("TreasuriesTransactions_dms_sync");
+                        });
+
+                    b.HasAnnotation("SqlServer:UseSqlOutputClause", false);
                 });
 
             modelBuilder.Entity("AribONE.Models.Entities.UnitOfMeasure", b =>
@@ -8355,7 +8537,12 @@ namespace AribONE.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("UnitOfMeasures");
+                    b.ToTable("UnitOfMeasures", t =>
+                        {
+                            t.HasTrigger("UnitOfMeasures_dms_sync");
+                        });
+
+                    b.HasAnnotation("SqlServer:UseSqlOutputClause", false);
                 });
 
             modelBuilder.Entity("AribONE.Models.Entities.User", b =>
@@ -8392,7 +8579,12 @@ namespace AribONE.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Users");
+                    b.ToTable("Users", t =>
+                        {
+                            t.HasTrigger("Users_dms_sync");
+                        });
+
+                    b.HasAnnotation("SqlServer:UseSqlOutputClause", false);
 
                     b.HasData(
                         new
@@ -8426,7 +8618,12 @@ namespace AribONE.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("UserRoles");
+                    b.ToTable("UserRoles", t =>
+                        {
+                            t.HasTrigger("UserRoles_dms_sync");
+                        });
+
+                    b.HasAnnotation("SqlServer:UseSqlOutputClause", false);
 
                     b.HasData(
                         new
@@ -8469,13 +8666,21 @@ namespace AribONE.Migrations
 
                     b.HasIndex("BranchId");
 
-                    b.ToTable("Warehouses");
+                    b.ToTable("Warehouses", t =>
+                        {
+                            t.HasTrigger("Warehouses_dms_sync");
+                        });
+
+                    b.HasAnnotation("SqlServer:UseSqlOutputClause", false);
                 });
 
             modelBuilder.Entity("AribONE.Models.Entities.WarehouseProductInventory", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("BranchId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("CreatedAt")
@@ -8526,11 +8731,18 @@ namespace AribONE.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("BranchId");
+
                     b.HasIndex("ProductId");
 
                     b.HasIndex("WarehouseId");
 
-                    b.ToTable("WarehousesProductInventories");
+                    b.ToTable("WarehousesProductInventories", t =>
+                        {
+                            t.HasTrigger("WarehousesProductInventories_dms_sync");
+                        });
+
+                    b.HasAnnotation("SqlServer:UseSqlOutputClause", false);
                 });
 
             modelBuilder.Entity("AribONE.Models.Entities.Order", b =>
@@ -8878,6 +9090,12 @@ namespace AribONE.Migrations
 
             modelBuilder.Entity("AribONE.Models.Entities.DailyProductCost", b =>
                 {
+                    b.HasOne("AribONE.Models.Entities.Branch", "Branch")
+                        .WithMany()
+                        .HasForeignKey("BranchId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.HasOne("AribONE.Models.Entities.Product", "Product")
                         .WithMany()
                         .HasForeignKey("ProductId")
@@ -8889,6 +9107,8 @@ namespace AribONE.Migrations
                         .HasForeignKey("WarehouseId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Branch");
 
                     b.Navigation("Product");
 
@@ -8939,6 +9159,17 @@ namespace AribONE.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("AribONE.Models.Entities.InventoryAdjustment", b =>
+                {
+                    b.HasOne("AribONE.Models.Entities.Branch", "Branch")
+                        .WithMany()
+                        .HasForeignKey("BranchId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Branch");
+                });
+
             modelBuilder.Entity("AribONE.Models.Entities.JournalEntry", b =>
                 {
                     b.HasOne("AribONE.Models.Entities.Account", "Account")
@@ -8966,6 +9197,12 @@ namespace AribONE.Migrations
 
             modelBuilder.Entity("AribONE.Models.Entities.OrderFulfillment", b =>
                 {
+                    b.HasOne("AribONE.Models.Entities.Branch", "Branch")
+                        .WithMany()
+                        .HasForeignKey("BranchId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.HasOne("AribONE.Models.Entities.OrderEntry", "OrderEntry")
                         .WithMany("Fulfillments")
                         .HasForeignKey("OrderEntryId")
@@ -8979,6 +9216,8 @@ namespace AribONE.Migrations
                     b.HasOne("AribONE.Models.Entities.SaleEntry", "SaleEntry")
                         .WithMany()
                         .HasForeignKey("SaleEntryId");
+
+                    b.Navigation("Branch");
 
                     b.Navigation("OrderEntry");
 
@@ -9009,6 +9248,12 @@ namespace AribONE.Migrations
 
             modelBuilder.Entity("AribONE.Models.Entities.ProductOpeningBalance", b =>
                 {
+                    b.HasOne("AribONE.Models.Entities.Branch", "Branch")
+                        .WithMany()
+                        .HasForeignKey("BranchId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.HasOne("AribONE.Models.Entities.Product", "Product")
                         .WithMany()
                         .HasForeignKey("ProductId")
@@ -9020,6 +9265,8 @@ namespace AribONE.Migrations
                         .HasForeignKey("WarehouseId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Branch");
 
                     b.Navigation("Product");
 
@@ -9204,6 +9451,12 @@ namespace AribONE.Migrations
 
             modelBuilder.Entity("AribONE.Models.Entities.WarehouseProductInventory", b =>
                 {
+                    b.HasOne("AribONE.Models.Entities.Branch", "Branch")
+                        .WithMany()
+                        .HasForeignKey("BranchId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.HasOne("AribONE.Models.Entities.Product", "Product")
                         .WithMany("WarehouseProductInventories")
                         .HasForeignKey("ProductId")
@@ -9215,6 +9468,8 @@ namespace AribONE.Migrations
                         .HasForeignKey("WarehouseId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Branch");
 
                     b.Navigation("Product");
 

@@ -8,7 +8,7 @@ public class Company
 {
     public Guid Id { get; set; }
 
-    [StringLength(100)] [Required] public string Name { get; set; }
+    [StringLength(100)] [Required] public required string Name { get; set; }
     [StringLength(100)] public string? Field { get; set; }
     [StringLength(12)] public string? Phone1 { get; set; }
     [StringLength(12)] public string? Phone2 { get; set; }
@@ -26,7 +26,7 @@ public class Company
     [StringLength(50)] public string? CommercialRegister { get; set; }
 
     public Guid CurrencyId { get; set; }
-    [StringLength(50)] public Currency Currency { get; set; }
+    [StringLength(50)] public Currency Currency { get; set; } = null!;
 
     public ICollection<Branch>? Branches { get; set; }
 }
