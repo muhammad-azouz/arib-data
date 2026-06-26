@@ -18,7 +18,7 @@ namespace AribONE.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .UseCollation("Arabic_CI_AS")
-                .HasAnnotation("ProductVersion", "10.0.1")
+                .HasAnnotation("ProductVersion", "10.0.4")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -5932,6 +5932,13 @@ namespace AribONE.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid?>("BankId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<decimal>("BankMoney")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
                     b.Property<decimal>("BillDiscount")
                         .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)");
@@ -6074,6 +6081,13 @@ namespace AribONE.Migrations
                     b.Property<Guid>("UserId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid?>("WalletId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<decimal>("WalletMoney")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
                     b.Property<string>("warehouse")
                         .IsRequired()
                         .HasMaxLength(50)
@@ -6200,7 +6214,7 @@ namespace AribONE.Migrations
                             t.HasTrigger("BillEntries_dms_sync");
                         });
 
-                    b.HasDiscriminator().HasValue("BillEntry");
+                    b.HasDiscriminator<string>("Discriminator").HasValue("BillEntry");
 
                     b
                         .UseTphMappingStrategy()
@@ -7448,6 +7462,9 @@ namespace AribONE.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("ProductCode")
+                        .HasColumnType("int");
+
                     b.Property<int>("ProductKind")
                         .HasColumnType("int");
 
@@ -7490,12 +7507,16 @@ namespace AribONE.Migrations
 
                     b.Property<string>("Code")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<Guid>("UnitOfMeasureId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Code")
+                        .IsUnique();
 
                     b.HasIndex("UnitOfMeasureId");
 

@@ -101,7 +101,11 @@ public class AribContext : DbContext
 
     public DbSet<InventoryAdjustment> InventoryAdjustments { get; set; }
 
-    [DbFunction("NormalizeArabic", "dbo")]
+    // Mapped to the SQL Server scalar UDF dbo.NormalizeArabic in OnModelCreating,
+    // but ONLY on SQL Server — Postgres has no such function and the gateway never
+    // calls it against a Postgres central, so the mapping is gated by provider
+    // rather than declared with a [DbFunction] attribute (which would register it
+    // unconditionally for every provider).
     public static string NormalizeArabic(string input)
         => throw new NotSupportedException();
 
@@ -124,7 +128,35 @@ public class AribContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.UseCollation("Arabic_CI_AS");
+        // Provider-conditional bits. SQL Server is the default/desktop path and
+        // keeps its exact existing shape; Postgres (gateway central only) gets the
+        // equivalents. Database.IsNpgsql()/IsSqlServer() read the configured
+        // provider during model build — the standard EF multi-provider pattern.
+        if (Database.IsNpgsql())
+        {
+            // The Postgres central's Arabic ordering comes from the database's
+            // default ICU 'ar' collation, set once at CREATE DATABASE time by the
+            // gateway dialect — so no model-level collation (which on Npgsql has no
+            // clean migration target for an already-created database) is needed.
+
+            // Npgsql maps DateTime -> "timestamp with time zone" and throws when a
+            // value has DateTimeKind.Local (entities use DateTime.Now). Mirror SQL
+            // Server's datetime2 with "timestamp without time zone" so DMS-applied
+            // Local-kind values write without the UTC-only guard (Dotmim.Sync#919).
+            foreach (var entityType in modelBuilder.Model.GetEntityTypes())
+                foreach (var property in entityType.GetProperties())
+                    if (property.ClrType == typeof(DateTime) || property.ClrType == typeof(DateTime?))
+                        property.SetColumnType("timestamp without time zone");
+        }
+        else
+        {
+            modelBuilder.UseCollation("Arabic_CI_AS");
+
+            // dbo.NormalizeArabic is a SQL Server scalar UDF; map it only here.
+            modelBuilder.HasDbFunction(
+                typeof(AribContext).GetMethod(nameof(NormalizeArabic))!)
+                .HasName("NormalizeArabic").HasSchema("dbo");
+        }
 
         // Debit/Credit/Balance are excluded from the sync column list (D10), so
         // DMS inserts arriving from other nodes omit them — without a SQL
@@ -296,6 +328,10 @@ public class AribContext : DbContext
                 }
             }
         }
+
+        modelBuilder.Entity<ProductBarcode>()
+            .HasIndex(pb => pb.Code)
+            .IsUnique();
 
         // DMS sync provisioning adds insert/update/delete triggers to every table in
         // the sync scope (SyncScope.AllTables). SQL Server forbids EF Core's default
