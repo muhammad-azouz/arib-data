@@ -13,6 +13,8 @@ public class Product
 
     public Guid Id { get; set; }
 
+    public int ProductCode { get; set; }
+
     public ProductKind ProductKind { get; set; }
 
     public required string Name { get; set; }

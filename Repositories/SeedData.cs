@@ -69,14 +69,19 @@ public static class SeedData
             // only below; branch Manager/Cashier roles deliberately lack it so a
             // cloud-bound branch can't edit replicated masters (products/prices/
             // accounts). Standalone installs ignore the gate (MasterDataPolicy).
-            new Permission { Id = SeedGuid(TableCodes.Permission, 42), Name = "تعديل البيانات الرئيسية", Description = "تعديل المنتجات والأسعار والحسابات (يُسمح به للإدارة الرئيسية فقط على الفروع السحابية)" }
+            new Permission { Id = SeedGuid(TableCodes.Permission, 42), Name = "تعديل البيانات الرئيسية", Description = "تعديل المنتجات والأسعار والحسابات (يُسمح به للإدارة الرئيسية فقط على الفروع السحابية)" },
+            // Installment permissions
+            new Permission { Id = SeedGuid(TableCodes.Permission, 43), Name = "عرض الأقساط", Description = "يمكنه عرض خطط وجداول الأقساط" },
+            new Permission { Id = SeedGuid(TableCodes.Permission, 44), Name = "إنشاء أقساط", Description = "يمكنه إنشاء خطة أقساط جديدة للعميل" },
+            new Permission { Id = SeedGuid(TableCodes.Permission, 45), Name = "تحصيل الأقساط", Description = "يمكنه تحصيل دفعة على قسط مستحق" },
+            new Permission { Id = SeedGuid(TableCodes.Permission, 46), Name = "إلغاء الأقساط", Description = "يمكنه إلغاء خطة أقساط نشطة" }
         );
 
         // Seed RolePermissions
 
         // Administrator role (all permissions)
         modelBuilder.Entity<RolePermission>().HasData(
-            Enumerable.Range(1, 42).Select(id => new RolePermission { Id = SeedGuid(TableCodes.RolePermission, id + 29), RoleId = SeedGuid(TableCodes.Role, 1), PermissionId = SeedGuid(TableCodes.Permission, id) }).ToArray()
+            Enumerable.Range(1, 46).Select(id => new RolePermission { Id = SeedGuid(TableCodes.RolePermission, id + 29), RoleId = SeedGuid(TableCodes.Role, 1), PermissionId = SeedGuid(TableCodes.Permission, id) }).ToArray()
         );
 
         // Manager role permissions

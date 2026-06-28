@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace AribONE.Models.Entities;
 
-public class ProductTransaction
+public class InventoryMovement
 {
     public Guid Id { get; set; }
     public DateTime IssueDate { get; set; }

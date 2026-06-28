@@ -36,6 +36,10 @@ public abstract class Bill
     public Guid BillTaxId { get; set; }
     public decimal Money { get; set; }
     public Guid MoneyId { get; set; }
+    public decimal WalletMoney { get; set; }
+    public Guid? WalletId { get; set; }
+    public decimal BankMoney { get; set; }
+    public Guid? BankId { get; set; }
     public decimal Total { get; set; }
     public decimal Remain { get; set; }
     public decimal TotalMoney { get; set; }
