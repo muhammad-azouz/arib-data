@@ -21,7 +21,7 @@ public static class SyncScope
 {
     /// <summary>One logical scope per branch DB; the BranchId filter parameter
     /// (D2) makes each branch's view of it distinct.</summary>
-    public const string ScopeName = "arib-branch";
+    public const string ScopeName = "arib_branch";
 
     /// <summary>Bumped on every schema change that touches a synced table.
     /// The gateway refuses clients whose version differs (D11) so an outdated
@@ -32,8 +32,11 @@ public static class SyncScope
     /// guaranteed additive, which we don't commit to yet. Until then a version bump
     /// is a fleet-wide flag day and a stale branch is told to update (HTTP 426).
     /// v2: gave the warehouse/order-scoped tables their own BranchId column so
-    /// every synced row is pinned to the token's branch (no more join filters).</summary>
-    public const int SchemaVersion = 2;
+    /// every synced row is pinned to the token's branch (no more join filters).
+    /// v3: renamed ProductTransaction→InventoryMovement and DailyProductCost→
+    /// WeightedAverageCost, and added InventoryBatches/InventoryBatchConsumptions
+    /// for per-batch FIFO/LIFO/FEFO costing + expiry.</summary>
+    public const int SchemaVersion = 3;
 
     /// <summary>
     /// Tier A (D9a): masters, replicated in full to every branch.
@@ -85,11 +88,13 @@ public static class SyncScope
         "EWalletTransactions",
         "Warehouses",
         "WarehousesProductInventories",
-        "ProductTransactions",
+        "InventoryMovements",
+        "InventoryBatches",
+        "InventoryBatchConsumptions",
         "ProductOpeningBalances",
         "InventoryAdjustments",
         "RevenueExpenses",
-        "DailyProductCosts",
+        "WeightedAverageCosts",
         "OrderFulfillments",
     ];
 
@@ -127,7 +132,7 @@ public static class SyncScope
 
     /// <summary>
     /// Tier-B tables filtered on their own branch column (D2).
-    /// <c>ProductTransactions.BranchId</c> was historically misspelled
+    /// <c>InventoryMovements.BranchId</c> was historically misspelled
     /// <c>BrunchId</c>; renamed 2026-06-12 (entity + column — the rename
     /// migration and the int→GUID conversion script must both carry it).
     /// </summary>
@@ -145,11 +150,13 @@ public static class SyncScope
         ("EWallets", "BranchId"),
         ("EWalletTransactions", "BranchId"),
         ("Warehouses", "BranchId"),
-        ("ProductTransactions", "BranchId"),
+        ("InventoryMovements", "BranchId"),
         ("RevenueExpenses", "BranchId"),
         // v2: own BranchId column added (were warehouse/order join-filtered).
         ("WarehousesProductInventories", "BranchId"),
-        ("DailyProductCosts", "BranchId"),
+        ("WeightedAverageCosts", "BranchId"),
+        ("InventoryBatches", "BranchId"),
+        ("InventoryBatchConsumptions", "BranchId"),
         ("InventoryAdjustments", "BranchId"),
         ("ProductOpeningBalances", "BranchId"),
         ("OrderFulfillments", "BranchId"),

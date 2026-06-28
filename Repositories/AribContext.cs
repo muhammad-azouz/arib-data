@@ -52,8 +52,10 @@ public class AribContext : DbContext
     public DbSet<TreasuryTransaction> TreasuriesTransactions { get; set; }
     public DbSet<Warehouse> Warehouses { get; set; }
     public DbSet<WarehouseProductInventory> WarehousesProductInventories { get; set; }
-    public DbSet<DailyProductCost> DailyProductCosts { get; set; }
-    public DbSet<ProductTransaction> ProductTransactions { get; set; }
+    public DbSet<WeightedAverageCost> WeightedAverageCosts { get; set; }
+    public DbSet<InventoryMovement> InventoryMovements { get; set; }
+    public DbSet<InventoryBatch> InventoryBatches { get; set; }
+    public DbSet<InventoryBatchConsumption> InventoryBatchConsumptions { get; set; }
     public DbSet<ProductOpeningBalance> ProductOpeningBalances { get; set; }
     public DbSet<Product> Products { get; set; }
 
@@ -100,6 +102,12 @@ public class AribContext : DbContext
     public DbSet<RevenueExpenses> RevenueExpenses { get; set; }
 
     public DbSet<InventoryAdjustment> InventoryAdjustments { get; set; }
+
+    public DbSet<InstallmentPlan> InstallmentPlans { get; set; }
+    public DbSet<InstallmentItem> InstallmentItems { get; set; }
+    public DbSet<InstallmentPayment> InstallmentPayments { get; set; }
+
+    public DbSet<BillPayment> BillPayments { get; set; }
 
     // Mapped to the SQL Server scalar UDF dbo.NormalizeArabic in OnModelCreating,
     // but ONLY on SQL Server — Postgres has no such function and the gateway never
@@ -182,16 +190,53 @@ public class AribContext : DbContext
         modelBuilder.Entity<WarehouseProductInventory>()
             .Property(x => x.LastOutQty).HasPrecision(18, 3);
 
-        modelBuilder.Entity<DailyProductCost>()
+        modelBuilder.Entity<WeightedAverageCost>()
             .Property(x => x.Qty).HasPrecision(18, 3);
 
         modelBuilder.Entity<ProductOpeningBalance>()
             .Property(x => x.Qty).HasPrecision(18, 3);
 
-        modelBuilder.Entity<ProductTransaction>()
+        modelBuilder.Entity<InventoryMovement>()
             .Property(x => x.InQty).HasPrecision(18, 3);
-        modelBuilder.Entity<ProductTransaction>()
+        modelBuilder.Entity<InventoryMovement>()
             .Property(x => x.OutQty).HasPrecision(18, 3);
+
+        // FIFO/LIFO/FEFO cost-and-expiry layers. Quantities 18,3; per-unit cost 18,4
+        // (matches BillEntry.ItemCost). Batches deplete by ExpiryDate (FEFO) or
+        // ReceivedDate (FIFO/LIFO); indexed for both the availability scan and expiry
+        // reporting. SourceRegNum/RegNum index the batch back to the bill that
+        // created/consumed it for reversal.
+        modelBuilder.Entity<InventoryBatch>()
+            .Property(x => x.InitialQty).HasPrecision(18, 3);
+        modelBuilder.Entity<InventoryBatch>()
+            .Property(x => x.RemainingQty).HasPrecision(18, 3);
+        modelBuilder.Entity<InventoryBatch>()
+            .Property(x => x.UnitCost).HasPrecision(18, 4);
+        modelBuilder.Entity<InventoryBatch>()
+            .HasIndex(x => new { x.ProductId, x.WarehouseId, x.RemainingQty });
+        modelBuilder.Entity<InventoryBatch>()
+            .HasIndex(x => x.ExpiryDate);
+        modelBuilder.Entity<InventoryBatch>()
+            .HasIndex(x => x.SourceRegNum);
+        modelBuilder.Entity<InventoryBatch>()
+            .HasOne(x => x.Branch).WithMany().HasForeignKey(x => x.BranchId)
+            .OnDelete(DeleteBehavior.Restrict);
+        modelBuilder.Entity<InventoryBatch>()
+            .HasOne(x => x.Product).WithMany().HasForeignKey(x => x.ProductId)
+            .OnDelete(DeleteBehavior.Restrict);
+        modelBuilder.Entity<InventoryBatch>()
+            .HasOne(x => x.Warehouse).WithMany().HasForeignKey(x => x.WarehouseId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+        modelBuilder.Entity<InventoryBatchConsumption>()
+            .Property(x => x.Qty).HasPrecision(18, 3);
+        modelBuilder.Entity<InventoryBatchConsumption>()
+            .Property(x => x.UnitCost).HasPrecision(18, 4);
+        modelBuilder.Entity<InventoryBatchConsumption>()
+            .HasIndex(x => x.RegNum);
+        modelBuilder.Entity<InventoryBatchConsumption>()
+            .HasOne(x => x.Batch).WithMany().HasForeignKey(x => x.BatchId)
+            .OnDelete(DeleteBehavior.Restrict);
 
         modelBuilder.Entity<Bill>()
             .HasDiscriminator(x => x.Type)
@@ -294,7 +339,7 @@ public class AribContext : DbContext
         modelBuilder.Entity<WarehouseProductInventory>()
             .HasOne(x => x.Branch).WithMany().HasForeignKey(x => x.BranchId)
             .OnDelete(DeleteBehavior.Restrict);
-        modelBuilder.Entity<DailyProductCost>()
+        modelBuilder.Entity<WeightedAverageCost>()
             .HasOne(x => x.Branch).WithMany().HasForeignKey(x => x.BranchId)
             .OnDelete(DeleteBehavior.Restrict);
         modelBuilder.Entity<ProductOpeningBalance>()
@@ -306,6 +351,39 @@ public class AribContext : DbContext
         modelBuilder.Entity<OrderFulfillment>()
             .HasOne(x => x.Branch).WithMany().HasForeignKey(x => x.BranchId)
             .OnDelete(DeleteBehavior.Restrict);
+
+        // InstallmentPlan decimal precision
+        modelBuilder.Entity<InstallmentPlan>()
+            .Property(x => x.Principal).HasPrecision(18, 3);
+        modelBuilder.Entity<InstallmentPlan>()
+            .Property(x => x.RoundingStep).HasPrecision(18, 3);
+        modelBuilder.Entity<InstallmentPlan>()
+            .HasOne(x => x.Customer).WithMany()
+            .HasForeignKey(x => x.CustomerId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+        modelBuilder.Entity<InstallmentItem>()
+            .Property(x => x.Amount).HasPrecision(18, 3);
+        modelBuilder.Entity<InstallmentItem>()
+            .Property(x => x.PaidAmount).HasPrecision(18, 3);
+        modelBuilder.Entity<InstallmentItem>()
+            .HasOne(x => x.Plan).WithMany(p => p.Installments)
+            .HasForeignKey(x => x.InstallmentPlanId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        modelBuilder.Entity<InstallmentPayment>()
+            .Property(x => x.Amount).HasPrecision(18, 3);
+        modelBuilder.Entity<InstallmentPayment>()
+            .HasOne(x => x.InstallmentItem).WithMany(i => i.Payments)
+            .HasForeignKey(x => x.InstallmentItemId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        modelBuilder.Entity<BillPayment>()
+            .Property(x => x.Amount).HasPrecision(18, 2);
+        modelBuilder.Entity<BillPayment>()
+            .HasOne(x => x.Bill).WithMany()
+            .HasForeignKey(x => x.BillId)
+            .OnDelete(DeleteBehavior.Cascade);
 
         // seed data here
         modelBuilder.Seed();

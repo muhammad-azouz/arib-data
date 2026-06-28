@@ -4,6 +4,7 @@ using AribONE.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AribONE.Migrations
 {
     [DbContext(typeof(AribContext))]
-    partial class AribContextModelSnapshot : ModelSnapshot
+    [Migration("20260627164228_AddBillPayments")]
+    partial class AddBillPayments
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -6726,6 +6729,58 @@ namespace AribONE.Migrations
                     b.HasAnnotation("SqlServer:UseSqlOutputClause", false);
                 });
 
+            modelBuilder.Entity("AribONE.Models.Entities.DailyProductCost", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("BatchNumber")
+                        .HasColumnType("int");
+
+                    b.Property<Guid>("BranchId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<decimal>("Cost")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<DateTime?>("ExpirationDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<decimal>("Price")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<Guid>("ProductId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<decimal>("Qty")
+                        .HasPrecision(18, 3)
+                        .HasColumnType("decimal(18,3)");
+
+                    b.Property<DateTime>("ReceivedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("WarehouseId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BranchId");
+
+                    b.HasIndex("ProductId");
+
+                    b.HasIndex("WarehouseId");
+
+                    b.ToTable("DailyProductCosts", t =>
+                        {
+                            t.HasTrigger("DailyProductCosts_dms_sync");
+                        });
+
+                    b.HasAnnotation("SqlServer:UseSqlOutputClause", false);
+                });
+
             modelBuilder.Entity("AribONE.Models.Entities.EWallet", b =>
                 {
                     b.Property<Guid>("Id")
@@ -7135,204 +7190,6 @@ namespace AribONE.Migrations
                     b.ToTable("InventoryAdjustments", t =>
                         {
                             t.HasTrigger("InventoryAdjustments_dms_sync");
-                        });
-
-                    b.HasAnnotation("SqlServer:UseSqlOutputClause", false);
-                });
-
-            modelBuilder.Entity("AribONE.Models.Entities.InventoryBatch", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("BatchNumber")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<Guid>("BranchId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime?>("ExpiryDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<decimal>("InitialQty")
-                        .HasPrecision(18, 3)
-                        .HasColumnType("decimal(18,3)");
-
-                    b.Property<Guid>("ProductId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("ReceivedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<decimal>("RemainingQty")
-                        .HasPrecision(18, 3)
-                        .HasColumnType("decimal(18,3)");
-
-                    b.Property<Guid>("SourceRegNum")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<decimal>("UnitCost")
-                        .HasPrecision(18, 4)
-                        .HasColumnType("decimal(18,4)");
-
-                    b.Property<Guid>("WarehouseId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("BranchId");
-
-                    b.HasIndex("ExpiryDate");
-
-                    b.HasIndex("SourceRegNum");
-
-                    b.HasIndex("WarehouseId");
-
-                    b.HasIndex("ProductId", "WarehouseId", "RemainingQty");
-
-                    b.ToTable("InventoryBatches", t =>
-                        {
-                            t.HasTrigger("InventoryBatches_dms_sync");
-                        });
-
-                    b.HasAnnotation("SqlServer:UseSqlOutputClause", false);
-                });
-
-            modelBuilder.Entity("AribONE.Models.Entities.InventoryBatchConsumption", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("BatchId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("BranchId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<Guid>("ProductId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<decimal>("Qty")
-                        .HasPrecision(18, 3)
-                        .HasColumnType("decimal(18,3)");
-
-                    b.Property<Guid>("RegNum")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<decimal>("UnitCost")
-                        .HasPrecision(18, 4)
-                        .HasColumnType("decimal(18,4)");
-
-                    b.Property<Guid>("WarehouseId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("BatchId");
-
-                    b.HasIndex("RegNum");
-
-                    b.ToTable("InventoryBatchConsumptions", t =>
-                        {
-                            t.HasTrigger("InventoryBatchConsumptions_dms_sync");
-                        });
-
-                    b.HasAnnotation("SqlServer:UseSqlOutputClause", false);
-                });
-
-            modelBuilder.Entity("AribONE.Models.Entities.InventoryMovement", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("BranchId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<decimal>("Cost")
-                        .HasPrecision(18, 2)
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<Guid?>("CustomerId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<int>("Dealing")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime?>("ExpirationDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<decimal>("InPrice")
-                        .HasPrecision(18, 2)
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<decimal>("InQty")
-                        .HasPrecision(18, 3)
-                        .HasColumnType("decimal(18,3)");
-
-                    b.Property<decimal>("InTotal")
-                        .HasPrecision(18, 2)
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime>("IssueDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<decimal>("OutPrice")
-                        .HasPrecision(18, 2)
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<decimal>("OutQty")
-                        .HasPrecision(18, 3)
-                        .HasColumnType("decimal(18,3)");
-
-                    b.Property<decimal>("OutTotal")
-                        .HasPrecision(18, 2)
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<string>("Pc")
-                        .IsRequired()
-                        .HasMaxLength(30)
-                        .HasColumnType("nvarchar(30)");
-
-                    b.Property<Guid>("ProductId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("RegNum")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Unit")
-                        .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
-
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("WarehouseId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CustomerId");
-
-                    b.HasIndex("ProductId");
-
-                    b.HasIndex("WarehouseId");
-
-                    b.ToTable("InventoryMovements", t =>
-                        {
-                            t.HasTrigger("InventoryMovements_dms_sync");
                         });
 
                     b.HasAnnotation("SqlServer:UseSqlOutputClause", false);
@@ -7994,6 +7851,96 @@ namespace AribONE.Migrations
                     b.ToTable("ProductOpeningBalances", t =>
                         {
                             t.HasTrigger("ProductOpeningBalances_dms_sync");
+                        });
+
+                    b.HasAnnotation("SqlServer:UseSqlOutputClause", false);
+                });
+
+            modelBuilder.Entity("AribONE.Models.Entities.ProductTransaction", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("BranchId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<decimal>("Cost")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<Guid?>("CustomerId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("Dealing")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("ExpirationDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<decimal>("InPrice")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("InQty")
+                        .HasPrecision(18, 3)
+                        .HasColumnType("decimal(18,3)");
+
+                    b.Property<decimal>("InTotal")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("IssueDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<decimal>("OutPrice")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("OutQty")
+                        .HasPrecision(18, 3)
+                        .HasColumnType("decimal(18,3)");
+
+                    b.Property<decimal>("OutTotal")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("Pc")
+                        .IsRequired()
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
+
+                    b.Property<Guid>("ProductId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("RegNum")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Unit")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("WarehouseId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CustomerId");
+
+                    b.HasIndex("ProductId");
+
+                    b.HasIndex("WarehouseId");
+
+                    b.ToTable("ProductTransactions", t =>
+                        {
+                            t.HasTrigger("ProductTransactions_dms_sync");
                         });
 
                     b.HasAnnotation("SqlServer:UseSqlOutputClause", false);
@@ -9022,52 +8969,6 @@ namespace AribONE.Migrations
                     b.HasAnnotation("SqlServer:UseSqlOutputClause", false);
                 });
 
-            modelBuilder.Entity("AribONE.Models.Entities.WeightedAverageCost", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("BranchId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<decimal>("Cost")
-                        .HasPrecision(18, 2)
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<decimal>("Price")
-                        .HasPrecision(18, 2)
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<Guid>("ProductId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<decimal>("Qty")
-                        .HasPrecision(18, 3)
-                        .HasColumnType("decimal(18,3)");
-
-                    b.Property<DateTime>("ReceivedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<Guid>("WarehouseId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("BranchId");
-
-                    b.HasIndex("ProductId");
-
-                    b.HasIndex("WarehouseId");
-
-                    b.ToTable("WeightedAverageCosts", t =>
-                        {
-                            t.HasTrigger("WeightedAverageCosts_dms_sync");
-                        });
-
-                    b.HasAnnotation("SqlServer:UseSqlOutputClause", false);
-                });
-
             modelBuilder.Entity("AribONE.Models.Entities.Order", b =>
                 {
                     b.HasBaseType("AribONE.Models.Entities.Bill");
@@ -9422,6 +9323,33 @@ namespace AribONE.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("AribONE.Models.Entities.DailyProductCost", b =>
+                {
+                    b.HasOne("AribONE.Models.Entities.Branch", "Branch")
+                        .WithMany()
+                        .HasForeignKey("BranchId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("AribONE.Models.Entities.Product", "Product")
+                        .WithMany()
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("AribONE.Models.Entities.Warehouse", "Warehouse")
+                        .WithMany()
+                        .HasForeignKey("WarehouseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Branch");
+
+                    b.Navigation("Product");
+
+                    b.Navigation("Warehouse");
+                });
+
             modelBuilder.Entity("AribONE.Models.Entities.EWallet", b =>
                 {
                     b.HasOne("AribONE.Models.Entities.Account", "Account")
@@ -9508,69 +9436,6 @@ namespace AribONE.Migrations
                         .IsRequired();
 
                     b.Navigation("Branch");
-                });
-
-            modelBuilder.Entity("AribONE.Models.Entities.InventoryBatch", b =>
-                {
-                    b.HasOne("AribONE.Models.Entities.Branch", "Branch")
-                        .WithMany()
-                        .HasForeignKey("BranchId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("AribONE.Models.Entities.Product", "Product")
-                        .WithMany()
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("AribONE.Models.Entities.Warehouse", "Warehouse")
-                        .WithMany()
-                        .HasForeignKey("WarehouseId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("Branch");
-
-                    b.Navigation("Product");
-
-                    b.Navigation("Warehouse");
-                });
-
-            modelBuilder.Entity("AribONE.Models.Entities.InventoryBatchConsumption", b =>
-                {
-                    b.HasOne("AribONE.Models.Entities.InventoryBatch", "Batch")
-                        .WithMany()
-                        .HasForeignKey("BatchId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("Batch");
-                });
-
-            modelBuilder.Entity("AribONE.Models.Entities.InventoryMovement", b =>
-                {
-                    b.HasOne("AribONE.Models.Entities.Customer", "Customer")
-                        .WithMany()
-                        .HasForeignKey("CustomerId");
-
-                    b.HasOne("AribONE.Models.Entities.Product", "Product")
-                        .WithMany()
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("AribONE.Models.Entities.Warehouse", "Warehouse")
-                        .WithMany()
-                        .HasForeignKey("WarehouseId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Customer");
-
-                    b.Navigation("Product");
-
-                    b.Navigation("Warehouse");
                 });
 
             modelBuilder.Entity("AribONE.Models.Entities.JournalEntry", b =>
@@ -9670,6 +9535,31 @@ namespace AribONE.Migrations
                         .IsRequired();
 
                     b.Navigation("Branch");
+
+                    b.Navigation("Product");
+
+                    b.Navigation("Warehouse");
+                });
+
+            modelBuilder.Entity("AribONE.Models.Entities.ProductTransaction", b =>
+                {
+                    b.HasOne("AribONE.Models.Entities.Customer", "Customer")
+                        .WithMany()
+                        .HasForeignKey("CustomerId");
+
+                    b.HasOne("AribONE.Models.Entities.Product", "Product")
+                        .WithMany()
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("AribONE.Models.Entities.Warehouse", "Warehouse")
+                        .WithMany()
+                        .HasForeignKey("WarehouseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Customer");
 
                     b.Navigation("Product");
 
@@ -9843,33 +9733,6 @@ namespace AribONE.Migrations
 
                     b.HasOne("AribONE.Models.Entities.Warehouse", "Warehouse")
                         .WithMany("WarehouseProductInventories")
-                        .HasForeignKey("WarehouseId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Branch");
-
-                    b.Navigation("Product");
-
-                    b.Navigation("Warehouse");
-                });
-
-            modelBuilder.Entity("AribONE.Models.Entities.WeightedAverageCost", b =>
-                {
-                    b.HasOne("AribONE.Models.Entities.Branch", "Branch")
-                        .WithMany()
-                        .HasForeignKey("BranchId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("AribONE.Models.Entities.Product", "Product")
-                        .WithMany()
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("AribONE.Models.Entities.Warehouse", "Warehouse")
-                        .WithMany()
                         .HasForeignKey("WarehouseId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
