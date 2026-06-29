@@ -109,6 +109,15 @@ public class AribContext : DbContext
 
     public DbSet<BillPayment> BillPayments { get; set; }
 
+    // Derived, local-only notifications (NOT in SyncScope — see AppNotification).
+    public DbSet<AppNotification> AppNotifications { get; set; }
+
+    // Per-user read/dismiss for the above (NOT in SyncScope — see NotificationReadState).
+    public DbSet<NotificationReadState> NotificationReadStates { get; set; }
+
+    // Branch-wide notification config (NOT in SyncScope — see NotificationSetting).
+    public DbSet<NotificationSetting> NotificationSettings { get; set; }
+
     // Mapped to the SQL Server scalar UDF dbo.NormalizeArabic in OnModelCreating,
     // but ONLY on SQL Server — Postgres has no such function and the gateway never
     // calls it against a Postgres central, so the mapping is gated by provider
@@ -384,6 +393,29 @@ public class AribContext : DbContext
             .HasOne(x => x.Bill).WithMany()
             .HasForeignKey(x => x.BillId)
             .OnDelete(DeleteBehavior.Cascade);
+
+        // Derived, local-only notifications (deliberately absent from SyncScope, so no
+        // _dms_sync trigger and no schema-version bump). DedupKey is the reconciliation
+        // identity — unique so a rule re-run upserts instead of duplicating. The two
+        // composite indexes back the drawer list query and the unread-count badge.
+        modelBuilder.Entity<AppNotification>()
+            .HasIndex(x => x.DedupKey).IsUnique();
+        modelBuilder.Entity<AppNotification>()
+            .HasIndex(x => new { x.BranchId, x.IsResolved, x.CreatedAt });
+
+        // Per-user read/dismiss side table (also local-only). One row per (notification,
+        // user); the unique index is the upsert key. Cascade-delete with the notification so
+        // pruning a resolved notification cleans up its read rows.
+        modelBuilder.Entity<NotificationReadState>()
+            .HasIndex(x => new { x.NotificationId, x.UserId }).IsUnique();
+        modelBuilder.Entity<NotificationReadState>()
+            .HasOne(x => x.Notification).WithMany()
+            .HasForeignKey(x => x.NotificationId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        // Branch-wide notification settings — one row per branch (also local-only).
+        modelBuilder.Entity<NotificationSetting>()
+            .HasIndex(x => x.BranchId).IsUnique();
 
         // seed data here
         modelBuilder.Seed();

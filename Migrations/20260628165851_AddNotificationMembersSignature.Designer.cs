@@ -4,6 +4,7 @@ using AribONE.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AribONE.Migrations
 {
     [DbContext(typeof(AribContext))]
-    partial class AribContextModelSnapshot : ModelSnapshot
+    [Migration("20260628165851_AddNotificationMembersSignature")]
+    partial class AddNotificationMembersSignature
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -5704,9 +5707,6 @@ namespace AribONE.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("AlertSeq")
-                        .HasColumnType("int");
-
                     b.Property<Guid>("BranchId")
                         .HasColumnType("uniqueidentifier");
 
@@ -5729,6 +5729,12 @@ namespace AribONE.Migrations
 
                     b.Property<string>("GroupKey")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsDismissed")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsRead")
+                        .HasColumnType("bit");
 
                     b.Property<bool>("IsResolved")
                         .HasColumnType("bit");
@@ -5774,7 +5780,9 @@ namespace AribONE.Migrations
                     b.HasIndex("DedupKey")
                         .IsUnique();
 
-                    b.HasIndex("BranchId", "IsResolved", "CreatedAt");
+                    b.HasIndex("BranchId", "IsRead", "IsResolved");
+
+                    b.HasIndex("BranchId", "IsResolved", "IsDismissed", "CreatedAt");
 
                     b.ToTable("AppNotifications");
                 });
@@ -7480,79 +7488,6 @@ namespace AribONE.Migrations
                         });
 
                     b.HasAnnotation("SqlServer:UseSqlOutputClause", false);
-                });
-
-            modelBuilder.Entity("AribONE.Models.Entities.NotificationReadState", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("BranchId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<int?>("DismissedSeq")
-                        .HasColumnType("int");
-
-                    b.Property<Guid>("NotificationId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<int?>("ReadSeq")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("UpdatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("NotificationId", "UserId")
-                        .IsUnique();
-
-                    b.ToTable("NotificationReadStates");
-                });
-
-            modelBuilder.Entity("AribONE.Models.Entities.NotificationSetting", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<int>("BackupStaleDays")
-                        .HasColumnType("int");
-
-                    b.Property<Guid>("BranchId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<int>("ExpiryDaysAhead")
-                        .HasColumnType("int");
-
-                    b.Property<bool>("ExpiryEnabled")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("FinanceEnabled")
-                        .HasColumnType("bit");
-
-                    b.Property<int>("InstallmentDueSoonDays")
-                        .HasColumnType("int");
-
-                    b.Property<bool>("InventoryEnabled")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("SystemEnabled")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime>("UpdatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("BranchId")
-                        .IsUnique();
-
-                    b.ToTable("NotificationSettings");
                 });
 
             modelBuilder.Entity("AribONE.Models.Entities.OrderFulfillment", b =>
@@ -9750,17 +9685,6 @@ namespace AribONE.Migrations
                     b.Navigation("Branch");
 
                     b.Navigation("Customer");
-                });
-
-            modelBuilder.Entity("AribONE.Models.Entities.NotificationReadState", b =>
-                {
-                    b.HasOne("AribONE.Models.Entities.AppNotification", "Notification")
-                        .WithMany()
-                        .HasForeignKey("NotificationId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Notification");
                 });
 
             modelBuilder.Entity("AribONE.Models.Entities.OrderFulfillment", b =>

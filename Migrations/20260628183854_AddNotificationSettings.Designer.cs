@@ -4,6 +4,7 @@ using AribONE.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AribONE.Migrations
 {
     [DbContext(typeof(AribContext))]
-    partial class AribContextModelSnapshot : ModelSnapshot
+    [Migration("20260628183854_AddNotificationSettings")]
+    partial class AddNotificationSettings
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -5730,6 +5733,12 @@ namespace AribONE.Migrations
                     b.Property<string>("GroupKey")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<bool>("IsDismissed")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsRead")
+                        .HasColumnType("bit");
+
                     b.Property<bool>("IsResolved")
                         .HasColumnType("bit");
 
@@ -5774,7 +5783,9 @@ namespace AribONE.Migrations
                     b.HasIndex("DedupKey")
                         .IsUnique();
 
-                    b.HasIndex("BranchId", "IsResolved", "CreatedAt");
+                    b.HasIndex("BranchId", "IsRead", "IsResolved");
+
+                    b.HasIndex("BranchId", "IsResolved", "IsDismissed", "CreatedAt");
 
                     b.ToTable("AppNotifications");
                 });
