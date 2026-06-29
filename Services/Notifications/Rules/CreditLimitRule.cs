@@ -33,7 +33,6 @@ public sealed class CreditLimitRule : INotificationRule
         var rows = await db.Customers
             .Where(c => c.BranchId == branchId
                         && c.IsActive
-                        && c.IsCredit
                         && c.Type == CustomerType.Customer
                         && c.CreditLimit > 0
                         && c.Balance > c.CreditLimit)
