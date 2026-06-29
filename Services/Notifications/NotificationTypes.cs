@@ -15,6 +15,7 @@ public static class NotificationTypes
     public const string InventoryLowStock = "Inventory.LowStock";
     public const string InventoryOutOfStock = "Inventory.OutOfStock";
     public const string InventoryNegative = "Inventory.Negative";
+    public const string InventoryDuplicateCode = "Inventory.DuplicateCode";
 
     public const string ExpiryExpiring = "Expiry.Expiring";
     public const string ExpiryExpired = "Expiry.Expired";
