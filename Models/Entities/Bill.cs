@@ -4,11 +4,16 @@ using System.ComponentModel.DataAnnotations;
 
 namespace AribONE.Models.Entities;
 
-public abstract class Bill
+public abstract class Bill : IShiftScoped
 {
     public Guid Id { get; set; }
     [StringLength(16)] public required string Num { get; set; }
-    public int ShiftId { get; set; }
+
+    /// <summary>The shift that owns this bill when Shift Mode is on; null in Open
+    /// Safe mode (and for all pre-shift history). Stamped by ShiftIdInterceptor.
+    /// (Repurposed from a dead pre-GUID int column that was always 0.)</summary>
+    public Guid? ShiftId { get; set; }
+
     public BillType Type { get; set; }
     public DateTime CreatedAt { get; set; }
     public DateTime IssuedAt { get; set; }

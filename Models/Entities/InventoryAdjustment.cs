@@ -2,7 +2,7 @@ using System;
 
 namespace AribONE.Models.Entities;
 
-public class InventoryAdjustment
+public class InventoryAdjustment : IShiftScoped
 {
     public Guid Id { get; set; }
 
@@ -42,4 +42,8 @@ public class InventoryAdjustment
     public DateTime ExprDt { get; set; }
 
     public decimal ItemCost { get; set; }
+
+    /// <summary>Owning shift in Shift Mode; null in Open Safe mode.
+    /// Stamped by ShiftIdInterceptor.</summary>
+    public Guid? ShiftId { get; set; }
 }

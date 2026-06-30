@@ -5974,6 +5974,9 @@ namespace AribONE.Migrations
                     b.Property<Guid>("RegNum")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid?>("ShiftId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<string>("Ship")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -5996,6 +5999,8 @@ namespace AribONE.Migrations
                     b.HasIndex("CurrencyId");
 
                     b.HasIndex("CustomerId");
+
+                    b.HasIndex("ShiftId");
 
                     b.HasIndex("UserId");
 
@@ -6121,8 +6126,8 @@ namespace AribONE.Migrations
                         .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<int>("ShiftId")
-                        .HasColumnType("int");
+                    b.Property<Guid?>("ShiftId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Ship")
                         .HasMaxLength(50)
@@ -6179,6 +6184,8 @@ namespace AribONE.Migrations
                     b.HasIndex("BranchId");
 
                     b.HasIndex("CustomerId");
+
+                    b.HasIndex("ShiftId");
 
                     b.HasIndex("UserId");
 
@@ -6324,11 +6331,21 @@ namespace AribONE.Migrations
                     b.Property<DateTime>("PaidAt")
                         .HasColumnType("datetime2");
 
+                    b.Property<Guid?>("ShiftId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.HasKey("Id");
 
                     b.HasIndex("BillId");
 
-                    b.ToTable("BillPayments");
+                    b.HasIndex("ShiftId");
+
+                    b.ToTable("BillPayments", t =>
+                        {
+                            t.HasTrigger("BillPayments_dms_sync");
+                        });
+
+                    b.HasAnnotation("SqlServer:UseSqlOutputClause", false);
                 });
 
             modelBuilder.Entity("AribONE.Models.Entities.Branch", b =>
@@ -6365,6 +6382,9 @@ namespace AribONE.Migrations
                     b.Property<string>("Phone3")
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
+
+                    b.Property<bool>("ShiftModeEnabled")
+                        .HasColumnType("bit");
 
                     b.HasKey("Id");
 
@@ -6782,6 +6802,9 @@ namespace AribONE.Migrations
                         .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)");
 
+                    b.Property<Guid?>("ShiftId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<decimal>("Tax")
                         .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)");
@@ -6796,6 +6819,8 @@ namespace AribONE.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("CustomerId");
+
+                    b.HasIndex("ShiftId");
 
                     b.HasIndex("UserId");
 
@@ -6915,6 +6940,9 @@ namespace AribONE.Migrations
                     b.Property<Guid>("RegNum")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid?>("ShiftId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<string>("Ship")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -6935,6 +6963,8 @@ namespace AribONE.Migrations
                     b.HasIndex("CustomerId");
 
                     b.HasIndex("EWalletId");
+
+                    b.HasIndex("ShiftId");
 
                     b.HasIndex("UserId");
 
@@ -7192,6 +7222,9 @@ namespace AribONE.Migrations
                     b.Property<Guid>("RegNum")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid?>("ShiftId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<decimal>("Total")
                         .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)");
@@ -7212,6 +7245,8 @@ namespace AribONE.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("BranchId");
+
+                    b.HasIndex("ShiftId");
 
                     b.ToTable("InventoryAdjustments", t =>
                         {
@@ -7903,6 +7938,18 @@ namespace AribONE.Migrations
                             Id = new Guid("00000003-0000-7000-a000-000000000046"),
                             Description = "يمكنه إلغاء خطة أقساط نشطة",
                             Name = "إلغاء الأقساط"
+                        },
+                        new
+                        {
+                            Id = new Guid("00000003-0000-7000-a000-000000000047"),
+                            Description = "يمكنه إغلاق ورديه كاشير آخر (إغلاق إجباري)",
+                            Name = "اغلاق الورديه إجباري"
+                        },
+                        new
+                        {
+                            Id = new Guid("00000003-0000-7000-a000-000000000048"),
+                            Description = "يمكنه عرض ورديات وتقارير الكاشيرين الآخرين",
+                            Name = "عرض ورديات الكاشيرين الآخرين"
                         });
                 });
 
@@ -8196,6 +8243,9 @@ namespace AribONE.Migrations
                     b.Property<Guid>("RegNum")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid?>("ShiftId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<decimal>("Total")
                         .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)");
@@ -8224,6 +8274,8 @@ namespace AribONE.Migrations
                     b.HasIndex("CurrencyId");
 
                     b.HasIndex("EwalletId");
+
+                    b.HasIndex("ShiftId");
 
                     b.HasIndex("TreasuryId");
 
@@ -8585,6 +8637,18 @@ namespace AribONE.Migrations
                         },
                         new
                         {
+                            Id = new Guid("00000004-0000-7000-a000-000000000076"),
+                            PermissionId = new Guid("00000003-0000-7000-a000-000000000047"),
+                            RoleId = new Guid("00000002-0000-7000-a000-000000000001")
+                        },
+                        new
+                        {
+                            Id = new Guid("00000004-0000-7000-a000-000000000077"),
+                            PermissionId = new Guid("00000003-0000-7000-a000-000000000048"),
+                            RoleId = new Guid("00000002-0000-7000-a000-000000000001")
+                        },
+                        new
+                        {
                             Id = new Guid("00000004-0000-7000-a000-000000000001"),
                             PermissionId = new Guid("00000003-0000-7000-a000-000000000001"),
                             RoleId = new Guid("00000002-0000-7000-a000-000000000002")
@@ -8759,6 +8823,102 @@ namespace AribONE.Migrations
                         });
                 });
 
+            modelBuilder.Entity("AribONE.Models.Entities.Shift", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<decimal>("ActualCash")
+                        .HasPrecision(18, 3)
+                        .HasColumnType("decimal(18,3)");
+
+                    b.Property<Guid>("BranchId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("CloseNote")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<DateTime?>("ClosedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("ClosedByUserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<decimal>("Difference")
+                        .HasPrecision(18, 3)
+                        .HasColumnType("decimal(18,3)");
+
+                    b.Property<decimal>("ExpectedBank")
+                        .HasPrecision(18, 3)
+                        .HasColumnType("decimal(18,3)");
+
+                    b.Property<decimal>("ExpectedCash")
+                        .HasPrecision(18, 3)
+                        .HasColumnType("decimal(18,3)");
+
+                    b.Property<decimal>("ExpectedCredit")
+                        .HasPrecision(18, 3)
+                        .HasColumnType("decimal(18,3)");
+
+                    b.Property<decimal>("ExpectedWallet")
+                        .HasPrecision(18, 3)
+                        .HasColumnType("decimal(18,3)");
+
+                    b.Property<bool>("IsForceClosed")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("Num")
+                        .HasColumnType("int");
+
+                    b.Property<string>("OpenNote")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<DateTime>("OpenedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("OpenedByUserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<decimal>("OpeningCash")
+                        .HasPrecision(18, 3)
+                        .HasColumnType("decimal(18,3)");
+
+                    b.Property<decimal>("RefundsTotal")
+                        .HasPrecision(18, 3)
+                        .HasColumnType("decimal(18,3)");
+
+                    b.Property<decimal>("SalesTotal")
+                        .HasPrecision(18, 3)
+                        .HasColumnType("decimal(18,3)");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<Guid>("TreasuryId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("WorkstationId")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("OpenedByUserId");
+
+                    b.HasIndex("BranchId", "WorkstationId", "Status");
+
+                    b.ToTable("Shifts", t =>
+                        {
+                            t.HasTrigger("Shifts_dms_sync");
+                        });
+
+                    b.HasAnnotation("SqlServer:UseSqlOutputClause", false);
+                });
+
             modelBuilder.Entity("AribONE.Models.Entities.Treasury", b =>
                 {
                     b.Property<Guid>("Id")
@@ -8864,6 +9024,9 @@ namespace AribONE.Migrations
                     b.Property<Guid>("RegNum")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid?>("ShiftId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<string>("Ship")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -8881,6 +9044,8 @@ namespace AribONE.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("BranchId");
+
+                    b.HasIndex("ShiftId");
 
                     b.HasIndex("TreasuryId");
 
@@ -9911,6 +10076,25 @@ namespace AribONE.Migrations
                     b.Navigation("Permission");
 
                     b.Navigation("Role");
+                });
+
+            modelBuilder.Entity("AribONE.Models.Entities.Shift", b =>
+                {
+                    b.HasOne("AribONE.Models.Entities.Branch", "Branch")
+                        .WithMany()
+                        .HasForeignKey("BranchId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("AribONE.Models.Entities.User", "OpenedByUser")
+                        .WithMany()
+                        .HasForeignKey("OpenedByUserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Branch");
+
+                    b.Navigation("OpenedByUser");
                 });
 
             modelBuilder.Entity("AribONE.Models.Entities.Treasury", b =>

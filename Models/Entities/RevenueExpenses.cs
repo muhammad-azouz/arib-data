@@ -8,7 +8,7 @@ public enum RevenueExpensesDealing
     Expenses = 1001,
 }
 
-public class RevenueExpenses
+public class RevenueExpenses : IShiftScoped
 {
     public Guid Id { get; set; }
     public DateTime CreateAt { get; set; }
@@ -46,4 +46,8 @@ public class RevenueExpenses
 
     public Guid BranchId { get; set; }
     public Branch Branch { get; set; } = null!;
+
+    /// <summary>Owning shift in Shift Mode; null in Open Safe mode.
+    /// Stamped by ShiftIdInterceptor.</summary>
+    public Guid? ShiftId { get; set; }
 }
