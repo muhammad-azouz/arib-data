@@ -35,8 +35,12 @@ public static class SyncScope
     /// every synced row is pinned to the token's branch (no more join filters).
     /// v3: renamed ProductTransaction→InventoryMovement and DailyProductCost→
     /// WeightedAverageCost, and added InventoryBatches/InventoryBatchConsumptions
-    /// for per-batch FIFO/LIFO/FEFO costing + expiry.</summary>
-    public const int SchemaVersion = 3;
+    /// for per-batch FIFO/LIFO/FEFO costing + expiry.
+    /// v4: Shift Management — added the Shifts table and BillPayments to the synced
+    /// branch tier, plus a nullable ShiftId column on the seven other anchor tables
+    /// (Bills/TreasuriesTransactions/BankTransactions/EWalletTransactions/
+    /// RevenueExpenses/CustomerTransactions/InventoryAdjustments).</summary>
+    public const int SchemaVersion = 4;
 
     /// <summary>
     /// Tier A (D9a): masters, replicated in full to every branch.
@@ -96,6 +100,8 @@ public static class SyncScope
         "RevenueExpenses",
         "WeightedAverageCosts",
         "OrderFulfillments",
+        "Shifts",
+        "BillPayments",
     ];
 
     /// <summary>
@@ -160,6 +166,9 @@ public static class SyncScope
         ("InventoryAdjustments", "BranchId"),
         ("ProductOpeningBalances", "BranchId"),
         ("OrderFulfillments", "BranchId"),
+        // v4: shift management
+        ("Shifts", "BranchId"),
+        ("BillPayments", "BranchId"),
     ];
 
     /// <summary>Builds the canonical <see cref="SyncSetup"/>: both tiers, the

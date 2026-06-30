@@ -19,6 +19,12 @@ public sealed class Branch
     [MaxLength(150)] public required string Address { get; set; }
     public bool IsActive { get; set; }
 
+    /// <summary>When true this branch runs in Shift Mode (cashiers must open a shift
+    /// before any money transaction, per-shift X/Z reconciliation). Default false =
+    /// Open Safe mode = unchanged legacy behaviour. Per-branch because the branch is
+    /// the sync node; stored in the DB (not preference.json).</summary>
+    public bool ShiftModeEnabled { get; set; }
+
     public Guid CompanyId { get; set; }
     public Company Company { get; set; } = null!;
 

@@ -39,6 +39,25 @@ public class AribContext : DbContext
     /// </summary>
     public static Func<Guid>? BranchIdProvider { get; set; }
 
+    /// <summary>
+    /// Supplies the current open shift id for the <see cref="ShiftIdInterceptor"/>.
+    /// The desktop app sets this to <c>() =&gt; ShiftContext.Current?.CurrentShiftId</c>
+    /// at startup. Returns null in Open Safe mode or when no shift is open on this
+    /// workstation, so anchor rows keep a null ShiftId (identical to pre-shift
+    /// behaviour). When the provider itself is null (gateway, design-time) the
+    /// interceptor is a no-op.
+    /// </summary>
+    public static Func<Guid?>? ShiftIdProvider { get; set; }
+
+    /// <summary>
+    /// Invoked by <see cref="AribONE.Interceptors.ShiftIdInterceptor"/> when a save is
+    /// aborted because the ambient shift was closed on another terminal (force-close or
+    /// a shared/duplicate workstation id). The desktop host sets this to drop the stale
+    /// <c>ShiftContext</c> so the gate blocks and the banner flips to "closed". Null
+    /// (gateway, design-time) = no-op.
+    /// </summary>
+    public static Action? ShiftClosedCallback { get; set; }
+
     // Entities
     public DbSet<Group> Groups { get; set; }
     public DbSet<Account> Accounts { get; set; }
@@ -118,6 +137,8 @@ public class AribContext : DbContext
     // Branch-wide notification config (NOT in SyncScope — see NotificationSetting).
     public DbSet<NotificationSetting> NotificationSettings { get; set; }
 
+    public DbSet<Shift> Shifts { get; set; }
+
     // Mapped to the SQL Server scalar UDF dbo.NormalizeArabic in OnModelCreating,
     // but ONLY on SQL Server — Postgres has no such function and the gateway never
     // calls it against a Postgres central, so the mapping is gated by provider
@@ -136,7 +157,7 @@ public class AribContext : DbContext
                          "The host must assign it once at startup before any " +
                          "parameterless new AribContext() is used.");
             options.UseSqlServer(cs);
-            options.AddInterceptors(new BranchIdInterceptor());
+            options.AddInterceptors(new BranchIdInterceptor(), new ShiftIdInterceptor());
 #if DEBUG
             options.EnableSensitiveDataLogging();
 #endif
@@ -416,6 +437,48 @@ public class AribContext : DbContext
         // Branch-wide notification settings — one row per branch (also local-only).
         modelBuilder.Entity<NotificationSetting>()
             .HasIndex(x => x.BranchId).IsUnique();
+
+        // Shift Management. A shift tags existing financial rows (IShiftScoped) on
+        // the branch's shared treasury; it is branch-filtered & synced (SyncScope v4).
+        // Restrict FKs keep Branch off SQL Server's multiple-cascade-paths rejection.
+        modelBuilder.Entity<Shift>()
+            .Property(x => x.OpeningCash).HasPrecision(18, 3);
+        modelBuilder.Entity<Shift>()
+            .Property(x => x.ExpectedCash).HasPrecision(18, 3);
+        modelBuilder.Entity<Shift>()
+            .Property(x => x.ActualCash).HasPrecision(18, 3);
+        modelBuilder.Entity<Shift>()
+            .Property(x => x.Difference).HasPrecision(18, 3);
+        modelBuilder.Entity<Shift>()
+            .Property(x => x.ExpectedBank).HasPrecision(18, 3);
+        modelBuilder.Entity<Shift>()
+            .Property(x => x.ExpectedWallet).HasPrecision(18, 3);
+        modelBuilder.Entity<Shift>()
+            .Property(x => x.ExpectedCredit).HasPrecision(18, 3);
+        modelBuilder.Entity<Shift>()
+            .Property(x => x.SalesTotal).HasPrecision(18, 3);
+        modelBuilder.Entity<Shift>()
+            .Property(x => x.RefundsTotal).HasPrecision(18, 3);
+        modelBuilder.Entity<Shift>()
+            .HasOne(x => x.Branch).WithMany().HasForeignKey(x => x.BranchId)
+            .OnDelete(DeleteBehavior.Restrict);
+        modelBuilder.Entity<Shift>()
+            .HasOne(x => x.OpenedByUser).WithMany().HasForeignKey(x => x.OpenedByUserId)
+            .OnDelete(DeleteBehavior.Restrict);
+        // The ambient open-shift lookup: one open shift per (branch, workstation).
+        modelBuilder.Entity<Shift>()
+            .HasIndex(x => new { x.BranchId, x.WorkstationId, x.Status });
+
+        // ShiftId tag indexes — every shift report aggregates by these, so they must
+        // stay fast on large databases.
+        modelBuilder.Entity<Bill>().HasIndex(x => x.ShiftId);
+        modelBuilder.Entity<TreasuryTransaction>().HasIndex(x => x.ShiftId);
+        modelBuilder.Entity<BankTransaction>().HasIndex(x => x.ShiftId);
+        modelBuilder.Entity<EWalletTransaction>().HasIndex(x => x.ShiftId);
+        modelBuilder.Entity<RevenueExpenses>().HasIndex(x => x.ShiftId);
+        modelBuilder.Entity<CustomerTransaction>().HasIndex(x => x.ShiftId);
+        modelBuilder.Entity<InventoryAdjustment>().HasIndex(x => x.ShiftId);
+        modelBuilder.Entity<BillPayment>().HasIndex(x => x.ShiftId);
 
         // seed data here
         modelBuilder.Seed();

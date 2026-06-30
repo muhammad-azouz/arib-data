@@ -74,14 +74,18 @@ public static class SeedData
             new Permission { Id = SeedGuid(TableCodes.Permission, 43), Name = "عرض الأقساط", Description = "يمكنه عرض خطط وجداول الأقساط" },
             new Permission { Id = SeedGuid(TableCodes.Permission, 44), Name = "إنشاء أقساط", Description = "يمكنه إنشاء خطة أقساط جديدة للعميل" },
             new Permission { Id = SeedGuid(TableCodes.Permission, 45), Name = "تحصيل الأقساط", Description = "يمكنه تحصيل دفعة على قسط مستحق" },
-            new Permission { Id = SeedGuid(TableCodes.Permission, 46), Name = "إلغاء الأقساط", Description = "يمكنه إلغاء خطة أقساط نشطة" }
+            new Permission { Id = SeedGuid(TableCodes.Permission, 46), Name = "إلغاء الأقساط", Description = "يمكنه إلغاء خطة أقساط نشطة" },
+            // Shift management — reuses the existing 33/34/35 (close/open/view shift);
+            // these two are new. Names MUST match ExtensionMethods.PermissionNames.
+            new Permission { Id = SeedGuid(TableCodes.Permission, 47), Name = "اغلاق الورديه إجباري", Description = "يمكنه إغلاق ورديه كاشير آخر (إغلاق إجباري)" },
+            new Permission { Id = SeedGuid(TableCodes.Permission, 48), Name = "عرض ورديات الكاشيرين الآخرين", Description = "يمكنه عرض ورديات وتقارير الكاشيرين الآخرين" }
         );
 
         // Seed RolePermissions
 
         // Administrator role (all permissions)
         modelBuilder.Entity<RolePermission>().HasData(
-            Enumerable.Range(1, 46).Select(id => new RolePermission { Id = SeedGuid(TableCodes.RolePermission, id + 29), RoleId = SeedGuid(TableCodes.Role, 1), PermissionId = SeedGuid(TableCodes.Permission, id) }).ToArray()
+            Enumerable.Range(1, 48).Select(id => new RolePermission { Id = SeedGuid(TableCodes.RolePermission, id + 29), RoleId = SeedGuid(TableCodes.Role, 1), PermissionId = SeedGuid(TableCodes.Permission, id) }).ToArray()
         );
 
         // Manager role permissions

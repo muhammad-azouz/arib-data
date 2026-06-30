@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace AribONE.Models.Entities;
 
-public class TreasuryTransaction
+public class TreasuryTransaction : IShiftScoped
 {
     public Guid Id { get; set; }
     public Guid TreasuryId { get; set; }
@@ -24,4 +24,8 @@ public class TreasuryTransaction
     public Guid RegNum { get; set; }
     public Guid UserId { get; set; }
     public User User { get; set; } = null!;
+
+    /// <summary>Owning shift in Shift Mode; null in Open Safe mode. Stamped by
+    /// ShiftIdInterceptor. Cash reconciliation sums these per shift.</summary>
+    public Guid? ShiftId { get; set; }
 }

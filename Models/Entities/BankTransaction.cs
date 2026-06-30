@@ -2,7 +2,7 @@ using System;
 
 namespace AribONE.Models.Entities;
 
-public class BankTransaction
+public class BankTransaction : IShiftScoped
 {
     public Guid Id { get; set; }
     public DateTime CreatedAt { get; set; }
@@ -27,4 +27,8 @@ public class BankTransaction
     public decimal CurrencyVal { get; set; }
     public Guid BranchId { get; set; }
     public required string Ship { get; set; }
+
+    /// <summary>Owning shift in Shift Mode; null in Open Safe mode.
+    /// Stamped by ShiftIdInterceptor.</summary>
+    public Guid? ShiftId { get; set; }
 }

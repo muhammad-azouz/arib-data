@@ -23,6 +23,8 @@ public static class NotificationTypes
     public const string FinanceInstallmentOverdue = "Finance.InstallmentOverdue";
     public const string FinanceInstallmentDueSoon = "Finance.InstallmentDueSoon";
     public const string FinanceCreditLimit = "Finance.CreditLimitExceeded";
+    public const string FinanceShiftOverShort = "Finance.ShiftOverShort";
+    public const string FinanceShiftForceClosed = "Finance.ShiftForceClosed";
 
     public const string SystemSyncFailed = "System.SyncFailed";
     public const string SystemUpdateRequired = "System.UpdateRequired";
