@@ -51,6 +51,21 @@ public abstract class Bill : IShiftScoped
     public Guid BillExtraId { get; set; }
     public decimal TotalExtra { get; set; }
     public decimal TotalDiscount { get; set; }
+
+    /// <summary>Ledger-based snapshot of the customer's/supplier's account
+    /// balance strictly before this bill's own CustomerTransaction row,
+    /// computed once at finalize time (SUM(Debit-Credit) over all earlier
+    /// ledger rows). Null when never computed (no Customer, an Order bill, or
+    /// a bill predating this feature) — PrintingService falls back to a live
+    /// recompute in that case. Frozen forever after finalize: never touched
+    /// by later payments, reversals, or deletions of earlier invoices.</summary>
+    public decimal? PreviousBalance { get; set; }
+
+    /// <summary>PreviousBalance + this bill's own ledger contribution
+    /// (Debit - Credit) at finalize time. Same snapshot/freeze semantics as
+    /// PreviousBalance.</summary>
+    public decimal? EndingBalance { get; set; }
+
     public Guid RegNum { get; set; }
     public int ItemCount { get; set; }
     public bool IsCash { get; set; }

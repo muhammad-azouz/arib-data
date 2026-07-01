@@ -4,6 +4,7 @@ using AribONE.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AribONE.Migrations
 {
     [DbContext(typeof(AribContext))]
-    partial class AribContextModelSnapshot : ModelSnapshot
+    [Migration("20260701084021_AddBillAndBranchBalanceSettings")]
+    partial class AddBillAndBranchBalanceSettings
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -99,7 +102,7 @@ namespace AribONE.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Accounts", null, t =>
+                    b.ToTable("Accounts", t =>
                         {
                             t.HasTrigger("Accounts_dms_sync");
                         });
@@ -5401,7 +5404,7 @@ namespace AribONE.Migrations
 
                     b.HasKey("Operand");
 
-                    b.ToTable("AccountOperands", null, t =>
+                    b.ToTable("AccountOperands", t =>
                         {
                             t.HasTrigger("AccountOperands_dms_sync");
                         });
@@ -5776,7 +5779,7 @@ namespace AribONE.Migrations
 
                     b.HasIndex("BranchId", "IsResolved", "CreatedAt");
 
-                    b.ToTable("AppNotifications", (string)null);
+                    b.ToTable("AppNotifications");
                 });
 
             modelBuilder.Entity("AribONE.Models.Entities.Area", b =>
@@ -5810,7 +5813,7 @@ namespace AribONE.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Areas", null, t =>
+                    b.ToTable("Areas", t =>
                         {
                             t.HasTrigger("Areas_dms_sync");
                         });
@@ -5913,7 +5916,7 @@ namespace AribONE.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Banks", null, t =>
+                    b.ToTable("Banks", t =>
                         {
                             t.HasTrigger("Banks_dms_sync");
                         });
@@ -6004,7 +6007,7 @@ namespace AribONE.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("BankTransactions", null, t =>
+                    b.ToTable("BankTransactions", t =>
                         {
                             t.HasTrigger("BankTransactions_dms_sync");
                         });
@@ -6197,7 +6200,7 @@ namespace AribONE.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Bills", null, t =>
+                    b.ToTable("Bills", t =>
                         {
                             t.HasTrigger("Bills_dms_sync");
                         });
@@ -6305,7 +6308,7 @@ namespace AribONE.Migrations
 
                     b.HasIndex("WarehouseId");
 
-                    b.ToTable("BillEntries", null, t =>
+                    b.ToTable("BillEntries", t =>
                         {
                             t.HasTrigger("BillEntries_dms_sync");
                         });
@@ -6348,7 +6351,7 @@ namespace AribONE.Migrations
 
                     b.HasIndex("ShiftId");
 
-                    b.ToTable("BillPayments", null, t =>
+                    b.ToTable("BillPayments", t =>
                         {
                             t.HasTrigger("BillPayments_dms_sync");
                         });
@@ -6404,7 +6407,7 @@ namespace AribONE.Migrations
 
                     b.HasIndex("CompanyId");
 
-                    b.ToTable("Branches", (string)null);
+                    b.ToTable("Branches");
                 });
 
             modelBuilder.Entity("AribONE.Models.Entities.Cash", b =>
@@ -6493,7 +6496,7 @@ namespace AribONE.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Cashes", null, t =>
+                    b.ToTable("Cashes", t =>
                         {
                             t.HasTrigger("Cashes_dms_sync");
                         });
@@ -6568,7 +6571,7 @@ namespace AribONE.Migrations
 
                     b.HasIndex("LogoId");
 
-                    b.ToTable("Companies", (string)null);
+                    b.ToTable("Companies");
                 });
 
             modelBuilder.Entity("AribONE.Models.Entities.Currency", b =>
@@ -6601,7 +6604,7 @@ namespace AribONE.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Currencies", null, t =>
+                    b.ToTable("Currencies", t =>
                         {
                             t.HasTrigger("Currencies_dms_sync");
                         });
@@ -6755,7 +6758,7 @@ namespace AribONE.Migrations
 
                     b.HasIndex("ImageId");
 
-                    b.ToTable("Customers", null, t =>
+                    b.ToTable("Customers", t =>
                         {
                             t.HasTrigger("Customers_dms_sync");
                         });
@@ -6838,7 +6841,7 @@ namespace AribONE.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("CustomerTransactions", null, t =>
+                    b.ToTable("CustomerTransactions", t =>
                         {
                             t.HasTrigger("CustomerTransactions_dms_sync");
                         });
@@ -6900,7 +6903,7 @@ namespace AribONE.Migrations
 
                     b.HasIndex("BranchId");
 
-                    b.ToTable("EWallets", null, t =>
+                    b.ToTable("EWallets", t =>
                         {
                             t.HasTrigger("EWallets_dms_sync");
                         });
@@ -6982,7 +6985,7 @@ namespace AribONE.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("EWalletTransactions", null, t =>
+                    b.ToTable("EWalletTransactions", t =>
                         {
                             t.HasTrigger("EWalletTransactions_dms_sync");
                         });
@@ -7016,7 +7019,7 @@ namespace AribONE.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Groups", null, t =>
+                    b.ToTable("Groups", t =>
                         {
                             t.HasTrigger("Groups_dms_sync");
                         });
@@ -7044,7 +7047,7 @@ namespace AribONE.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Images", null, t =>
+                    b.ToTable("Images", t =>
                         {
                             t.HasTrigger("Images_dms_sync");
                         });
@@ -7085,7 +7088,7 @@ namespace AribONE.Migrations
 
                     b.HasIndex("InstallmentPlanId");
 
-                    b.ToTable("InstallmentItems", (string)null);
+                    b.ToTable("InstallmentItems");
                 });
 
             modelBuilder.Entity("AribONE.Models.Entities.InstallmentPayment", b =>
@@ -7114,7 +7117,7 @@ namespace AribONE.Migrations
 
                     b.HasIndex("InstallmentItemId");
 
-                    b.ToTable("InstallmentPayments", (string)null);
+                    b.ToTable("InstallmentPayments");
                 });
 
             modelBuilder.Entity("AribONE.Models.Entities.InstallmentPlan", b =>
@@ -7175,7 +7178,7 @@ namespace AribONE.Migrations
 
                     b.HasIndex("CustomerId");
 
-                    b.ToTable("InstallmentPlans", (string)null);
+                    b.ToTable("InstallmentPlans");
                 });
 
             modelBuilder.Entity("AribONE.Models.Entities.InventoryAdjustment", b =>
@@ -7262,7 +7265,7 @@ namespace AribONE.Migrations
 
                     b.HasIndex("ShiftId");
 
-                    b.ToTable("InventoryAdjustments", null, t =>
+                    b.ToTable("InventoryAdjustments", t =>
                         {
                             t.HasTrigger("InventoryAdjustments_dms_sync");
                         });
@@ -7324,7 +7327,7 @@ namespace AribONE.Migrations
 
                     b.HasIndex("ProductId", "WarehouseId", "RemainingQty");
 
-                    b.ToTable("InventoryBatches", null, t =>
+                    b.ToTable("InventoryBatches", t =>
                         {
                             t.HasTrigger("InventoryBatches_dms_sync");
                         });
@@ -7370,7 +7373,7 @@ namespace AribONE.Migrations
 
                     b.HasIndex("RegNum");
 
-                    b.ToTable("InventoryBatchConsumptions", null, t =>
+                    b.ToTable("InventoryBatchConsumptions", t =>
                         {
                             t.HasTrigger("InventoryBatchConsumptions_dms_sync");
                         });
@@ -7460,7 +7463,7 @@ namespace AribONE.Migrations
 
                     b.HasIndex("WarehouseId");
 
-                    b.ToTable("InventoryMovements", null, t =>
+                    b.ToTable("InventoryMovements", t =>
                         {
                             t.HasTrigger("InventoryMovements_dms_sync");
                         });
@@ -7523,7 +7526,7 @@ namespace AribONE.Migrations
 
                     b.HasIndex("CustomerId");
 
-                    b.ToTable("JournalEntries", null, t =>
+                    b.ToTable("JournalEntries", t =>
                         {
                             t.HasTrigger("JournalEntries_dms_sync");
                         });
@@ -7560,7 +7563,7 @@ namespace AribONE.Migrations
                     b.HasIndex("NotificationId", "UserId")
                         .IsUnique();
 
-                    b.ToTable("NotificationReadStates", (string)null);
+                    b.ToTable("NotificationReadStates");
                 });
 
             modelBuilder.Entity("AribONE.Models.Entities.NotificationSetting", b =>
@@ -7601,7 +7604,7 @@ namespace AribONE.Migrations
                     b.HasIndex("BranchId")
                         .IsUnique();
 
-                    b.ToTable("NotificationSettings", (string)null);
+                    b.ToTable("NotificationSettings");
                 });
 
             modelBuilder.Entity("AribONE.Models.Entities.OrderFulfillment", b =>
@@ -7645,7 +7648,7 @@ namespace AribONE.Migrations
 
                     b.HasIndex("SaleEntryId");
 
-                    b.ToTable("OrderFulfillments", null, t =>
+                    b.ToTable("OrderFulfillments", t =>
                         {
                             t.HasTrigger("OrderFulfillments_dms_sync");
                         });
@@ -7669,7 +7672,7 @@ namespace AribONE.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Permissions", null, t =>
+                    b.ToTable("Permissions", t =>
                         {
                             t.HasTrigger("Permissions_dms_sync");
                         });
@@ -8031,7 +8034,7 @@ namespace AribONE.Migrations
 
                     b.HasIndex("GroupId");
 
-                    b.ToTable("Products", null, t =>
+                    b.ToTable("Products", t =>
                         {
                             t.HasTrigger("Products_dms_sync");
                         });
@@ -8060,7 +8063,7 @@ namespace AribONE.Migrations
 
                     b.HasIndex("UnitOfMeasureId");
 
-                    b.ToTable("Barcodes", null, t =>
+                    b.ToTable("Barcodes", t =>
                         {
                             t.HasTrigger("Barcodes_dms_sync");
                         });
@@ -8122,7 +8125,7 @@ namespace AribONE.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ProductDefaults", null, t =>
+                    b.ToTable("ProductDefaults", t =>
                         {
                             t.HasTrigger("ProductDefaults_dms_sync");
                         });
@@ -8206,7 +8209,7 @@ namespace AribONE.Migrations
 
                     b.HasIndex("WarehouseId");
 
-                    b.ToTable("ProductOpeningBalances", null, t =>
+                    b.ToTable("ProductOpeningBalances", t =>
                         {
                             t.HasTrigger("ProductOpeningBalances_dms_sync");
                         });
@@ -8295,7 +8298,7 @@ namespace AribONE.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("RevenueExpenses", null, t =>
+                    b.ToTable("RevenueExpenses", t =>
                         {
                             t.HasTrigger("RevenueExpenses_dms_sync");
                         });
@@ -8319,7 +8322,7 @@ namespace AribONE.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Roles", null, t =>
+                    b.ToTable("Roles", t =>
                         {
                             t.HasTrigger("Roles_dms_sync");
                         });
@@ -8365,7 +8368,7 @@ namespace AribONE.Migrations
 
                     b.HasIndex("RoleId");
 
-                    b.ToTable("RolePermissions", null, t =>
+                    b.ToTable("RolePermissions", t =>
                         {
                             t.HasTrigger("RolePermissions_dms_sync");
                         });
@@ -8925,7 +8928,7 @@ namespace AribONE.Migrations
 
                     b.HasIndex("BranchId", "WorkstationId", "Status");
 
-                    b.ToTable("Shifts", null, t =>
+                    b.ToTable("Shifts", t =>
                         {
                             t.HasTrigger("Shifts_dms_sync");
                         });
@@ -8986,7 +8989,7 @@ namespace AribONE.Migrations
 
                     b.HasIndex("BranchId");
 
-                    b.ToTable("Treasuries", null, t =>
+                    b.ToTable("Treasuries", t =>
                         {
                             t.HasTrigger("Treasuries_dms_sync");
                         });
@@ -9065,7 +9068,7 @@ namespace AribONE.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("TreasuriesTransactions", null, t =>
+                    b.ToTable("TreasuriesTransactions", t =>
                         {
                             t.HasTrigger("TreasuriesTransactions_dms_sync");
                         });
@@ -9147,7 +9150,7 @@ namespace AribONE.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("UnitOfMeasures", null, t =>
+                    b.ToTable("UnitOfMeasures", t =>
                         {
                             t.HasTrigger("UnitOfMeasures_dms_sync");
                         });
@@ -9189,7 +9192,7 @@ namespace AribONE.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Users", null, t =>
+                    b.ToTable("Users", t =>
                         {
                             t.HasTrigger("Users_dms_sync");
                         });
@@ -9228,7 +9231,7 @@ namespace AribONE.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("UserRoles", null, t =>
+                    b.ToTable("UserRoles", t =>
                         {
                             t.HasTrigger("UserRoles_dms_sync");
                         });
@@ -9276,7 +9279,7 @@ namespace AribONE.Migrations
 
                     b.HasIndex("BranchId");
 
-                    b.ToTable("Warehouses", null, t =>
+                    b.ToTable("Warehouses", t =>
                         {
                             t.HasTrigger("Warehouses_dms_sync");
                         });
@@ -9347,7 +9350,7 @@ namespace AribONE.Migrations
 
                     b.HasIndex("WarehouseId");
 
-                    b.ToTable("WarehousesProductInventories", null, t =>
+                    b.ToTable("WarehousesProductInventories", t =>
                         {
                             t.HasTrigger("WarehousesProductInventories_dms_sync");
                         });
@@ -9393,7 +9396,7 @@ namespace AribONE.Migrations
 
                     b.HasIndex("WarehouseId");
 
-                    b.ToTable("WeightedAverageCosts", null, t =>
+                    b.ToTable("WeightedAverageCosts", t =>
                         {
                             t.HasTrigger("WeightedAverageCosts_dms_sync");
                         });
