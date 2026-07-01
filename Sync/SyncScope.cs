@@ -39,8 +39,10 @@ public static class SyncScope
     /// v4: Shift Management — added the Shifts table and BillPayments to the synced
     /// branch tier, plus a nullable ShiftId column on the seven other anchor tables
     /// (Bills/TreasuriesTransactions/BankTransactions/EWalletTransactions/
-    /// RevenueExpenses/CustomerTransactions/InventoryAdjustments).</summary>
-    public const int SchemaVersion = 4;
+    /// RevenueExpenses/CustomerTransactions/InventoryAdjustments).
+    /// v5: added nullable PreviousBalance/EndingBalance snapshot columns to Bills
+    /// for the ledger-based Previous/Ending Balance receipt feature.</summary>
+    public const int SchemaVersion = 5;
 
     /// <summary>
     /// Tier A (D9a): masters, replicated in full to every branch.

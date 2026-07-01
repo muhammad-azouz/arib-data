@@ -25,6 +25,19 @@ public sealed class Branch
     /// the sync node; stored in the DB (not preference.json).</summary>
     public bool ShiftModeEnabled { get; set; }
 
+    /// <summary>When true, receipts recompute PreviousBalance/EndingBalance live
+    /// from the customer ledger at print/reprint time instead of using the
+    /// snapshot frozen on the Bill at finalize time. Default false = snapshot
+    /// mode = frozen receipts. Per-branch, DB-resident like ShiftModeEnabled —
+    /// not preference.json.</summary>
+    public bool DynamicBalanceModeEnabled { get; set; }
+
+    /// <summary>When true, receipts also print a live "Current Balance" field
+    /// (Customer.Balance as of print time) under the customer-info section,
+    /// independent of PreviousBalance/EndingBalance. Default false. Per-branch,
+    /// DB-resident like ShiftModeEnabled.</summary>
+    public bool ShowCurrentBalanceOnReceipt { get; set; }
+
     public Guid CompanyId { get; set; }
     public Company Company { get; set; } = null!;
 
