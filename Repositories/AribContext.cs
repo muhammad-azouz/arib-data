@@ -382,27 +382,18 @@ public class AribContext : DbContext
             .HasOne(x => x.Branch).WithMany().HasForeignKey(x => x.BranchId)
             .OnDelete(DeleteBehavior.Restrict);
 
-        // InstallmentPlan decimal precision
-        modelBuilder.Entity<InstallmentPlan>()
-            .Property(x => x.Principal).HasPrecision(18, 3);
-        modelBuilder.Entity<InstallmentPlan>()
-            .Property(x => x.RoundingStep).HasPrecision(18, 3);
+        // InstallmentPlan money columns (Principal, RoundingStep, Amount, PaidAmount)
+        // inherit the global decimal(18,2) money convention — no precision override.
         modelBuilder.Entity<InstallmentPlan>()
             .HasOne(x => x.Customer).WithMany()
             .HasForeignKey(x => x.CustomerId)
             .OnDelete(DeleteBehavior.Restrict);
 
         modelBuilder.Entity<InstallmentItem>()
-            .Property(x => x.Amount).HasPrecision(18, 3);
-        modelBuilder.Entity<InstallmentItem>()
-            .Property(x => x.PaidAmount).HasPrecision(18, 3);
-        modelBuilder.Entity<InstallmentItem>()
             .HasOne(x => x.Plan).WithMany(p => p.Installments)
             .HasForeignKey(x => x.InstallmentPlanId)
             .OnDelete(DeleteBehavior.Cascade);
 
-        modelBuilder.Entity<InstallmentPayment>()
-            .Property(x => x.Amount).HasPrecision(18, 3);
         modelBuilder.Entity<InstallmentPayment>()
             .HasOne(x => x.InstallmentItem).WithMany(i => i.Payments)
             .HasForeignKey(x => x.InstallmentItemId)
@@ -441,24 +432,8 @@ public class AribContext : DbContext
         // Shift Management. A shift tags existing financial rows (IShiftScoped) on
         // the branch's shared treasury; it is branch-filtered & synced (SyncScope v4).
         // Restrict FKs keep Branch off SQL Server's multiple-cascade-paths rejection.
-        modelBuilder.Entity<Shift>()
-            .Property(x => x.OpeningCash).HasPrecision(18, 3);
-        modelBuilder.Entity<Shift>()
-            .Property(x => x.ExpectedCash).HasPrecision(18, 3);
-        modelBuilder.Entity<Shift>()
-            .Property(x => x.ActualCash).HasPrecision(18, 3);
-        modelBuilder.Entity<Shift>()
-            .Property(x => x.Difference).HasPrecision(18, 3);
-        modelBuilder.Entity<Shift>()
-            .Property(x => x.ExpectedBank).HasPrecision(18, 3);
-        modelBuilder.Entity<Shift>()
-            .Property(x => x.ExpectedWallet).HasPrecision(18, 3);
-        modelBuilder.Entity<Shift>()
-            .Property(x => x.ExpectedCredit).HasPrecision(18, 3);
-        modelBuilder.Entity<Shift>()
-            .Property(x => x.SalesTotal).HasPrecision(18, 3);
-        modelBuilder.Entity<Shift>()
-            .Property(x => x.RefundsTotal).HasPrecision(18, 3);
+        // All Shift decimals are money → they inherit the global decimal(18,2)
+        // convention (ConfigureConventions); no per-property precision override.
         modelBuilder.Entity<Shift>()
             .HasOne(x => x.Branch).WithMany().HasForeignKey(x => x.BranchId)
             .OnDelete(DeleteBehavior.Restrict);
