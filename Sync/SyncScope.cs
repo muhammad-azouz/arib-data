@@ -41,8 +41,11 @@ public static class SyncScope
     /// (Bills/TreasuriesTransactions/BankTransactions/EWalletTransactions/
     /// RevenueExpenses/CustomerTransactions/InventoryAdjustments).
     /// v5: added nullable PreviousBalance/EndingBalance snapshot columns to Bills
-    /// for the ledger-based Previous/Ending Balance receipt feature.</summary>
-    public const int SchemaVersion = 5;
+    /// for the ledger-based Previous/Ending Balance receipt feature.
+    /// v6: product-type split — added nullable Products.PurchaseAccountId and
+    /// relaxed Products.{SalesAccountId,StockAccountId,SalesCostAccountId} to
+    /// nullable so Sales/Purchase Service rows carry only their relevant account.</summary>
+    public const int SchemaVersion = 6;
 
     /// <summary>
     /// Tier A (D9a): masters, replicated in full to every branch.

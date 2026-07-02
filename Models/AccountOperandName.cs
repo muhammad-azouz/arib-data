@@ -43,4 +43,6 @@ public enum AccountOperandName
     WorkSalary,
     BillSaleExtra,
     BillPurchaseExtra,
+    SoldServices,
+    PurchasedServices,
 }
