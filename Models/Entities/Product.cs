@@ -38,9 +38,15 @@ public class Product
     public double TargetSales { get; set; }
 
     public bool IsExpire { get; set; }
-    public Guid SalesAccountId { get; set; }
-    public Guid StockAccountId { get; set; }
-    public Guid SalesCostAccountId { get; set; }
+
+    // Accounting setup is per-ProductKind (see ProductTypeProfile). All four are
+    // nullable because a service uses only a subset: a Sales Service has only a
+    // sales account; a Purchase Service has only a purchase account; an Inventory
+    // Product has sales + stock + COGS (and no separate purchase leg — perpetual).
+    public Guid? SalesAccountId { get; set; }
+    public Guid? PurchaseAccountId { get; set; }
+    public Guid? StockAccountId { get; set; }
+    public Guid? SalesCostAccountId { get; set; }
 
     public ICollection<UnitOfMeasure> UnitOfMeasure { get; set; }
 

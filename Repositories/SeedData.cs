@@ -197,6 +197,8 @@ public static class SeedData
              new AccountOperand() {LabelAr = "أجور نقدية", LabelEn = "Work Salary", Operand = AccountOperandName.WorkSalary.ToString(), AccountId = SeedGuid(TableCodes.Account, 150) },
              new AccountOperand() {LabelAr = "اضافى على الفاتورة", LabelEn = "Extra on Bill", Operand = AccountOperandName.BillSaleExtra.ToString(), AccountId = SeedGuid(TableCodes.Account, 218) },
              new AccountOperand() {LabelAr = "خدمات مشتراة", LabelEn = "Extra on Purchase", Operand = AccountOperandName.BillPurchaseExtra.ToString(), AccountId = SeedGuid(TableCodes.Account, 156) },
+             new AccountOperand() {LabelAr = "خدمات مباعة", LabelEn = "Sold Services", Operand = AccountOperandName.SoldServices.ToString(), AccountId = SeedGuid(TableCodes.Account, 218) }, // 5113 خدمات مباعة (default sales account for a Sales Service)
+             new AccountOperand() {LabelAr = "خدمات مشتراة", LabelEn = "Purchased Services", Operand = AccountOperandName.PurchasedServices.ToString(), AccountId = SeedGuid(TableCodes.Account, 156) }, // 42141 خدمات مشتراة (default purchase account for a Purchase Service)
              // new AccountOperand() {LabelAr = "", LabelEn = "", Operand = "ChequeBank", AccountId = 54 },
              // new AccountOperand() { Operand = "UnEarnedProfit", AccountId = 4265 },
              // new AccountOperand() { Operand = "VisaExpenses", AccountId = 183 },
