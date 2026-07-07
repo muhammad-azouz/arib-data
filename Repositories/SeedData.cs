@@ -78,14 +78,18 @@ public static class SeedData
             // Shift management — reuses the existing 33/34/35 (close/open/view shift);
             // these two are new. Names MUST match ExtensionMethods.PermissionNames.
             new Permission { Id = SeedGuid(TableCodes.Permission, 47), Name = "اغلاق الورديه إجباري", Description = "يمكنه إغلاق ورديه كاشير آخر (إغلاق إجباري)" },
-            new Permission { Id = SeedGuid(TableCodes.Permission, 48), Name = "عرض ورديات الكاشيرين الآخرين", Description = "يمكنه عرض ورديات وتقارير الكاشيرين الآخرين" }
+            new Permission { Id = SeedGuid(TableCodes.Permission, 48), Name = "عرض ورديات الكاشيرين الآخرين", Description = "يمكنه عرض ورديات وتقارير الكاشيرين الآخرين" },
+            // Shift vs Treasury (drawer/safe cash ownership) — lets a user post an
+            // expense/income/cash-in-out from the branch safe instead of the
+            // cashier's drawer, bypassing the open-shift requirement for that flow.
+            new Permission { Id = SeedGuid(TableCodes.Permission, 49), Name = "التعامل مع نقدية الخزنة الرئيسية", Description = "يمكنه تسجيل حركات نقدية من خزنة الفرع مباشرة بدلاً من درج الكاشير" }
         );
 
         // Seed RolePermissions
 
         // Administrator role (all permissions)
         modelBuilder.Entity<RolePermission>().HasData(
-            Enumerable.Range(1, 48).Select(id => new RolePermission { Id = SeedGuid(TableCodes.RolePermission, id + 29), RoleId = SeedGuid(TableCodes.Role, 1), PermissionId = SeedGuid(TableCodes.Permission, id) }).ToArray()
+            Enumerable.Range(1, 49).Select(id => new RolePermission { Id = SeedGuid(TableCodes.RolePermission, id + 29), RoleId = SeedGuid(TableCodes.Role, 1), PermissionId = SeedGuid(TableCodes.Permission, id) }).ToArray()
         );
 
         // Manager role permissions
@@ -109,7 +113,8 @@ public static class SeedData
             new RolePermission { Id = SeedGuid(TableCodes.RolePermission, 17), RoleId = SeedGuid(TableCodes.Role, 2), PermissionId = SeedGuid(TableCodes.Permission, 23) }, // الوصول لتقارير الحسابات
             new RolePermission { Id = SeedGuid(TableCodes.RolePermission, 18), RoleId = SeedGuid(TableCodes.Role, 2), PermissionId = SeedGuid(TableCodes.Permission, 33) }, // اغلاق الشفت
             new RolePermission { Id = SeedGuid(TableCodes.RolePermission, 19), RoleId = SeedGuid(TableCodes.Role, 2), PermissionId = SeedGuid(TableCodes.Permission, 34) }, // فتح الشفت
-            new RolePermission { Id = SeedGuid(TableCodes.RolePermission, 20), RoleId = SeedGuid(TableCodes.Role, 2), PermissionId = SeedGuid(TableCodes.Permission, 35) }  // استعراض الشفت
+            new RolePermission { Id = SeedGuid(TableCodes.RolePermission, 20), RoleId = SeedGuid(TableCodes.Role, 2), PermissionId = SeedGuid(TableCodes.Permission, 35) }, // استعراض الشفت
+            new RolePermission { Id = SeedGuid(TableCodes.RolePermission, 79), RoleId = SeedGuid(TableCodes.Role, 2), PermissionId = SeedGuid(TableCodes.Permission, 49) }  // التعامل مع نقدية الخزنة الرئيسية
         );
 
         // Cashier role permissions

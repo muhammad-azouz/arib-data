@@ -20,6 +20,11 @@ namespace AribONE.Interceptors;
 /// before. When the provider itself is null (gateway, design-time) it is also a
 /// no-op. Mirrors <see cref="BranchIdInterceptor"/>.
 ///
+/// A save can also opt out explicitly via <see cref="ShiftTagging.Suppress"/> —
+/// used by safe-owned cash movements (e.g. purchases, or an expense/payment the
+/// user marked as paid from the safe rather than the drawer) so they are never
+/// counted against the cashier's shift reconciliation.
+///
 /// The commit-time guard closes the in-flight race: a cashier may have opened a money
 /// flow while the shift was open, but if a supervisor force-closed it (or a duplicate
 /// workstation id closed it) before Save, this aborts the whole SaveChanges so no row
@@ -72,6 +77,9 @@ public sealed class ShiftIdInterceptor : SaveChangesInterceptor
     private static bool TryStamp(DbContext ctx, out Guid shiftId)
     {
         shiftId = Guid.Empty;
+        if (ShiftTagging.IsSuppressed)
+            return false;
+
         var provider = Repositories.AribContext.ShiftIdProvider;
         if (provider is null)
             return false;
