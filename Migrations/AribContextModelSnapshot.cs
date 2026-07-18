@@ -6106,6 +6106,52 @@ namespace AribONE.Migrations
                     b.HasAnnotation("SqlServer:UseSqlOutputClause", false);
                 });
 
+            modelBuilder.Entity("AribONE.Models.Entities.FiscalYear", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("ClosedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("ClosedByUserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("ClosingRegNum")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("EndDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<decimal>("NetProfit")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<DateTime>("StartDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Status");
+
+                    b.HasIndex("StartDate", "EndDate")
+                        .IsUnique();
+
+                    b.ToTable("FiscalYears", t =>
+                        {
+                            t.HasTrigger("FiscalYears_dms_sync");
+                        });
+
+                    b.HasAnnotation("SqlServer:UseSqlOutputClause", false);
+                });
+
             modelBuilder.Entity("AribONE.Models.Entities.GeneralLedgerEntry", b =>
                 {
                     b.Property<Guid>("Id")
@@ -7961,6 +8007,13 @@ namespace AribONE.Migrations
                             AccountId = new Guid("00000001-0000-7000-a000-000000000035"),
                             LabelAr = "عهد الموظفين",
                             LabelEn = "Pledge"
+                        },
+                        new
+                        {
+                            Role = "RetainedEarnings",
+                            AccountId = new Guid("00000001-0000-7000-a000-000000000129"),
+                            LabelAr = "أرباح (خسائر) مرحلة",
+                            LabelEn = "Retained Earnings"
                         },
                         new
                         {
