@@ -61,8 +61,8 @@ public class AribContext : DbContext
     // Entities
     public DbSet<Group> Groups { get; set; }
     public DbSet<Account> Accounts { get; set; }
-    public DbSet<AccountOperand> AccountOperands { get; set; }
-    public DbSet<JournalEntry> JournalEntries { get; set; }
+    public DbSet<PostingAccount> PostingAccounts { get; set; }
+    public DbSet<GeneralLedgerEntry> GeneralLedgerEntries { get; set; }
     public DbSet<Currency> Currencies { get; set; }
     public DbSet<Image> Images { get; set; }
     public DbSet<Company> Companies { get; set; }
@@ -83,25 +83,25 @@ public class AribContext : DbContext
 
     public DbSet<ProductDefault> ProductDefaults { get; set; }
     public DbSet<Area> Areas { get; set; }
-    public DbSet<Customer> Customers { get; set; }
-    public DbSet<CustomerTransaction> CustomerTransactions { get; set; }
+    public DbSet<Partner> Partners { get; set; }
+    public DbSet<PartnerLedgerEntry> PartnerLedgerEntries { get; set; }
 
-    public DbSet<Bill> Bills { get; set; }
-    public DbSet<BillEntry> BillEntries { get; set; }
+    public DbSet<Invoice> Invoices { get; set; }
+    public DbSet<InvoiceLine> InvoiceLines { get; set; }
     public DbSet<Purchase> Purchases { get; set; }
-    public DbSet<PurchaseEntry> PurchaseEntries { get; set; }
+    public DbSet<PurchaseLine> PurchaseLines { get; set; }
 
-    public DbSet<RePurchase> RePurchases { get; set; }
-    public DbSet<RePurchaseEntry> RePurchaseEntries { get; set; }
+    public DbSet<PurchaseReturn> PurchaseReturns { get; set; }
+    public DbSet<PurchaseReturnLine> PurchaseReturnLines { get; set; }
 
     public DbSet<Sale> Sales { get; set; }
-    public DbSet<SaleEntry> SaleEntries { get; set; }
+    public DbSet<SaleLine> SaleLines { get; set; }
 
-    public DbSet<ReSale> ReSales { get; set; }
-    public DbSet<ReSaleEntry> ReSaleEntries { get; set; }
+    public DbSet<SalesReturn> SalesReturns { get; set; }
+    public DbSet<SalesReturnLine> SalesReturnLines { get; set; }
 
     public DbSet<Order> Orders { get; set; }
-    public DbSet<OrderEntry> OrderEntries { get; set; }
+    public DbSet<OrderLine> OrderLines { get; set; }
     public DbSet<OrderFulfillment> OrderFulfillments { get; set; }
 
     public DbSet<User> Users { get; set; }
@@ -110,15 +110,15 @@ public class AribContext : DbContext
     public DbSet<RolePermission> RolePermissions { get; set; }
     public DbSet<UserRole> UserRoles { get; set; }
 
-    public DbSet<Cash> Cashes { get; set; }
+    public DbSet<PaymentVoucher> PaymentVouchers { get; set; }
 
-    public DbSet<Bank> Banks { get; set; }
+    public DbSet<BankAccount> BankAccounts { get; set; }
     public DbSet<BankTransaction> BankTransactions { get; set; }
 
     public DbSet<EWallet> EWallets { get; set; }
     public DbSet<EWalletTransaction> EWalletTransactions { get; set; }
 
-    public DbSet<RevenueExpenses> RevenueExpenses { get; set; }
+    public DbSet<ExpenseIncomeVoucher> ExpenseIncomeVouchers { get; set; }
 
     public DbSet<InventoryAdjustment> InventoryAdjustments { get; set; }
 
@@ -126,7 +126,7 @@ public class AribContext : DbContext
     public DbSet<InstallmentItem> InstallmentItems { get; set; }
     public DbSet<InstallmentPayment> InstallmentPayments { get; set; }
 
-    public DbSet<BillPayment> BillPayments { get; set; }
+    public DbSet<InvoicePayment> InvoicePayments { get; set; }
 
     // Derived, local-only notifications (NOT in SyncScope — see AppNotification).
     public DbSet<AppNotification> AppNotifications { get; set; }
@@ -206,7 +206,7 @@ public class AribContext : DbContext
         modelBuilder.Entity<Group>()
             .HasDiscriminator<string>("Kind")
             .HasValue<ProductGroup>("Product")
-            .HasValue<CustomerGroup>("Customer");
+            .HasValue<PartnerGroup>("Customer");
 
         modelBuilder.Entity<Product>()
             .HasMany(x => x.Warehouses)
@@ -230,9 +230,11 @@ public class AribContext : DbContext
             .Property(x => x.InQty).HasPrecision(18, 3);
         modelBuilder.Entity<InventoryMovement>()
             .Property(x => x.OutQty).HasPrecision(18, 3);
+        // Discriminator value strings ("Product"/"Customer") are stored DB data —
+        // unchanged by the PartnerGroup rename above.
 
         // FIFO/LIFO/FEFO cost-and-expiry layers. Quantities 18,3; per-unit cost 18,4
-        // (matches BillEntry.ItemCost). Batches deplete by ExpiryDate (FEFO) or
+        // (matches InvoiceLine.ItemCost). Batches deplete by ExpiryDate (FEFO) or
         // ReceivedDate (FIFO/LIFO); indexed for both the availability scan and expiry
         // reporting. SourceRegNum/RegNum index the batch back to the bill that
         // created/consumed it for reversal.
@@ -268,38 +270,48 @@ public class AribContext : DbContext
             .HasOne(x => x.Batch).WithMany().HasForeignKey(x => x.BatchId)
             .OnDelete(DeleteBehavior.Restrict);
 
-        modelBuilder.Entity<Bill>()
+        modelBuilder.Entity<Invoice>()
             .HasDiscriminator(x => x.Type)
-            .HasValue<Sale>(BillType.Sale)
-            .HasValue<ReSale>(BillType.ReSale)
-            .HasValue<Purchase>(BillType.Purchase)
-            .HasValue<RePurchase>(BillType.RePurchase)
-            .HasValue<Order>(BillType.Order);
+            .HasValue<Sale>(InvoiceType.Sale)
+            .HasValue<SalesReturn>(InvoiceType.SalesReturn)
+            .HasValue<Purchase>(InvoiceType.Purchase)
+            .HasValue<PurchaseReturn>(InvoiceType.PurchaseReturn)
+            .HasValue<Order>(InvoiceType.Order);
 
-        modelBuilder.Entity<BillEntry>()
-            .Property<string>("Discriminator"); // Exposes existing column
+        // Pins the TPH discriminator to the pre-rename class names — EF's default
+        // convention writes the CLR type name, which would silently drift to the new
+        // class names (SaleLine, etc.) for newly-inserted rows otherwise, corrupting
+        // the invariant that stored Discriminator values are byte-identical pre/post
+        // rename (existing rows already contain "SaleEntry"/"PurchaseEntry"/etc.).
+        modelBuilder.Entity<InvoiceLine>()
+            .HasDiscriminator<string>("Discriminator")
+            .HasValue<SaleLine>("SaleEntry")
+            .HasValue<PurchaseLine>("PurchaseEntry")
+            .HasValue<SalesReturnLine>("ReSaleEntry")
+            .HasValue<PurchaseReturnLine>("RePurchaseEntry")
+            .HasValue<OrderLine>("OrderEntry");
 
-        // modelBuilder.Entity<Bill>().Property("Type").HasMaxLength(3)
+        // modelBuilder.Entity<Invoice>().Property("Type").HasMaxLength(3)
 
-        modelBuilder.Entity<BillEntry>()
+        modelBuilder.Entity<InvoiceLine>()
             .HasOne(x => x.Branch)
             .WithMany()
             .HasForeignKey(x => x.BranchId)
             .OnDelete(DeleteBehavior.Restrict);
 
-        modelBuilder.Entity<BillEntry>()
+        modelBuilder.Entity<InvoiceLine>()
             .HasOne(x => x.Unit)
             .WithMany()
             .HasForeignKey(x => x.UnitId)
             .OnDelete(DeleteBehavior.Restrict);
 
-        modelBuilder.Entity<BillEntry>()
+        modelBuilder.Entity<InvoiceLine>()
             .HasOne(x => x.Warehouse)
             .WithMany()
             .HasForeignKey(x => x.WarehouseId)
             .OnDelete(DeleteBehavior.Restrict);
 
-        modelBuilder.Entity<BillEntry>()
+        modelBuilder.Entity<InvoiceLine>()
             .HasOne(x => x.Product)
             .WithMany()
             .HasForeignKey(x => x.ProductId)
@@ -314,7 +326,7 @@ public class AribContext : DbContext
             .HasForeignKey(x => x.TreasuryId)
             .OnDelete(DeleteBehavior.Restrict);
 
-        modelBuilder.Entity<Cash>()
+        modelBuilder.Entity<PaymentVoucher>()
             .HasOne(x => x.Currency)
             .WithMany()
             .HasForeignKey(x => x.CurrencyId)
@@ -326,7 +338,7 @@ public class AribContext : DbContext
             .HasForeignKey(x => x.BankId)
             .OnDelete(DeleteBehavior.Restrict);
 
-        modelBuilder.Entity<RevenueExpenses>()
+        modelBuilder.Entity<ExpenseIncomeVoucher>()
             .HasOne(x => x.Currency)
             .WithMany()
             .HasForeignKey(x => x.CurrencyId)
@@ -385,8 +397,8 @@ public class AribContext : DbContext
         // InstallmentPlan money columns (Principal, RoundingStep, Amount, PaidAmount)
         // inherit the global decimal(18,2) money convention — no precision override.
         modelBuilder.Entity<InstallmentPlan>()
-            .HasOne(x => x.Customer).WithMany()
-            .HasForeignKey(x => x.CustomerId)
+            .HasOne(x => x.Partner).WithMany()
+            .HasForeignKey(x => x.PartnerId)
             .OnDelete(DeleteBehavior.Restrict);
 
         modelBuilder.Entity<InstallmentItem>()
@@ -399,11 +411,11 @@ public class AribContext : DbContext
             .HasForeignKey(x => x.InstallmentItemId)
             .OnDelete(DeleteBehavior.Cascade);
 
-        modelBuilder.Entity<BillPayment>()
+        modelBuilder.Entity<InvoicePayment>()
             .Property(x => x.Amount).HasPrecision(18, 2);
-        modelBuilder.Entity<BillPayment>()
-            .HasOne(x => x.Bill).WithMany()
-            .HasForeignKey(x => x.BillId)
+        modelBuilder.Entity<InvoicePayment>()
+            .HasOne(x => x.Invoice).WithMany()
+            .HasForeignKey(x => x.InvoiceId)
             .OnDelete(DeleteBehavior.Cascade);
 
         // Derived, local-only notifications (deliberately absent from SyncScope, so no
@@ -446,14 +458,14 @@ public class AribContext : DbContext
 
         // ShiftId tag indexes — every shift report aggregates by these, so they must
         // stay fast on large databases.
-        modelBuilder.Entity<Bill>().HasIndex(x => x.ShiftId);
+        modelBuilder.Entity<Invoice>().HasIndex(x => x.ShiftId);
         modelBuilder.Entity<TreasuryTransaction>().HasIndex(x => x.ShiftId);
         modelBuilder.Entity<BankTransaction>().HasIndex(x => x.ShiftId);
         modelBuilder.Entity<EWalletTransaction>().HasIndex(x => x.ShiftId);
-        modelBuilder.Entity<RevenueExpenses>().HasIndex(x => x.ShiftId);
-        modelBuilder.Entity<CustomerTransaction>().HasIndex(x => x.ShiftId);
+        modelBuilder.Entity<ExpenseIncomeVoucher>().HasIndex(x => x.ShiftId);
+        modelBuilder.Entity<PartnerLedgerEntry>().HasIndex(x => x.ShiftId);
         modelBuilder.Entity<InventoryAdjustment>().HasIndex(x => x.ShiftId);
-        modelBuilder.Entity<BillPayment>().HasIndex(x => x.ShiftId);
+        modelBuilder.Entity<InvoicePayment>().HasIndex(x => x.ShiftId);
 
         // seed data here
         modelBuilder.Seed();

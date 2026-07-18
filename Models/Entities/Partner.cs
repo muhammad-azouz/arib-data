@@ -3,17 +3,17 @@ using System.ComponentModel.DataAnnotations;
 
 namespace AribONE.Models.Entities;
 
-public class Customer
+public class Partner
 {
     public Guid Id { get; set; }
     public int Num { get; set; }
-    public CustomerType Type { get; set; }
+    public PartnerType Type { get; set; }
     [MaxLength(100)] [MinLength(3)] public required string Name { get; set; }
 
     public Guid? ImageId { get; set; }
     public Image? Image { get; set; }
     public Guid? GroupId { get; set; }
-    public virtual CustomerGroup? Group { get; set; }
+    public virtual PartnerGroup? Group { get; set; }
     public DateTime? CreatedAt { get; set; }
     public decimal Debit { get; set; }
     public decimal Credit { get; set; }

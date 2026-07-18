@@ -9,8 +9,8 @@ namespace AribONE.Models.Entities;
 /// value is still null. In Open Safe mode the provider returns null and the
 /// column stays null — identical to pre-shift behaviour.
 ///
-/// Derived/double-entry rows (JournalEntry, InventoryMovement, InventoryBatch)
-/// are deliberately NOT shift-scoped; reports join them back through RegNum/BillId
+/// Derived/double-entry rows (GeneralLedgerEntry, InventoryMovement, InventoryBatch)
+/// are deliberately NOT shift-scoped; reports join them back through RegNum/InvoiceId
 /// to avoid duplicating shift attribution.
 /// </summary>
 public interface IShiftScoped

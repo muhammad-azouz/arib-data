@@ -1,6 +1,6 @@
 namespace AribONE.Models;
 
-public enum AccountOperandName
+public enum PostingRole
 {
     InventoryAdjustmentDifferences,
     Asset,

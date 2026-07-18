@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace AribONE.Models.Entities;
 
-public class Bank
+public class BankAccount
 {
     public Guid Id { get; set; }
     public required string Name { get; set; }

@@ -20,5 +20,5 @@ public class Area
 
     [StringLength(50)] public string? Tag { get; set; }
 
-    public ICollection<Customer> Customers { get; set; } = new List<Customer>();
+    public ICollection<Partner> Partners { get; set; } = new List<Partner>();
 }

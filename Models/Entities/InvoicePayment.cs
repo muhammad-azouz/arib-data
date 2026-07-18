@@ -2,11 +2,11 @@ using System;
 
 namespace AribONE.Models.Entities;
 
-public class BillPayment : IShiftScoped
+public class InvoicePayment : IShiftScoped
 {
     public Guid Id { get; set; }
-    public Guid BillId { get; set; }
-    public Bill Bill { get; set; } = null!;
+    public Guid InvoiceId { get; set; }
+    public Invoice Invoice { get; set; } = null!;
 
     public Guid CashRegNum { get; set; }
     public decimal Amount { get; set; }

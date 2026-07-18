@@ -2,17 +2,17 @@ using System;
 
 namespace AribONE.Models.Entities;
 
-public enum RevenueExpensesDealing
+public enum ExpenseIncomeVoucherDealing
 {
     Revenue = 1000,
     Expenses = 1001,
 }
 
-public class RevenueExpenses : IShiftScoped
+public class ExpenseIncomeVoucher : IShiftScoped
 {
     public Guid Id { get; set; }
     public DateTime CreateAt { get; set; }
-    public RevenueExpensesDealing Dealing { get; set; }
+    public ExpenseIncomeVoucherDealing Dealing { get; set; }
     public int Num { get; set; }
     public string? Note { get; set; }
 
@@ -23,7 +23,7 @@ public class RevenueExpenses : IShiftScoped
     public Treasury? Treasury { get; set; }
 
     public Guid? BankId { get; set; }
-    public Bank? Bank { get; set; }
+    public BankAccount? Bank { get; set; }
 
     public Guid? EwalletId { get; set; }
     public EWallet? Ewallet { get; set; }

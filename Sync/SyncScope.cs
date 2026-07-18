@@ -44,13 +44,20 @@ public static class SyncScope
     /// for the ledger-based Previous/Ending Balance receipt feature.
     /// v6: product-type split — added nullable Products.PurchaseAccountId and
     /// relaxed Products.{SalesAccountId,StockAccountId,SalesCostAccountId} to
-    /// nullable so Sales/Purchase Service rows carry only their relevant account.</summary>
-    public const int SchemaVersion = 6;
+    /// nullable so Sales/Purchase Service rows carry only their relevant account.
+    /// v7: accounting schema rename (tasks/spec-rename.md) — table/entity names only,
+    /// zero shape change: AccountOperands→PostingAccounts, Bills→Invoices,
+    /// BillEntries→InvoiceLines, BillPayments→InvoicePayments, JournalEntries→
+    /// GeneralLedgerEntries, Customers→Partners, CustomerTransactions→
+    /// PartnerLedgerEntries, Cashes→PaymentVouchers, RevenueExpenses→
+    /// ExpenseIncomeVouchers, Banks→BankAccounts. A fleet flag-day in principle,
+    /// but zero production tenants existed at rename time (2026-07-18).</summary>
+    public const int SchemaVersion = 7;
 
     /// <summary>
     /// Tier A (D9a): masters, replicated in full to every branch.
-    /// <c>Banks</c> is tenant-wide (no BranchId column) and FK-required by the
-    /// branch-filtered <c>BankTransactions</c>, so it lives here even though
+    /// <c>BankAccounts</c> is tenant-wide (no BranchId column) and FK-required by
+    /// the branch-filtered <c>BankTransactions</c>, so it lives here even though
     /// D9's shorthand listed only the transactions.
     /// </summary>
     public static readonly string[] MasterTables =
@@ -64,8 +71,8 @@ public static class SyncScope
         "ProductDefaults",
         "Images",
         "Accounts",
-        "AccountOperands",
-        "Banks",
+        "PostingAccounts",
+        "BankAccounts",
         "Users",
         "Roles",
         "Permissions",
@@ -77,19 +84,19 @@ public static class SyncScope
     /// Tier B (D9b): branch documents, BranchId-filtered at the gateway (D2).
     /// Every table here carries its own BranchId column (v2 added it to the
     /// warehouse/order-scoped tables that used to be join-filtered), so each
-    /// filters on itself. Bill subtypes (Sale/Purchase/…) share the TPH tables
-    /// <c>Bills</c>/<c>BillEntries</c>. <c>OrderFulfillments</c> backs the
+    /// filters on itself. Invoice subtypes (Sale/Purchase/…) share the TPH tables
+    /// <c>Invoices</c>/<c>InvoiceLines</c>. <c>OrderFulfillments</c> backs the
     /// HQ-ordering workflow (D13: HQ writes Order rows, the branch answers with
     /// fulfillment rows).
     /// </summary>
     public static readonly string[] BranchTables =
     [
-        "Bills",
-        "BillEntries",
-        "JournalEntries",
-        "Customers",
-        "CustomerTransactions",
-        "Cashes",
+        "Invoices",
+        "InvoiceLines",
+        "GeneralLedgerEntries",
+        "Partners",
+        "PartnerLedgerEntries",
+        "PaymentVouchers",
         "Treasuries",
         "TreasuriesTransactions",
         "BankTransactions",
@@ -102,11 +109,11 @@ public static class SyncScope
         "InventoryBatchConsumptions",
         "ProductOpeningBalances",
         "InventoryAdjustments",
-        "RevenueExpenses",
+        "ExpenseIncomeVouchers",
         "WeightedAverageCosts",
         "OrderFulfillments",
         "Shifts",
-        "BillPayments",
+        "InvoicePayments",
     ];
 
     /// <summary>
@@ -149,12 +156,12 @@ public static class SyncScope
     /// </summary>
     public static readonly (string Table, string Column)[] OwnColumnFilters =
     [
-        ("Bills", "BranchId"),
-        ("BillEntries", "BranchId"),
-        ("JournalEntries", "BranchId"),
-        ("Customers", "BranchId"),
-        ("CustomerTransactions", "BranchId"),
-        ("Cashes", "BranchId"),
+        ("Invoices", "BranchId"),
+        ("InvoiceLines", "BranchId"),
+        ("GeneralLedgerEntries", "BranchId"),
+        ("Partners", "BranchId"),
+        ("PartnerLedgerEntries", "BranchId"),
+        ("PaymentVouchers", "BranchId"),
         ("Treasuries", "BranchId"),
         ("TreasuriesTransactions", "BranchId"),
         ("BankTransactions", "BranchId"),
@@ -162,7 +169,7 @@ public static class SyncScope
         ("EWalletTransactions", "BranchId"),
         ("Warehouses", "BranchId"),
         ("InventoryMovements", "BranchId"),
-        ("RevenueExpenses", "BranchId"),
+        ("ExpenseIncomeVouchers", "BranchId"),
         // v2: own BranchId column added (were warehouse/order join-filtered).
         ("WarehousesProductInventories", "BranchId"),
         ("WeightedAverageCosts", "BranchId"),
@@ -173,7 +180,7 @@ public static class SyncScope
         ("OrderFulfillments", "BranchId"),
         // v4: shift management
         ("Shifts", "BranchId"),
-        ("BillPayments", "BranchId"),
+        ("InvoicePayments", "BranchId"),
     ];
 
     /// <summary>Builds the canonical <see cref="SyncSetup"/>: both tiers, the

@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace AribONE.Models.Entities;
 
-public class JournalEntry
+public class GeneralLedgerEntry
 {
     public Guid Id { get; set; }
 
@@ -12,8 +12,8 @@ public class JournalEntry
     public Guid AccountId { get; set; }
     public Account Account { get; set; } = null!;
 
-    public Guid? CustomerId { get; set; }
-    public Customer? Customer { get; set; }
+    public Guid? PartnerId { get; set; }
+    public Partner? Partner { get; set; }
 
     public decimal Debit { get; set; }
 

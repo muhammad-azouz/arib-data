@@ -40,7 +40,7 @@ public sealed class InstallmentRule : INotificationRule
                         && i.Plan.Status == InstallmentPlanStatus.Active
                         && i.PaidAmount < i.Amount
                         && i.DueDate < dueSoonUpper)
-            .Select(i => new Row(i.Id, i.Plan.Customer.Name, i.DueDate, i.Amount - i.PaidAmount))
+            .Select(i => new Row(i.Id, i.Plan.Partner.Name, i.DueDate, i.Amount - i.PaidAmount))
             .ToListAsync(ct);
 
         var drafts = new List<NotificationDraft>();
@@ -71,7 +71,7 @@ public sealed class InstallmentRule : INotificationRule
             .Take(50)
             .Select(i => new
             {
-                i.CustomerName,
+                i.PartnerName,
                 DueDate = i.DueDate,
                 DaysOverdue = (int)(today - i.DueDate.Date).TotalDays,
                 Remaining = i.Remaining,
@@ -92,5 +92,5 @@ public sealed class InstallmentRule : INotificationRule
         };
     }
 
-    private readonly record struct Row(Guid Id, string CustomerName, DateTime DueDate, decimal Remaining);
+    private readonly record struct Row(Guid Id, string PartnerName, DateTime DueDate, decimal Remaining);
 }

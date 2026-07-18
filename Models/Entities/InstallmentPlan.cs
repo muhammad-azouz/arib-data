@@ -9,10 +9,10 @@ public class InstallmentPlan
     public Guid Id { get; set; }
     public int Num { get; set; }
 
-    public Guid CustomerId { get; set; }
-    public Customer Customer { get; set; } = null!;
+    public Guid PartnerId { get; set; }
+    public Partner Partner { get; set; } = null!;
 
-    public Guid? SourceBillId { get; set; }
+    public Guid? SourceInvoiceId { get; set; }
 
     public decimal Principal { get; set; }
     public int Count { get; set; }

@@ -12,10 +12,10 @@ using Microsoft.EntityFrameworkCore;
 namespace AribONE.Services.Notifications.Rules;
 
 /// <summary>
-/// Customers whose outstanding balance has passed their credit limit. Balance is positive
-/// when the customer owes the business, so "exceeded" = credit customer with a limit set
-/// and <c>Balance &gt; CreditLimit</c>. One grouped notification per branch; member identity
-/// is the customer id, so a newly-over-limit customer re-alerts. Deep-links to customers.
+/// Partners (customers) whose outstanding balance has passed their credit limit. Balance is
+/// positive when the customer owes the business, so "exceeded" = credit customer with a
+/// limit set and <c>Balance &gt; CreditLimit</c>. One grouped notification per branch;
+/// member identity is the partner id, so a newly-over-limit customer re-alerts.
 /// </summary>
 public sealed class CreditLimitRule : INotificationRule
 {
@@ -30,10 +30,10 @@ public sealed class CreditLimitRule : INotificationRule
     {
         var branchId = AribContext.BranchIdProvider?.Invoke() ?? Guid.Empty;
 
-        var rows = await db.Customers
+        var rows = await db.Partners
             .Where(c => c.BranchId == branchId
                         && c.IsActive
-                        && c.Type == CustomerType.Customer
+                        && c.Type == PartnerType.Customer
                         && c.CreditLimit > 0
                         && c.Balance > c.CreditLimit)
             .Select(c => new Row(c.Id, c.Name, c.Balance, c.CreditLimit))
@@ -45,7 +45,7 @@ public sealed class CreditLimitRule : INotificationRule
         var metadata = JsonSerializer.Serialize(rows
             .OrderByDescending(r => r.Balance - r.CreditLimit)
             .Take(50)
-            .Select(r => new { r.CustomerName, r.Balance, r.CreditLimit, Over = r.Balance - r.CreditLimit }));
+            .Select(r => new { r.PartnerName, r.Balance, r.CreditLimit, Over = r.Balance - r.CreditLimit }));
 
         return
         [
@@ -56,14 +56,14 @@ public sealed class CreditLimitRule : INotificationRule
                 Severity = NotificationSeverity.Warning,
                 Title = "تجاوز حد الائتمان",
                 Message = $"{rows.Count} عميل تجاوز حد الائتمان المسموح",
-                ReferenceType = "Customer",
+                ReferenceType = "Partner",
                 GroupKey = $"fin:creditlimit:{branchId}",
                 Count = rows.Count,
                 Metadata = metadata,
-                Members = rows.Select(r => r.CustomerId.ToString()).ToList(),
+                Members = rows.Select(r => r.PartnerId.ToString()).ToList(),
             },
         ];
     }
 
-    private readonly record struct Row(Guid CustomerId, string CustomerName, decimal Balance, decimal CreditLimit);
+    private readonly record struct Row(Guid PartnerId, string PartnerName, decimal Balance, decimal CreditLimit);
 }

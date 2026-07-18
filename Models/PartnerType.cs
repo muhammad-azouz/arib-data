@@ -1,6 +1,6 @@
 namespace AribONE.Models;
 
-public enum CustomerType
+public enum PartnerType
 {
     Customer,
     Supplier,
