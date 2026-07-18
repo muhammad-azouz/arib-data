@@ -45,4 +45,5 @@ public enum PostingRole
     BillPurchaseExtra,
     SoldServices,
     PurchasedServices,
+    RetainedEarnings,
 }

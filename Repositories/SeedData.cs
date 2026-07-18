@@ -188,6 +188,7 @@ public static class SeedData
              new PostingAccount() {LabelAr = "التأمينات الاجتماعية", LabelEn = "Insurance", Role = PostingRole.Insurance.ToString(), AccountId = SeedGuid(TableCodes.Account, 96) }, // جارى مصلحة التأمينات الاجتماعية
              new PostingAccount() {LabelAr = "الخزينة", LabelEn = "Treasury", Role = PostingRole.Treasury.ToString(), AccountId = SeedGuid(TableCodes.Account, 33) }, // 
              new PostingAccount() {LabelAr = "عهد الموظفين", LabelEn = "Pledge", Role = PostingRole.Pledge.ToString(), AccountId = SeedGuid(TableCodes.Account, 35) }, // عهد الموظفين
+             new PostingAccount() {LabelAr = "أرباح (خسائر) مرحلة", LabelEn = "Retained Earnings", Role = PostingRole.RetainedEarnings.ToString(), AccountId = SeedGuid(TableCodes.Account, 129) }, // أرباح (خسائر) مرحلة
              new PostingAccount() {LabelAr = "خصم كميه مكتسب", LabelEn = "Qty Discount In", Role = PostingRole.QtyDiscountIn.ToString(), AccountId = SeedGuid(TableCodes.Account, 1243) },
              new PostingAccount() {LabelAr = "خصم كمية مسموح به", LabelEn = "Qty Discount Out", Role = PostingRole.QtyDiscountOut.ToString(), AccountId = SeedGuid(TableCodes.Account, 1244) },
              new PostingAccount() {LabelAr = "الصدقه", LabelEn = "Sadka", Role = PostingRole.Sadka.ToString(), AccountId = SeedGuid(TableCodes.Account, 201) },

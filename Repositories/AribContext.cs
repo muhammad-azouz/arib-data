@@ -139,6 +139,8 @@ public class AribContext : DbContext
 
     public DbSet<Shift> Shifts { get; set; }
 
+    public DbSet<FiscalYear> FiscalYears { get; set; }
+
     // Mapped to the SQL Server scalar UDF dbo.NormalizeArabic in OnModelCreating,
     // but ONLY on SQL Server — Postgres has no such function and the gateway never
     // calls it against a Postgres central, so the mapping is gated by provider
@@ -455,6 +457,13 @@ public class AribContext : DbContext
         // The ambient open-shift lookup: one open shift per (branch, workstation).
         modelBuilder.Entity<Shift>()
             .HasIndex(x => new { x.BranchId, x.WorkstationId, x.Status });
+
+        // Fiscal Year. Company-wide calendar (no BranchId); NetProfit is money →
+        // inherits the global decimal(18,2) convention, no override.
+        modelBuilder.Entity<FiscalYear>()
+            .HasIndex(x => new { x.StartDate, x.EndDate }).IsUnique();
+        modelBuilder.Entity<FiscalYear>()
+            .HasIndex(x => x.Status);
 
         // ShiftId tag indexes — every shift report aggregates by these, so they must
         // stay fast on large databases.

@@ -19,5 +19,6 @@ public enum Dealing
     Revenue = 1000,
     Expenses = 1001,
     CloseTreasury = 1100,
-    InventoryAdjustment = 2000
+    InventoryAdjustment = 2000,
+    YearClose = 2100
 }

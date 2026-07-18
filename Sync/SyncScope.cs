@@ -51,8 +51,10 @@ public static class SyncScope
     /// GeneralLedgerEntries, Customers→Partners, CustomerTransactions→
     /// PartnerLedgerEntries, Cashes→PaymentVouchers, RevenueExpenses→
     /// ExpenseIncomeVouchers, Banks→BankAccounts. A fleet flag-day in principle,
-    /// but zero production tenants existed at rename time (2026-07-18).</summary>
-    public const int SchemaVersion = 7;
+    /// but zero production tenants existed at rename time (2026-07-18).
+    /// v8: Fiscal Year (tasks/spec-fiscal-year.md) — added the company-wide
+    /// FiscalYears table to the master tier.</summary>
+    public const int SchemaVersion = 8;
 
     /// <summary>
     /// Tier A (D9a): masters, replicated in full to every branch.
@@ -78,6 +80,7 @@ public static class SyncScope
         "Permissions",
         "UserRoles",
         "RolePermissions",
+        "FiscalYears",
     ];
 
     /// <summary>
