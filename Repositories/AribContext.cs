@@ -1,4 +1,6 @@
 using System;
+using System.Threading;
+using System.Threading.Tasks;
 using AribONE.Interceptors;
 using AribONE.Models;
 using AribONE.Models.Entities;
@@ -57,6 +59,31 @@ public class AribContext : DbContext
     /// (gateway, design-time) = no-op.
     /// </summary>
     public static Action? ShiftClosedCallback { get; set; }
+
+    /// <summary>
+    /// Supplies the cached fiscal-year calendar for <see cref="FiscalGuardInterceptor"/>'s
+    /// cheap path (in-memory scan — no DB hit per save). The desktop app sets this to
+    /// <c>() =&gt; FiscalContext.Current.Years</c> at startup. Null or an empty list means
+    /// no calendar exists yet (pre-setup, before the first
+    /// <c>FiscalYearService.EnsureCalendarAsync</c> backfill) — the interceptor no-ops,
+    /// identical to <c>ShiftGate</c> in Open Safe mode.
+    /// </summary>
+    public static Func<System.Collections.Generic.IReadOnlyList<FiscalYear>>? FiscalCalendarProvider { get; set; }
+
+    /// <summary>
+    /// Resolves (auto-chaining forward past the last defined year if needed) the fiscal
+    /// year containing a date, for <see cref="FiscalGuardInterceptor"/>'s synchronous
+    /// <c>SavingChanges</c> path. The desktop app sets this to
+    /// <c>FiscalYearService.Instance.GetYearFor</c>. Only ever called once
+    /// <see cref="FiscalCalendarProvider"/> has confirmed a calendar exists, so a null
+    /// result here means the date falls before the calendar's first year — the
+    /// interceptor must fail the save.
+    /// </summary>
+    public static Func<DateTime, FiscalYear?>? FiscalYearResolver { get; set; }
+
+    /// <summary>Async twin of <see cref="FiscalYearResolver"/> for the
+    /// <c>SavingChangesAsync</c> path.</summary>
+    public static Func<DateTime, CancellationToken, Task<FiscalYear?>>? FiscalYearResolverAsync { get; set; }
 
     // Entities
     public DbSet<Group> Groups { get; set; }
@@ -159,7 +186,7 @@ public class AribContext : DbContext
                          "The host must assign it once at startup before any " +
                          "parameterless new AribContext() is used.");
             options.UseSqlServer(cs);
-            options.AddInterceptors(new BranchIdInterceptor(), new ShiftIdInterceptor());
+            options.AddInterceptors(new BranchIdInterceptor(), new ShiftIdInterceptor(), new FiscalGuardInterceptor());
 #if DEBUG
             options.EnableSensitiveDataLogging();
 #endif
