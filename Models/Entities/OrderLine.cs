@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace AribONE.Models.Entities;
 
-public class OrderEntry : BillEntry
+public class OrderLine : InvoiceLine
 {
     public ICollection<OrderFulfillment> Fulfillments { get; set; } = null!;
 

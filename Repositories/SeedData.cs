@@ -160,75 +160,75 @@ public static class SeedData
         // ]);
 
         // @formatter:off
-        modelBuilder.Entity<AccountOperand>().HasData([
-            new AccountOperand() {LabelAr = "تسويه جرديه", LabelEn = "Inventory Adjustment", Operand = AccountOperandName.InventoryAdjustmentDifferences.ToString(), AccountId = SeedGuid(TableCodes.Account, 1252) }, // فروق تسويات جردية
-             new AccountOperand() {LabelAr = "الاصول", LabelEn = "Asset", Operand = AccountOperandName.Asset.ToString(), AccountId = SeedGuid(TableCodes.Account, 1) },
-             new AccountOperand() {LabelAr = "إهلاك الأصول الثابتة", LabelEn = "Fixed Assets Depreciation", Operand = AccountOperandName.FixedAssetsDepreciation.ToString(), AccountId = SeedGuid(TableCodes.Account, 164) }, // إهلاك الأصول الثابتة
-             new AccountOperand() {LabelAr = "مصروفات صيانة واصلاح", LabelEn = "", Operand = AccountOperandName.MaintenanceAndRepairExpenses.ToString(), AccountId = SeedGuid(TableCodes.Account, 189) }, // مصروفات صيانة واصلاح
-             new AccountOperand() {LabelAr = "ديون معدومة", LabelEn = "Bad Debit", Operand = AccountOperandName.BadDebit.ToString(), AccountId = SeedGuid(TableCodes.Account, 195) }, // ديون معدومة
-             new AccountOperand() {LabelAr = "البنوك", LabelEn = "Banks", Operand = AccountOperandName.Bank.ToString(), AccountId = SeedGuid(TableCodes.Account, 34) }, // البنوك
-             new AccountOperand() {LabelAr = "المحافظ الاليكترونيه", LabelEn = "EWallets", Operand = AccountOperandName.EWallet.ToString(), AccountId = SeedGuid(TableCodes.Account, 4270) }, // المحافظ الاليكترونيه
-             new AccountOperand() {LabelAr = "مصروفات البنوك", LabelEn = "BankExpenses", Operand = AccountOperandName.BankExpenses.ToString(), AccountId = SeedGuid(TableCodes.Account, 181) }, // Bank expenses
-             new AccountOperand() {LabelAr = "تحويلات النقديه بين الفروع", LabelEn = "Cash Branches Transfer", Operand = AccountOperandName.CashBranchesTransfer.ToString(), AccountId = SeedGuid(TableCodes.Account, 62) }, // Cash Transfer between Branches
-             new AccountOperand() {LabelAr = "ارصدة افتتاحيه", LabelEn = "Opening Balances", Operand = AccountOperandName.OpeningBalances.ToString(), AccountId = SeedGuid(TableCodes.Account, 4263) }, // Opening balances
-             new AccountOperand() {LabelAr = "راس المال", LabelEn = "Capital", Operand = AccountOperandName.Capital.ToString(), AccountId = SeedGuid(TableCodes.Account, 126) }, // 
-             new AccountOperand() {LabelAr = "خصم مكتسب (المشتريات)", LabelEn = "Cash Discount In", Operand = AccountOperandName.CashDiscountIn.ToString(), AccountId = SeedGuid(TableCodes.Account, 217) }, // خصم مكتسب
-             new AccountOperand() {LabelAr = "خصم مسموح به ( مبيعات )", LabelEn = "Cash Discount Out", Operand = AccountOperandName.CashDiscountOut.ToString(), AccountId = SeedGuid(TableCodes.Account, 1245) }, // خصم مسموح به ( مدين )
-             new AccountOperand() {LabelAr = "العملاء", LabelEn = "Customers", Operand = AccountOperandName.Customers.ToString(), AccountId = SeedGuid(TableCodes.Account, 52) },
-             new AccountOperand() {LabelAr = "الموردون", LabelEn = "Vendor", Operand = AccountOperandName.Vendor.ToString(), AccountId = SeedGuid(TableCodes.Account, 84) },
-             new AccountOperand() {LabelAr = "تسويات ماليه", LabelEn = "Customers Adjustment", Operand = AccountOperandName.CustomersAdjustment.ToString(), AccountId = SeedGuid(TableCodes.Account, 205) }, // فروق تسويات مالية
-             new AccountOperand() {LabelAr = "الضريبة", LabelEn = "Tax", Operand = AccountOperandName.Tax.ToString(), AccountId = SeedGuid(TableCodes.Account, 93) },
-             new AccountOperand() {LabelAr = "ضريبة الخصم و الإضافة", LabelEn = "Withholding Tax", Operand = AccountOperandName.WithholdingTax.ToString(), AccountId = SeedGuid(TableCodes.Account, 4264) }, // ضريبة الخصم و الإضافة
-             new AccountOperand() {LabelAr = "التوصيل للمنازل", LabelEn = "Delivery Income", Operand = AccountOperandName.DeliveryIncome.ToString(), AccountId = SeedGuid(TableCodes.Account, 4268) },
-             new AccountOperand() {LabelAr = "إيرادات مستحقة", LabelEn = "DueRevenue", Operand = AccountOperandName.DueRevenue.ToString(), AccountId = SeedGuid(TableCodes.Account, 59) }, // إيرادات مستحقة التحصيل
-             new AccountOperand() {LabelAr = "أرباح محققة", LabelEn = "EarnedProfit", Operand = AccountOperandName.EarnedProfit.ToString(), AccountId = SeedGuid(TableCodes.Account, 4266) }, // أرباح محققة
-             new AccountOperand() {LabelAr = "هدايا", LabelEn = "Gifts", Operand = AccountOperandName.Gifts.ToString(), AccountId = SeedGuid(TableCodes.Account, 173) },
-             new AccountOperand() {LabelAr = "هالك المخزون", LabelEn = "Waste Stock", Operand = AccountOperandName.WasteStock.ToString(), AccountId = SeedGuid(TableCodes.Account, 174) }, // هالك المخزون
-             new AccountOperand() {LabelAr = "حوافذ", LabelEn = "Incentive", Operand = AccountOperandName.Incentive.ToString(), AccountId = SeedGuid(TableCodes.Account, 0) }, // حوافذ
-             new AccountOperand() {LabelAr = "التأمينات الاجتماعية", LabelEn = "Insurance", Operand = AccountOperandName.Insurance.ToString(), AccountId = SeedGuid(TableCodes.Account, 96) }, // جارى مصلحة التأمينات الاجتماعية
-             new AccountOperand() {LabelAr = "الخزينة", LabelEn = "Treasury", Operand = AccountOperandName.Treasury.ToString(), AccountId = SeedGuid(TableCodes.Account, 33) }, // 
-             new AccountOperand() {LabelAr = "عهد الموظفين", LabelEn = "Pledge", Operand = AccountOperandName.Pledge.ToString(), AccountId = SeedGuid(TableCodes.Account, 35) }, // عهد الموظفين
-             new AccountOperand() {LabelAr = "خصم كميه مكتسب", LabelEn = "Qty Discount In", Operand = AccountOperandName.QtyDiscountIn.ToString(), AccountId = SeedGuid(TableCodes.Account, 1243) },
-             new AccountOperand() {LabelAr = "خصم كمية مسموح به", LabelEn = "Qty Discount Out", Operand = AccountOperandName.QtyDiscountOut.ToString(), AccountId = SeedGuid(TableCodes.Account, 1244) },
-             new AccountOperand() {LabelAr = "الصدقه", LabelEn = "Sadka", Operand = AccountOperandName.Sadka.ToString(), AccountId = SeedGuid(TableCodes.Account, 201) },
-             new AccountOperand() {LabelAr = "المبيعات", LabelEn = "Sale", Operand = AccountOperandName.Sale.ToString(), AccountId = SeedGuid(TableCodes.Account, 210) },
-             new AccountOperand() {LabelAr = "تكلفة المبيعات", LabelEn = "Sale Cost", Operand = AccountOperandName.SaleCost.ToString(), AccountId = SeedGuid(TableCodes.Account, 137) },
-             new AccountOperand() {LabelAr = "مرتجع المبيعات", LabelEn = "SaleReturn", Operand = AccountOperandName.SaleReturn.ToString(), AccountId = SeedGuid(TableCodes.Account, 211) },
-             new AccountOperand() {LabelAr = "عجز في إغلاق اليومية", LabelEn = "Shortage", Operand = AccountOperandName.Shortage.ToString(), AccountId = SeedGuid(TableCodes.Account, 3264) }, // عجز في إغلاق اليومية
-             new AccountOperand() {LabelAr = "فائض إغلاق اليومية", LabelEn = "Surplus", Operand = AccountOperandName.Surplus.ToString(), AccountId = SeedGuid(TableCodes.Account, 3263) }, // فائض إغلاق اليومية
-             new AccountOperand() {LabelAr = "سلف الموظفين", LabelEn = "Advances To Employees", Operand = AccountOperandName.AdvancesToEmployees.ToString(), AccountId = SeedGuid(TableCodes.Account, 61) }, // سلف الموظفين
-             new AccountOperand() {LabelAr = "مخزون البضاعة", LabelEn = "Stock", Operand = AccountOperandName.Stock.ToString(), AccountId = SeedGuid(TableCodes.Account, 39) }, // مخزون البضاعة
-             new AccountOperand() {LabelAr = "تحويلات المخازن", LabelEn = "Warehouse Transfer", Operand = AccountOperandName.WarehouseTransfer.ToString(), AccountId = SeedGuid(TableCodes.Account, 3262) },
-             new AccountOperand() {LabelAr = "أجور نقدية", LabelEn = "Work Salary", Operand = AccountOperandName.WorkSalary.ToString(), AccountId = SeedGuid(TableCodes.Account, 150) },
-             new AccountOperand() {LabelAr = "اضافى على الفاتورة", LabelEn = "Extra on Bill", Operand = AccountOperandName.BillSaleExtra.ToString(), AccountId = SeedGuid(TableCodes.Account, 218) },
-             new AccountOperand() {LabelAr = "خدمات مشتراة", LabelEn = "Extra on Purchase", Operand = AccountOperandName.BillPurchaseExtra.ToString(), AccountId = SeedGuid(TableCodes.Account, 156) },
-             new AccountOperand() {LabelAr = "خدمات مباعة", LabelEn = "Sold Services", Operand = AccountOperandName.SoldServices.ToString(), AccountId = SeedGuid(TableCodes.Account, 218) }, // 5113 خدمات مباعة (default sales account for a Sales Service)
-             new AccountOperand() {LabelAr = "خدمات مشتراة", LabelEn = "Purchased Services", Operand = AccountOperandName.PurchasedServices.ToString(), AccountId = SeedGuid(TableCodes.Account, 156) }, // 42141 خدمات مشتراة (default purchase account for a Purchase Service)
-             // new AccountOperand() {LabelAr = "", LabelEn = "", Operand = "ChequeBank", AccountId = 54 },
-             // new AccountOperand() { Operand = "UnEarnedProfit", AccountId = 4265 },
-             // new AccountOperand() { Operand = "VisaExpenses", AccountId = 183 },
-             // new AccountOperand() { Operand = "CapitalLosses", AccountId = 204 },
-             // new AccountOperand() { Operand = "CapitalProfits", AccountId = 241 },
-             // new AccountOperand() { Operand = "ChequeReturn", AccountId = 2259 },
-             // new AccountOperand() { Operand = "Consignment", AccountId = 3260 },
-             // new AccountOperand() { Operand = "CurrencyLoss", AccountId = 202 }, // خسائر فروق العملة
-             // new AccountOperand() { Operand = "CurrencyProfit", AccountId = 239 }, // أرباح فروق العملة
-             // new AccountOperand() { Operand = "CmbDiscountCoupon", AccountId = 4269 },
-             // new AccountOperand() { Operand = "EServiceCO", AccountId = 161 }, // خدمات الجهات الحكومية والمؤسسات
-             // new AccountOperand() { Operand = "EServiceWork", AccountId = 1251 }, // مستحقات سداد الخدمات الالكترونية
-             // new AccountOperand() { Operand = "Estimate", AccountId = 20 }, //اعتمادات مستنديه لشراء أصول ثابتة
-             // new AccountOperand() { Operand = "Factory", AccountId = 41 },
-             // new AccountOperand() { Operand = "CmbInvoiceRound", AccountId = 4267 },
-             // new AccountOperand() { Operand = "CmbOtherCust", AccountId = 2256 },
-             // new AccountOperand() { Operand = "Pay", AccountId = 85 }, // أوراق الدفع
-             // new AccountOperand() { Operand = "Receive", AccountId = 53 }, // أوراق قبض
-             // new AccountOperand() { Operand = "SalariesNotPaid", AccountId = 88 },
-             // new AccountOperand() { Operand = "SaleLet", AccountId = 216 },
-             // new AccountOperand() { Operand = "SalesRep", AccountId = 2258 },
-             // new AccountOperand() { Operand = "CmbSalesRepClose", AccountId = 88 },
-             // new AccountOperand() { Operand = "TaxExtra", AccountId = 0 },
-             // new AccountOperand() { Operand = "TaxKaseb", AccountId = 94 }, // مصلحة الضرائب العامة
-             // new AccountOperand() { Operand = "Visa", AccountId = 1254 }, // بطاقات إئتمان
+        modelBuilder.Entity<PostingAccount>().HasData([
+            new PostingAccount() {LabelAr = "تسويه جرديه", LabelEn = "Inventory Adjustment", Role = PostingRole.InventoryAdjustmentDifferences.ToString(), AccountId = SeedGuid(TableCodes.Account, 1252) }, // فروق تسويات جردية
+             new PostingAccount() {LabelAr = "الاصول", LabelEn = "Asset", Role = PostingRole.Asset.ToString(), AccountId = SeedGuid(TableCodes.Account, 1) },
+             new PostingAccount() {LabelAr = "إهلاك الأصول الثابتة", LabelEn = "Fixed Assets Depreciation", Role = PostingRole.FixedAssetsDepreciation.ToString(), AccountId = SeedGuid(TableCodes.Account, 164) }, // إهلاك الأصول الثابتة
+             new PostingAccount() {LabelAr = "مصروفات صيانة واصلاح", LabelEn = "", Role = PostingRole.MaintenanceAndRepairExpenses.ToString(), AccountId = SeedGuid(TableCodes.Account, 189) }, // مصروفات صيانة واصلاح
+             new PostingAccount() {LabelAr = "ديون معدومة", LabelEn = "Bad Debit", Role = PostingRole.BadDebit.ToString(), AccountId = SeedGuid(TableCodes.Account, 195) }, // ديون معدومة
+             new PostingAccount() {LabelAr = "البنوك", LabelEn = "Banks", Role = PostingRole.Bank.ToString(), AccountId = SeedGuid(TableCodes.Account, 34) }, // البنوك
+             new PostingAccount() {LabelAr = "المحافظ الاليكترونيه", LabelEn = "EWallets", Role = PostingRole.EWallet.ToString(), AccountId = SeedGuid(TableCodes.Account, 4270) }, // المحافظ الاليكترونيه
+             new PostingAccount() {LabelAr = "مصروفات البنوك", LabelEn = "BankExpenses", Role = PostingRole.BankExpenses.ToString(), AccountId = SeedGuid(TableCodes.Account, 181) }, // Bank expenses
+             new PostingAccount() {LabelAr = "تحويلات النقديه بين الفروع", LabelEn = "Cash Branches Transfer", Role = PostingRole.CashBranchesTransfer.ToString(), AccountId = SeedGuid(TableCodes.Account, 62) }, // Cash Transfer between Branches
+             new PostingAccount() {LabelAr = "ارصدة افتتاحيه", LabelEn = "Opening Balances", Role = PostingRole.OpeningBalances.ToString(), AccountId = SeedGuid(TableCodes.Account, 4263) }, // Opening balances
+             new PostingAccount() {LabelAr = "راس المال", LabelEn = "Capital", Role = PostingRole.Capital.ToString(), AccountId = SeedGuid(TableCodes.Account, 126) }, // 
+             new PostingAccount() {LabelAr = "خصم مكتسب (المشتريات)", LabelEn = "Cash Discount In", Role = PostingRole.CashDiscountIn.ToString(), AccountId = SeedGuid(TableCodes.Account, 217) }, // خصم مكتسب
+             new PostingAccount() {LabelAr = "خصم مسموح به ( مبيعات )", LabelEn = "Cash Discount Out", Role = PostingRole.CashDiscountOut.ToString(), AccountId = SeedGuid(TableCodes.Account, 1245) }, // خصم مسموح به ( مدين )
+             new PostingAccount() {LabelAr = "العملاء", LabelEn = "Customers", Role = PostingRole.Customers.ToString(), AccountId = SeedGuid(TableCodes.Account, 52) },
+             new PostingAccount() {LabelAr = "الموردون", LabelEn = "Vendor", Role = PostingRole.Vendor.ToString(), AccountId = SeedGuid(TableCodes.Account, 84) },
+             new PostingAccount() {LabelAr = "تسويات ماليه", LabelEn = "Customers Adjustment", Role = PostingRole.CustomersAdjustment.ToString(), AccountId = SeedGuid(TableCodes.Account, 205) }, // فروق تسويات مالية
+             new PostingAccount() {LabelAr = "الضريبة", LabelEn = "Tax", Role = PostingRole.Tax.ToString(), AccountId = SeedGuid(TableCodes.Account, 93) },
+             new PostingAccount() {LabelAr = "ضريبة الخصم و الإضافة", LabelEn = "Withholding Tax", Role = PostingRole.WithholdingTax.ToString(), AccountId = SeedGuid(TableCodes.Account, 4264) }, // ضريبة الخصم و الإضافة
+             new PostingAccount() {LabelAr = "التوصيل للمنازل", LabelEn = "Delivery Income", Role = PostingRole.DeliveryIncome.ToString(), AccountId = SeedGuid(TableCodes.Account, 4268) },
+             new PostingAccount() {LabelAr = "إيرادات مستحقة", LabelEn = "DueRevenue", Role = PostingRole.DueRevenue.ToString(), AccountId = SeedGuid(TableCodes.Account, 59) }, // إيرادات مستحقة التحصيل
+             new PostingAccount() {LabelAr = "أرباح محققة", LabelEn = "EarnedProfit", Role = PostingRole.EarnedProfit.ToString(), AccountId = SeedGuid(TableCodes.Account, 4266) }, // أرباح محققة
+             new PostingAccount() {LabelAr = "هدايا", LabelEn = "Gifts", Role = PostingRole.Gifts.ToString(), AccountId = SeedGuid(TableCodes.Account, 173) },
+             new PostingAccount() {LabelAr = "هالك المخزون", LabelEn = "Waste Stock", Role = PostingRole.WasteStock.ToString(), AccountId = SeedGuid(TableCodes.Account, 174) }, // هالك المخزون
+             new PostingAccount() {LabelAr = "حوافذ", LabelEn = "Incentive", Role = PostingRole.Incentive.ToString(), AccountId = SeedGuid(TableCodes.Account, 0) }, // حوافذ
+             new PostingAccount() {LabelAr = "التأمينات الاجتماعية", LabelEn = "Insurance", Role = PostingRole.Insurance.ToString(), AccountId = SeedGuid(TableCodes.Account, 96) }, // جارى مصلحة التأمينات الاجتماعية
+             new PostingAccount() {LabelAr = "الخزينة", LabelEn = "Treasury", Role = PostingRole.Treasury.ToString(), AccountId = SeedGuid(TableCodes.Account, 33) }, // 
+             new PostingAccount() {LabelAr = "عهد الموظفين", LabelEn = "Pledge", Role = PostingRole.Pledge.ToString(), AccountId = SeedGuid(TableCodes.Account, 35) }, // عهد الموظفين
+             new PostingAccount() {LabelAr = "خصم كميه مكتسب", LabelEn = "Qty Discount In", Role = PostingRole.QtyDiscountIn.ToString(), AccountId = SeedGuid(TableCodes.Account, 1243) },
+             new PostingAccount() {LabelAr = "خصم كمية مسموح به", LabelEn = "Qty Discount Out", Role = PostingRole.QtyDiscountOut.ToString(), AccountId = SeedGuid(TableCodes.Account, 1244) },
+             new PostingAccount() {LabelAr = "الصدقه", LabelEn = "Sadka", Role = PostingRole.Sadka.ToString(), AccountId = SeedGuid(TableCodes.Account, 201) },
+             new PostingAccount() {LabelAr = "المبيعات", LabelEn = "Sale", Role = PostingRole.Sale.ToString(), AccountId = SeedGuid(TableCodes.Account, 210) },
+             new PostingAccount() {LabelAr = "تكلفة المبيعات", LabelEn = "Sale Cost", Role = PostingRole.SaleCost.ToString(), AccountId = SeedGuid(TableCodes.Account, 137) },
+             new PostingAccount() {LabelAr = "مرتجع المبيعات", LabelEn = "SaleReturn", Role = PostingRole.SaleReturn.ToString(), AccountId = SeedGuid(TableCodes.Account, 211) },
+             new PostingAccount() {LabelAr = "عجز في إغلاق اليومية", LabelEn = "Shortage", Role = PostingRole.Shortage.ToString(), AccountId = SeedGuid(TableCodes.Account, 3264) }, // عجز في إغلاق اليومية
+             new PostingAccount() {LabelAr = "فائض إغلاق اليومية", LabelEn = "Surplus", Role = PostingRole.Surplus.ToString(), AccountId = SeedGuid(TableCodes.Account, 3263) }, // فائض إغلاق اليومية
+             new PostingAccount() {LabelAr = "سلف الموظفين", LabelEn = "Advances To Employees", Role = PostingRole.AdvancesToEmployees.ToString(), AccountId = SeedGuid(TableCodes.Account, 61) }, // سلف الموظفين
+             new PostingAccount() {LabelAr = "مخزون البضاعة", LabelEn = "Stock", Role = PostingRole.Stock.ToString(), AccountId = SeedGuid(TableCodes.Account, 39) }, // مخزون البضاعة
+             new PostingAccount() {LabelAr = "تحويلات المخازن", LabelEn = "Warehouse Transfer", Role = PostingRole.WarehouseTransfer.ToString(), AccountId = SeedGuid(TableCodes.Account, 3262) },
+             new PostingAccount() {LabelAr = "أجور نقدية", LabelEn = "Work Salary", Role = PostingRole.WorkSalary.ToString(), AccountId = SeedGuid(TableCodes.Account, 150) },
+             new PostingAccount() {LabelAr = "اضافى على الفاتورة", LabelEn = "Extra on Bill", Role = PostingRole.BillSaleExtra.ToString(), AccountId = SeedGuid(TableCodes.Account, 218) },
+             new PostingAccount() {LabelAr = "خدمات مشتراة", LabelEn = "Extra on Purchase", Role = PostingRole.BillPurchaseExtra.ToString(), AccountId = SeedGuid(TableCodes.Account, 156) },
+             new PostingAccount() {LabelAr = "خدمات مباعة", LabelEn = "Sold Services", Role = PostingRole.SoldServices.ToString(), AccountId = SeedGuid(TableCodes.Account, 218) }, // 5113 خدمات مباعة (default sales account for a Sales Service)
+             new PostingAccount() {LabelAr = "خدمات مشتراة", LabelEn = "Purchased Services", Role = PostingRole.PurchasedServices.ToString(), AccountId = SeedGuid(TableCodes.Account, 156) }, // 42141 خدمات مشتراة (default purchase account for a Purchase Service)
+             // new PostingAccount() {LabelAr = "", LabelEn = "", Role = "ChequeBank", AccountId = 54 },
+             // new PostingAccount() { Role = "UnEarnedProfit", AccountId = 4265 },
+             // new PostingAccount() { Role = "VisaExpenses", AccountId = 183 },
+             // new PostingAccount() { Role = "CapitalLosses", AccountId = 204 },
+             // new PostingAccount() { Role = "CapitalProfits", AccountId = 241 },
+             // new PostingAccount() { Role = "ChequeReturn", AccountId = 2259 },
+             // new PostingAccount() { Role = "Consignment", AccountId = 3260 },
+             // new PostingAccount() { Role = "CurrencyLoss", AccountId = 202 }, // خسائر فروق العملة
+             // new PostingAccount() { Role = "CurrencyProfit", AccountId = 239 }, // أرباح فروق العملة
+             // new PostingAccount() { Role = "CmbDiscountCoupon", AccountId = 4269 },
+             // new PostingAccount() { Role = "EServiceCO", AccountId = 161 }, // خدمات الجهات الحكومية والمؤسسات
+             // new PostingAccount() { Role = "EServiceWork", AccountId = 1251 }, // مستحقات سداد الخدمات الالكترونية
+             // new PostingAccount() { Role = "Estimate", AccountId = 20 }, //اعتمادات مستنديه لشراء أصول ثابتة
+             // new PostingAccount() { Role = "Factory", AccountId = 41 },
+             // new PostingAccount() { Role = "CmbInvoiceRound", AccountId = 4267 },
+             // new PostingAccount() { Role = "CmbOtherCust", AccountId = 2256 },
+             // new PostingAccount() { Role = "Pay", AccountId = 85 }, // أوراق الدفع
+             // new PostingAccount() { Role = "Receive", AccountId = 53 }, // أوراق قبض
+             // new PostingAccount() { Role = "SalariesNotPaid", AccountId = 88 },
+             // new PostingAccount() { Role = "SaleLet", AccountId = 216 },
+             // new PostingAccount() { Role = "SalesRep", AccountId = 2258 },
+             // new PostingAccount() { Role = "CmbSalesRepClose", AccountId = 88 },
+             // new PostingAccount() { Role = "TaxExtra", AccountId = 0 },
+             // new PostingAccount() { Role = "TaxKaseb", AccountId = 94 }, // مصلحة الضرائب العامة
+             // new PostingAccount() { Role = "Visa", AccountId = 1254 }, // بطاقات إئتمان
          ]);
 
         // @formatter:off

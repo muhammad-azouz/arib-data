@@ -8,8 +8,8 @@ public class EWalletTransaction : IShiftScoped
     public DateTime CreatedAt { get; set; }
     public Guid EWalletId { get; set; }
     public EWallet EWallet { get; set; } = null!;
-    public Guid? CustomerId { get; set; }
-    public Customer? Customer { get; set; }
+    public Guid? PartnerId { get; set; }
+    public Partner? Partner { get; set; }
     public decimal Credit { get; set; }
     public decimal Debit { get; set; }
     public decimal Value { get; set; }

@@ -1,3 +1,3 @@
 namespace AribONE.Models.Entities;
 
-public class Sale : Bill;
+public class Sale : Invoice;

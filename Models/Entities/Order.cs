@@ -1,57 +1,57 @@
 namespace AribONE.Models.Entities;
 
-public class Order : Bill
+public class Order : Invoice
 {
     public OrderStatus Status { get; set; }
 
-    public static Order FromBill(Bill bill)
+    public static Order FromInvoice(Invoice invoice)
     {
         return new Order
         {
-            // Base Bill properties
-            Num = bill.Num,
-            ShiftId = bill.ShiftId,
-            CreatedAt = bill.CreatedAt,
-            IssuedAt = bill.IssuedAt,
-            CustomerId = bill.CustomerId,
-            Customer = bill.Customer,
-            UserId = bill.UserId,
-            User = bill.User,
-            BranchId = bill.BranchId,
-            Branch = bill.Branch,
-            BillEntries = bill.BillEntries, // Be careful: you may want to clone this
-            warehouse = bill.warehouse,
-            Ship = bill.Ship,
-            ShipAddress = bill.ShipAddress,
-            ShipPhone1 = bill.ShipPhone1,
-            ShipPhone2 = bill.ShipPhone2,
-            ItemTotal = bill.ItemTotal,
-            BillDiscount = bill.BillDiscount,
-            BillDiscountId = bill.BillDiscountId,
-            ItemDiscount = bill.ItemDiscount,
-            ItemDiscountId = bill.ItemDiscountId,
-            BillTax = bill.BillTax,
-            BillTaxPercentage = bill.BillTaxPercentage,
-            BillTaxId = bill.BillTaxId,
-            Money = bill.Money,
-            MoneyId = bill.MoneyId,
-            Total = bill.Total,
-            Remain = bill.Remain,
-            TotalMoney = bill.TotalMoney,
-            BillExtraId = bill.BillExtraId,
-            TotalExtra = bill.TotalExtra,
-            TotalDiscount = bill.TotalDiscount,
-            RegNum = bill.RegNum,
-            ItemCount = bill.ItemCount,
-            IsCash = bill.IsCash,
-            IsPaid = bill.IsPaid,
-            PaidDate = bill.PaidDate,
-            PaidValue = bill.PaidValue,
-            PaidDiscount = bill.PaidDiscount,
-            MoneyTotalPaid = bill.MoneyTotalPaid,
-            PaidRegNum = bill.PaidRegNum,
-            InternalNote = bill.InternalNote,
-            Note = bill.Note,
+            // Base Invoice properties
+            Num = invoice.Num,
+            ShiftId = invoice.ShiftId,
+            CreatedAt = invoice.CreatedAt,
+            IssuedAt = invoice.IssuedAt,
+            PartnerId = invoice.PartnerId,
+            Partner = invoice.Partner,
+            UserId = invoice.UserId,
+            User = invoice.User,
+            BranchId = invoice.BranchId,
+            Branch = invoice.Branch,
+            InvoiceLines = invoice.InvoiceLines, // Be careful: you may want to clone this
+            warehouse = invoice.warehouse,
+            Ship = invoice.Ship,
+            ShipAddress = invoice.ShipAddress,
+            ShipPhone1 = invoice.ShipPhone1,
+            ShipPhone2 = invoice.ShipPhone2,
+            ItemTotal = invoice.ItemTotal,
+            BillDiscount = invoice.BillDiscount,
+            BillDiscountId = invoice.BillDiscountId,
+            ItemDiscount = invoice.ItemDiscount,
+            ItemDiscountId = invoice.ItemDiscountId,
+            BillTax = invoice.BillTax,
+            BillTaxPercentage = invoice.BillTaxPercentage,
+            BillTaxId = invoice.BillTaxId,
+            Money = invoice.Money,
+            MoneyId = invoice.MoneyId,
+            Total = invoice.Total,
+            Remain = invoice.Remain,
+            TotalMoney = invoice.TotalMoney,
+            BillExtraId = invoice.BillExtraId,
+            TotalExtra = invoice.TotalExtra,
+            TotalDiscount = invoice.TotalDiscount,
+            RegNum = invoice.RegNum,
+            ItemCount = invoice.ItemCount,
+            IsCash = invoice.IsCash,
+            IsPaid = invoice.IsPaid,
+            PaidDate = invoice.PaidDate,
+            PaidValue = invoice.PaidValue,
+            PaidDiscount = invoice.PaidDiscount,
+            MoneyTotalPaid = invoice.MoneyTotalPaid,
+            PaidRegNum = invoice.PaidRegNum,
+            InternalNote = invoice.InternalNote,
+            Note = invoice.Note,
             // Specific to Order
             Status = OrderStatus.Pending
         };

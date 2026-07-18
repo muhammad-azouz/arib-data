@@ -20,7 +20,7 @@ public class TreasuryTransaction : IShiftScoped
     public Branch Branch { get; set; } = null!;
     public required string Ship { get; set; }
     public decimal Total { get; set; }
-    public Guid? CustomerId { get; set; }
+    public Guid? PartnerId { get; set; }
     public Guid RegNum { get; set; }
     public Guid UserId { get; set; }
     public User User { get; set; } = null!;

@@ -3,12 +3,12 @@ using Microsoft.EntityFrameworkCore;
 
 namespace AribONE.Models.Entities;
 
-public class BillEntry
+public class InvoiceLine
 {
     public Guid Id { get; set; }
     public int Num { get; set; }
-    public Guid BillId { get; set; }
-    public Bill Bill { get; set; } = null!;
+    public Guid InvoiceId { get; set; }
+    public Invoice Invoice { get; set; } = null!;
     public DateTime CreatedAt { get; set; }
     public Guid WarehouseId { get; set; }
     public Warehouse Warehouse { get; set; } = null!;
@@ -16,8 +16,8 @@ public class BillEntry
     public Product Product { get; set; } = null!;
     public Guid UnitId { get; set; }
     public UnitOfMeasure Unit { get; set; } = null!;
-    public Guid? CustomerId { get; set; }
-    public Customer? Customer { get; set; }
+    public Guid? PartnerId { get; set; }
+    public Partner? Partner { get; set; }
     public Guid BranchId { get; set; }
     public Branch Branch { get; set; } = null!;
     [Precision(18, 3)] public decimal Qty { get; set; }

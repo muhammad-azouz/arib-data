@@ -7,9 +7,9 @@ public class BankTransaction : IShiftScoped
     public Guid Id { get; set; }
     public DateTime CreatedAt { get; set; }
     public Guid BankId { get; set; }
-    public Bank Bank { get; set; } = null!;
-    public Guid? CustomerId { get; set; }
-    public Customer? Customer { get; set; }
+    public BankAccount Bank { get; set; } = null!;
+    public Guid? PartnerId { get; set; }
+    public Partner? Partner { get; set; }
     public decimal Credit { get; set; }
     public decimal Debit { get; set; }
     public decimal Value { get; set; }

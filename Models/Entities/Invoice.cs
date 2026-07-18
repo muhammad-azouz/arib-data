@@ -4,27 +4,27 @@ using System.ComponentModel.DataAnnotations;
 
 namespace AribONE.Models.Entities;
 
-public abstract class Bill : IShiftScoped
+public abstract class Invoice : IShiftScoped
 {
     public Guid Id { get; set; }
     [StringLength(16)] public required string Num { get; set; }
 
-    /// <summary>The shift that owns this bill when Shift Mode is on; null in Open
+    /// <summary>The shift that owns this invoice when Shift Mode is on; null in Open
     /// Safe mode (and for all pre-shift history). Stamped by ShiftIdInterceptor.
     /// (Repurposed from a dead pre-GUID int column that was always 0.)</summary>
     public Guid? ShiftId { get; set; }
 
-    public BillType Type { get; set; }
+    public InvoiceType Type { get; set; }
     public DateTime CreatedAt { get; set; }
     public DateTime IssuedAt { get; set; }
-    public Guid? CustomerId { get; set; }
-    public Customer? Customer { get; set; }
+    public Guid? PartnerId { get; set; }
+    public Partner? Partner { get; set; }
     public Guid UserId { get; set; }
     public User User { get; set; } = null!;
 
     public Guid BranchId { get; set; }
     public Branch Branch { get; set; } = null!;
-    public ICollection<BillEntry> BillEntries { get; set; } = null!;
+    public ICollection<InvoiceLine> InvoiceLines { get; set; } = null!;
 
     [MaxLength(50)] public required string warehouse { get; set; }
     [MaxLength(50)] public string? Ship { get; set; }
@@ -53,15 +53,15 @@ public abstract class Bill : IShiftScoped
     public decimal TotalDiscount { get; set; }
 
     /// <summary>Ledger-based snapshot of the customer's/supplier's account
-    /// balance strictly before this bill's own CustomerTransaction row,
+    /// balance strictly before this invoice's own PartnerLedgerEntry row,
     /// computed once at finalize time (SUM(Debit-Credit) over all earlier
-    /// ledger rows). Null when never computed (no Customer, an Order bill, or
-    /// a bill predating this feature) — PrintingService falls back to a live
+    /// ledger rows). Null when never computed (no Partner, an Order invoice, or
+    /// an invoice predating this feature) — PrintingService falls back to a live
     /// recompute in that case. Frozen forever after finalize: never touched
     /// by later payments, reversals, or deletions of earlier invoices.</summary>
     public decimal? PreviousBalance { get; set; }
 
-    /// <summary>PreviousBalance + this bill's own ledger contribution
+    /// <summary>PreviousBalance + this invoice's own ledger contribution
     /// (Debit - Credit) at finalize time. Same snapshot/freeze semantics as
     /// PreviousBalance.</summary>
     public decimal? EndingBalance { get; set; }

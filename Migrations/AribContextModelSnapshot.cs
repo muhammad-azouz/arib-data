@@ -5380,338 +5380,6 @@ namespace AribONE.Migrations
                         });
                 });
 
-            modelBuilder.Entity("AribONE.Models.Entities.AccountOperand", b =>
-                {
-                    b.Property<string>("Operand")
-                        .HasMaxLength(30)
-                        .HasColumnType("nvarchar(30)");
-
-                    b.Property<Guid>("AccountId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("LabelAr")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<string>("LabelEn")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.HasKey("Operand");
-
-                    b.ToTable("AccountOperands", t =>
-                        {
-                            t.HasTrigger("AccountOperands_dms_sync");
-                        });
-
-                    b.HasAnnotation("SqlServer:UseSqlOutputClause", false);
-
-                    b.HasData(
-                        new
-                        {
-                            Operand = "InventoryAdjustmentDifferences",
-                            AccountId = new Guid("00000001-0000-7000-a000-000000001252"),
-                            LabelAr = "تسويه جرديه",
-                            LabelEn = "Inventory Adjustment"
-                        },
-                        new
-                        {
-                            Operand = "Asset",
-                            AccountId = new Guid("00000001-0000-7000-a000-000000000001"),
-                            LabelAr = "الاصول",
-                            LabelEn = "Asset"
-                        },
-                        new
-                        {
-                            Operand = "FixedAssetsDepreciation",
-                            AccountId = new Guid("00000001-0000-7000-a000-000000000164"),
-                            LabelAr = "إهلاك الأصول الثابتة",
-                            LabelEn = "Fixed Assets Depreciation"
-                        },
-                        new
-                        {
-                            Operand = "MaintenanceAndRepairExpenses",
-                            AccountId = new Guid("00000001-0000-7000-a000-000000000189"),
-                            LabelAr = "مصروفات صيانة واصلاح",
-                            LabelEn = ""
-                        },
-                        new
-                        {
-                            Operand = "BadDebit",
-                            AccountId = new Guid("00000001-0000-7000-a000-000000000195"),
-                            LabelAr = "ديون معدومة",
-                            LabelEn = "Bad Debit"
-                        },
-                        new
-                        {
-                            Operand = "Bank",
-                            AccountId = new Guid("00000001-0000-7000-a000-000000000034"),
-                            LabelAr = "البنوك",
-                            LabelEn = "Banks"
-                        },
-                        new
-                        {
-                            Operand = "EWallet",
-                            AccountId = new Guid("00000001-0000-7000-a000-000000004270"),
-                            LabelAr = "المحافظ الاليكترونيه",
-                            LabelEn = "EWallets"
-                        },
-                        new
-                        {
-                            Operand = "BankExpenses",
-                            AccountId = new Guid("00000001-0000-7000-a000-000000000181"),
-                            LabelAr = "مصروفات البنوك",
-                            LabelEn = "BankExpenses"
-                        },
-                        new
-                        {
-                            Operand = "CashBranchesTransfer",
-                            AccountId = new Guid("00000001-0000-7000-a000-000000000062"),
-                            LabelAr = "تحويلات النقديه بين الفروع",
-                            LabelEn = "Cash Branches Transfer"
-                        },
-                        new
-                        {
-                            Operand = "OpeningBalances",
-                            AccountId = new Guid("00000001-0000-7000-a000-000000004263"),
-                            LabelAr = "ارصدة افتتاحيه",
-                            LabelEn = "Opening Balances"
-                        },
-                        new
-                        {
-                            Operand = "Capital",
-                            AccountId = new Guid("00000001-0000-7000-a000-000000000126"),
-                            LabelAr = "راس المال",
-                            LabelEn = "Capital"
-                        },
-                        new
-                        {
-                            Operand = "CashDiscountIn",
-                            AccountId = new Guid("00000001-0000-7000-a000-000000000217"),
-                            LabelAr = "خصم مكتسب (المشتريات)",
-                            LabelEn = "Cash Discount In"
-                        },
-                        new
-                        {
-                            Operand = "CashDiscountOut",
-                            AccountId = new Guid("00000001-0000-7000-a000-000000001245"),
-                            LabelAr = "خصم مسموح به ( مبيعات )",
-                            LabelEn = "Cash Discount Out"
-                        },
-                        new
-                        {
-                            Operand = "Customers",
-                            AccountId = new Guid("00000001-0000-7000-a000-000000000052"),
-                            LabelAr = "العملاء",
-                            LabelEn = "Customers"
-                        },
-                        new
-                        {
-                            Operand = "Vendor",
-                            AccountId = new Guid("00000001-0000-7000-a000-000000000084"),
-                            LabelAr = "الموردون",
-                            LabelEn = "Vendor"
-                        },
-                        new
-                        {
-                            Operand = "CustomersAdjustment",
-                            AccountId = new Guid("00000001-0000-7000-a000-000000000205"),
-                            LabelAr = "تسويات ماليه",
-                            LabelEn = "Customers Adjustment"
-                        },
-                        new
-                        {
-                            Operand = "Tax",
-                            AccountId = new Guid("00000001-0000-7000-a000-000000000093"),
-                            LabelAr = "الضريبة",
-                            LabelEn = "Tax"
-                        },
-                        new
-                        {
-                            Operand = "WithholdingTax",
-                            AccountId = new Guid("00000001-0000-7000-a000-000000004264"),
-                            LabelAr = "ضريبة الخصم و الإضافة",
-                            LabelEn = "Withholding Tax"
-                        },
-                        new
-                        {
-                            Operand = "DeliveryIncome",
-                            AccountId = new Guid("00000001-0000-7000-a000-000000004268"),
-                            LabelAr = "التوصيل للمنازل",
-                            LabelEn = "Delivery Income"
-                        },
-                        new
-                        {
-                            Operand = "DueRevenue",
-                            AccountId = new Guid("00000001-0000-7000-a000-000000000059"),
-                            LabelAr = "إيرادات مستحقة",
-                            LabelEn = "DueRevenue"
-                        },
-                        new
-                        {
-                            Operand = "EarnedProfit",
-                            AccountId = new Guid("00000001-0000-7000-a000-000000004266"),
-                            LabelAr = "أرباح محققة",
-                            LabelEn = "EarnedProfit"
-                        },
-                        new
-                        {
-                            Operand = "Gifts",
-                            AccountId = new Guid("00000001-0000-7000-a000-000000000173"),
-                            LabelAr = "هدايا",
-                            LabelEn = "Gifts"
-                        },
-                        new
-                        {
-                            Operand = "WasteStock",
-                            AccountId = new Guid("00000001-0000-7000-a000-000000000174"),
-                            LabelAr = "هالك المخزون",
-                            LabelEn = "Waste Stock"
-                        },
-                        new
-                        {
-                            Operand = "Incentive",
-                            AccountId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            LabelAr = "حوافذ",
-                            LabelEn = "Incentive"
-                        },
-                        new
-                        {
-                            Operand = "Insurance",
-                            AccountId = new Guid("00000001-0000-7000-a000-000000000096"),
-                            LabelAr = "التأمينات الاجتماعية",
-                            LabelEn = "Insurance"
-                        },
-                        new
-                        {
-                            Operand = "Treasury",
-                            AccountId = new Guid("00000001-0000-7000-a000-000000000033"),
-                            LabelAr = "الخزينة",
-                            LabelEn = "Treasury"
-                        },
-                        new
-                        {
-                            Operand = "Pledge",
-                            AccountId = new Guid("00000001-0000-7000-a000-000000000035"),
-                            LabelAr = "عهد الموظفين",
-                            LabelEn = "Pledge"
-                        },
-                        new
-                        {
-                            Operand = "QtyDiscountIn",
-                            AccountId = new Guid("00000001-0000-7000-a000-000000001243"),
-                            LabelAr = "خصم كميه مكتسب",
-                            LabelEn = "Qty Discount In"
-                        },
-                        new
-                        {
-                            Operand = "QtyDiscountOut",
-                            AccountId = new Guid("00000001-0000-7000-a000-000000001244"),
-                            LabelAr = "خصم كمية مسموح به",
-                            LabelEn = "Qty Discount Out"
-                        },
-                        new
-                        {
-                            Operand = "Sadka",
-                            AccountId = new Guid("00000001-0000-7000-a000-000000000201"),
-                            LabelAr = "الصدقه",
-                            LabelEn = "Sadka"
-                        },
-                        new
-                        {
-                            Operand = "Sale",
-                            AccountId = new Guid("00000001-0000-7000-a000-000000000210"),
-                            LabelAr = "المبيعات",
-                            LabelEn = "Sale"
-                        },
-                        new
-                        {
-                            Operand = "SaleCost",
-                            AccountId = new Guid("00000001-0000-7000-a000-000000000137"),
-                            LabelAr = "تكلفة المبيعات",
-                            LabelEn = "Sale Cost"
-                        },
-                        new
-                        {
-                            Operand = "SaleReturn",
-                            AccountId = new Guid("00000001-0000-7000-a000-000000000211"),
-                            LabelAr = "مرتجع المبيعات",
-                            LabelEn = "SaleReturn"
-                        },
-                        new
-                        {
-                            Operand = "Shortage",
-                            AccountId = new Guid("00000001-0000-7000-a000-000000003264"),
-                            LabelAr = "عجز في إغلاق اليومية",
-                            LabelEn = "Shortage"
-                        },
-                        new
-                        {
-                            Operand = "Surplus",
-                            AccountId = new Guid("00000001-0000-7000-a000-000000003263"),
-                            LabelAr = "فائض إغلاق اليومية",
-                            LabelEn = "Surplus"
-                        },
-                        new
-                        {
-                            Operand = "AdvancesToEmployees",
-                            AccountId = new Guid("00000001-0000-7000-a000-000000000061"),
-                            LabelAr = "سلف الموظفين",
-                            LabelEn = "Advances To Employees"
-                        },
-                        new
-                        {
-                            Operand = "Stock",
-                            AccountId = new Guid("00000001-0000-7000-a000-000000000039"),
-                            LabelAr = "مخزون البضاعة",
-                            LabelEn = "Stock"
-                        },
-                        new
-                        {
-                            Operand = "WarehouseTransfer",
-                            AccountId = new Guid("00000001-0000-7000-a000-000000003262"),
-                            LabelAr = "تحويلات المخازن",
-                            LabelEn = "Warehouse Transfer"
-                        },
-                        new
-                        {
-                            Operand = "WorkSalary",
-                            AccountId = new Guid("00000001-0000-7000-a000-000000000150"),
-                            LabelAr = "أجور نقدية",
-                            LabelEn = "Work Salary"
-                        },
-                        new
-                        {
-                            Operand = "BillSaleExtra",
-                            AccountId = new Guid("00000001-0000-7000-a000-000000000218"),
-                            LabelAr = "اضافى على الفاتورة",
-                            LabelEn = "Extra on Bill"
-                        },
-                        new
-                        {
-                            Operand = "BillPurchaseExtra",
-                            AccountId = new Guid("00000001-0000-7000-a000-000000000156"),
-                            LabelAr = "خدمات مشتراة",
-                            LabelEn = "Extra on Purchase"
-                        },
-                        new
-                        {
-                            Operand = "SoldServices",
-                            AccountId = new Guid("00000001-0000-7000-a000-000000000218"),
-                            LabelAr = "خدمات مباعة",
-                            LabelEn = "Sold Services"
-                        },
-                        new
-                        {
-                            Operand = "PurchasedServices",
-                            AccountId = new Guid("00000001-0000-7000-a000-000000000156"),
-                            LabelAr = "خدمات مشتراة",
-                            LabelEn = "Purchased Services"
-                        });
-                });
-
             modelBuilder.Entity("AribONE.Models.Entities.AppNotification", b =>
                 {
                     b.Property<Guid>("Id")
@@ -5832,7 +5500,7 @@ namespace AribONE.Migrations
                     b.HasAnnotation("SqlServer:UseSqlOutputClause", false);
                 });
 
-            modelBuilder.Entity("AribONE.Models.Entities.Bank", b =>
+            modelBuilder.Entity("AribONE.Models.Entities.BankAccount", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -5927,9 +5595,9 @@ namespace AribONE.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Banks", t =>
+                    b.ToTable("BankAccounts", t =>
                         {
-                            t.HasTrigger("Banks_dms_sync");
+                            t.HasTrigger("BankAccounts_dms_sync");
                         });
 
                     b.HasAnnotation("SqlServer:UseSqlOutputClause", false);
@@ -5965,9 +5633,6 @@ namespace AribONE.Migrations
                         .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<Guid?>("CustomerId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<int>("Dealing")
                         .HasColumnType("int");
 
@@ -5980,6 +5645,9 @@ namespace AribONE.Migrations
 
                     b.Property<string>("Note")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid?>("PartnerId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Pc")
                         .IsRequired()
@@ -6012,7 +5680,7 @@ namespace AribONE.Migrations
 
                     b.HasIndex("CurrencyId");
 
-                    b.HasIndex("CustomerId");
+                    b.HasIndex("PartnerId");
 
                     b.HasIndex("ShiftId");
 
@@ -6021,350 +5689,6 @@ namespace AribONE.Migrations
                     b.ToTable("BankTransactions", t =>
                         {
                             t.HasTrigger("BankTransactions_dms_sync");
-                        });
-
-                    b.HasAnnotation("SqlServer:UseSqlOutputClause", false);
-                });
-
-            modelBuilder.Entity("AribONE.Models.Entities.Bill", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("BankId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<decimal>("BankMoney")
-                        .HasPrecision(18, 2)
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<decimal>("BillDiscount")
-                        .HasPrecision(18, 2)
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<Guid>("BillDiscountId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("BillExtraId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<decimal>("BillTax")
-                        .HasPrecision(18, 2)
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<Guid>("BillTaxId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<decimal>("BillTaxPercentage")
-                        .HasPrecision(18, 2)
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<Guid>("BranchId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<Guid?>("CustomerId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<decimal?>("EndingBalance")
-                        .HasPrecision(18, 2)
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<string>("InternalNote")
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
-
-                    b.Property<bool>("IsCash")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsPaid")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime>("IssuedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("ItemCount")
-                        .HasColumnType("int");
-
-                    b.Property<decimal>("ItemDiscount")
-                        .HasPrecision(18, 2)
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<Guid>("ItemDiscountId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<decimal>("ItemTotal")
-                        .HasPrecision(18, 2)
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<decimal>("Money")
-                        .HasPrecision(18, 2)
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<Guid>("MoneyId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<decimal?>("MoneyTotalPaid")
-                        .HasPrecision(18, 2)
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<string>("Note")
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
-
-                    b.Property<string>("Num")
-                        .IsRequired()
-                        .HasMaxLength(16)
-                        .HasColumnType("nvarchar(16)");
-
-                    b.Property<DateTime?>("PaidDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<decimal?>("PaidDiscount")
-                        .HasPrecision(18, 2)
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<Guid?>("PaidRegNum")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<decimal?>("PaidValue")
-                        .HasPrecision(18, 2)
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<decimal?>("PreviousBalance")
-                        .HasPrecision(18, 2)
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<Guid>("RegNum")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<decimal>("Remain")
-                        .HasPrecision(18, 2)
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<Guid?>("ShiftId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Ship")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<string>("ShipAddress")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<string>("ShipPhone1")
-                        .HasMaxLength(12)
-                        .HasColumnType("nvarchar(12)");
-
-                    b.Property<string>("ShipPhone2")
-                        .HasMaxLength(12)
-                        .HasColumnType("nvarchar(12)");
-
-                    b.Property<decimal>("Total")
-                        .HasPrecision(18, 2)
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<decimal>("TotalDiscount")
-                        .HasPrecision(18, 2)
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<decimal>("TotalExtra")
-                        .HasPrecision(18, 2)
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<decimal>("TotalMoney")
-                        .HasPrecision(18, 2)
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<int>("Type")
-                        .HasColumnType("int");
-
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("WalletId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<decimal>("WalletMoney")
-                        .HasPrecision(18, 2)
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<string>("warehouse")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("BranchId");
-
-                    b.HasIndex("CustomerId");
-
-                    b.HasIndex("ShiftId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Bills", t =>
-                        {
-                            t.HasTrigger("Bills_dms_sync");
-                        });
-
-                    b.HasDiscriminator<int>("Type");
-
-                    b
-                        .UseTphMappingStrategy()
-                        .HasAnnotation("SqlServer:UseSqlOutputClause", false);
-                });
-
-            modelBuilder.Entity("AribONE.Models.Entities.BillEntry", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("BillId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("BranchId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<Guid?>("CustomerId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<decimal>("Discount")
-                        .HasPrecision(18, 2)
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<decimal>("DiscountPercentage")
-                        .HasPrecision(18, 2)
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<string>("Discriminator")
-                        .IsRequired()
-                        .HasMaxLength(21)
-                        .HasColumnType("nvarchar(21)");
-
-                    b.Property<DateTime?>("ExpireDt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("FromOrder")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsDelete")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsPaid")
-                        .HasColumnType("bit");
-
-                    b.Property<decimal>("ItemCost")
-                        .HasPrecision(18, 2)
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<int>("Num")
-                        .HasColumnType("int");
-
-                    b.Property<decimal>("Price")
-                        .HasPrecision(18, 2)
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<Guid>("ProductId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<decimal>("Qty")
-                        .HasPrecision(18, 2)
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<Guid>("RegNum")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<decimal>("Tax")
-                        .HasPrecision(18, 2)
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<decimal>("Total")
-                        .HasPrecision(18, 2)
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<decimal>("TotalQty")
-                        .HasPrecision(18, 2)
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<Guid>("UnitId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("WarehouseId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("BillId");
-
-                    b.HasIndex("BranchId");
-
-                    b.HasIndex("CustomerId");
-
-                    b.HasIndex("ProductId");
-
-                    b.HasIndex("UnitId");
-
-                    b.HasIndex("WarehouseId");
-
-                    b.ToTable("BillEntries", t =>
-                        {
-                            t.HasTrigger("BillEntries_dms_sync");
-                        });
-
-                    b.HasDiscriminator<string>("Discriminator").HasValue("BillEntry");
-
-                    b
-                        .UseTphMappingStrategy()
-                        .HasAnnotation("SqlServer:UseSqlOutputClause", false);
-                });
-
-            modelBuilder.Entity("AribONE.Models.Entities.BillPayment", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<decimal>("Amount")
-                        .HasPrecision(18, 2)
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<Guid>("BillId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("BranchId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("CashRegNum")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("PaidAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<Guid?>("ShiftId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("BillId");
-
-                    b.HasIndex("ShiftId");
-
-                    b.ToTable("BillPayments", t =>
-                        {
-                            t.HasTrigger("BillPayments_dms_sync");
                         });
 
                     b.HasAnnotation("SqlServer:UseSqlOutputClause", false);
@@ -6419,100 +5743,6 @@ namespace AribONE.Migrations
                     b.HasIndex("CompanyId");
 
                     b.ToTable("Branches");
-                });
-
-            modelBuilder.Entity("AribONE.Models.Entities.Cash", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("AccountId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("BankId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("BranchId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<Guid>("CurrencyId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<decimal>("CurrencyVal")
-                        .HasPrecision(18, 2)
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<Guid>("CustomerId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<int>("Dealing")
-                        .HasColumnType("int");
-
-                    b.Property<decimal>("Discount")
-                        .HasPrecision(18, 2)
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<Guid>("DiscountId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("EWalletId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Note")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Num")
-                        .HasColumnType("int");
-
-                    b.Property<int>("PaymentMethod")
-                        .HasColumnType("int");
-
-                    b.Property<Guid>("RegNum")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<decimal>("Total")
-                        .HasPrecision(18, 2)
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<Guid?>("TreasuryId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<int>("Type")
-                        .HasColumnType("int");
-
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<decimal>("Value")
-                        .HasPrecision(18, 2)
-                        .HasColumnType("decimal(18,2)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("BankId");
-
-                    b.HasIndex("BranchId");
-
-                    b.HasIndex("CurrencyId");
-
-                    b.HasIndex("CustomerId");
-
-                    b.HasIndex("EWalletId");
-
-                    b.HasIndex("TreasuryId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Cashes", t =>
-                        {
-                            t.HasTrigger("Cashes_dms_sync");
-                        });
-
-                    b.HasAnnotation("SqlServer:UseSqlOutputClause", false);
                 });
 
             modelBuilder.Entity("AribONE.Models.Entities.Company", b =>
@@ -6643,223 +5873,6 @@ namespace AribONE.Migrations
                         });
                 });
 
-            modelBuilder.Entity("AribONE.Models.Entities.Customer", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("AccountId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Address")
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
-
-                    b.Property<Guid?>("AreaId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<decimal>("Balance")
-                        .HasPrecision(18, 2)
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<string>("BankBrunch")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<string>("BankName")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<string>("BankNum")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<Guid>("BranchId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Company")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<DateTime?>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<decimal>("Credit")
-                        .HasPrecision(18, 2)
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<decimal>("CreditLimit")
-                        .HasPrecision(18, 2)
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<decimal>("Debit")
-                        .HasPrecision(18, 2)
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<Guid>("FromId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("GroupId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("ImageId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsCredit")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsDoubleType")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Mail")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<string>("Note")
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<int>("Num")
-                        .HasColumnType("int");
-
-                    b.Property<decimal>("OpenBalance")
-                        .HasPrecision(18, 2)
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<string>("Phone1")
-                        .IsRequired()
-                        .HasMaxLength(12)
-                        .HasColumnType("nvarchar(12)");
-
-                    b.Property<string>("Phone2")
-                        .HasMaxLength(12)
-                        .HasColumnType("nvarchar(12)");
-
-                    b.Property<string>("Phone3")
-                        .HasMaxLength(12)
-                        .HasColumnType("nvarchar(12)");
-
-                    b.Property<int?>("PriceTier")
-                        .HasColumnType("int");
-
-                    b.Property<Guid?>("RegNum")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<int>("Type")
-                        .HasColumnType("int");
-
-                    b.Property<string>("WebSite")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("AreaId");
-
-                    b.HasIndex("GroupId");
-
-                    b.HasIndex("ImageId");
-
-                    b.ToTable("Customers", t =>
-                        {
-                            t.HasTrigger("Customers_dms_sync");
-                        });
-
-                    b.HasAnnotation("SqlServer:UseSqlOutputClause", false);
-                });
-
-            modelBuilder.Entity("AribONE.Models.Entities.CustomerTransaction", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<decimal>("Balance")
-                        .HasPrecision(18, 2)
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<Guid>("BranchId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<decimal>("Credit")
-                        .HasPrecision(18, 2)
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<Guid?>("CustomerId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<int>("Dealing")
-                        .HasColumnType("int");
-
-                    b.Property<decimal>("Debit")
-                        .HasPrecision(18, 2)
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<decimal>("Discount")
-                        .HasPrecision(18, 2)
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<decimal>("Extra")
-                        .HasPrecision(18, 2)
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<string>("Note")
-                        .HasMaxLength(1000)
-                        .HasColumnType("nvarchar(1000)");
-
-                    b.Property<decimal>("Pay")
-                        .HasPrecision(18, 2)
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<Guid>("RegNum")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<decimal>("Remain")
-                        .HasPrecision(18, 2)
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<Guid?>("ShiftId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<decimal>("Tax")
-                        .HasPrecision(18, 2)
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<decimal>("Total")
-                        .HasPrecision(18, 2)
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CustomerId");
-
-                    b.HasIndex("ShiftId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("CustomerTransactions", t =>
-                        {
-                            t.HasTrigger("CustomerTransactions_dms_sync");
-                        });
-
-                    b.HasAnnotation("SqlServer:UseSqlOutputClause", false);
-                });
-
             modelBuilder.Entity("AribONE.Models.Entities.EWallet", b =>
                 {
                     b.Property<Guid>("Id")
@@ -6942,9 +5955,6 @@ namespace AribONE.Migrations
                         .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<Guid?>("CustomerId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<int>("Dealing")
                         .HasColumnType("int");
 
@@ -6960,6 +5970,9 @@ namespace AribONE.Migrations
 
                     b.Property<string>("Note")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid?>("PartnerId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Pc")
                         .IsRequired()
@@ -6988,9 +6001,9 @@ namespace AribONE.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CustomerId");
-
                     b.HasIndex("EWalletId");
+
+                    b.HasIndex("PartnerId");
 
                     b.HasIndex("ShiftId");
 
@@ -6999,6 +6012,158 @@ namespace AribONE.Migrations
                     b.ToTable("EWalletTransactions", t =>
                         {
                             t.HasTrigger("EWalletTransactions_dms_sync");
+                        });
+
+                    b.HasAnnotation("SqlServer:UseSqlOutputClause", false);
+                });
+
+            modelBuilder.Entity("AribONE.Models.Entities.ExpenseIncomeVoucher", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("AccountId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("BankId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("BranchId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreateAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("CurrencyId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<decimal>("CurrencyVal")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<int>("Dealing")
+                        .HasColumnType("int");
+
+                    b.Property<Guid?>("EwalletId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Note")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Num")
+                        .HasColumnType("int");
+
+                    b.Property<int>("PaymentMethod")
+                        .HasColumnType("int");
+
+                    b.Property<Guid>("RegNum")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("ShiftId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<decimal>("Total")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<Guid?>("TreasuryId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<decimal>("Value")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<int?>("WorkId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AccountId");
+
+                    b.HasIndex("BankId");
+
+                    b.HasIndex("BranchId");
+
+                    b.HasIndex("CurrencyId");
+
+                    b.HasIndex("EwalletId");
+
+                    b.HasIndex("ShiftId");
+
+                    b.HasIndex("TreasuryId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("ExpenseIncomeVouchers", t =>
+                        {
+                            t.HasTrigger("ExpenseIncomeVouchers_dms_sync");
+                        });
+
+                    b.HasAnnotation("SqlServer:UseSqlOutputClause", false);
+                });
+
+            modelBuilder.Entity("AribONE.Models.Entities.GeneralLedgerEntry", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("AccountId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool>("Active")
+                        .HasColumnType("bit");
+
+                    b.Property<decimal>("Balance")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<Guid>("BranchId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<decimal>("Credit")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<int>("Dealing")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("Debit")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<Guid?>("PartnerId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("RegNum")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Ship")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AccountId");
+
+                    b.HasIndex("BranchId");
+
+                    b.HasIndex("PartnerId");
+
+                    b.ToTable("GeneralLedgerEntries", t =>
+                        {
+                            t.HasTrigger("GeneralLedgerEntries_dms_sync");
                         });
 
                     b.HasAnnotation("SqlServer:UseSqlOutputClause", false);
@@ -7146,9 +6311,6 @@ namespace AribONE.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid>("CustomerId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<int>("IntervalMonths")
                         .HasColumnType("int");
 
@@ -7158,6 +6320,9 @@ namespace AribONE.Migrations
 
                     b.Property<int>("Num")
                         .HasColumnType("int");
+
+                    b.Property<Guid>("PartnerId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<decimal>("Principal")
                         .HasPrecision(18, 2)
@@ -7173,7 +6338,7 @@ namespace AribONE.Migrations
                         .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<Guid?>("SourceBillId")
+                    b.Property<Guid?>("SourceInvoiceId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("StartDate")
@@ -7187,7 +6352,7 @@ namespace AribONE.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CustomerId");
+                    b.HasIndex("PartnerId");
 
                     b.ToTable("InstallmentPlans");
                 });
@@ -7405,9 +6570,6 @@ namespace AribONE.Migrations
                         .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<Guid?>("CustomerId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<int>("Dealing")
                         .HasColumnType("int");
 
@@ -7444,6 +6606,9 @@ namespace AribONE.Migrations
                         .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)");
 
+                    b.Property<Guid?>("PartnerId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<string>("Pc")
                         .IsRequired()
                         .HasMaxLength(30)
@@ -7468,7 +6633,7 @@ namespace AribONE.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CustomerId");
+                    b.HasIndex("PartnerId");
 
                     b.HasIndex("ProductId");
 
@@ -7482,19 +6647,37 @@ namespace AribONE.Migrations
                     b.HasAnnotation("SqlServer:UseSqlOutputClause", false);
                 });
 
-            modelBuilder.Entity("AribONE.Models.Entities.JournalEntry", b =>
+            modelBuilder.Entity("AribONE.Models.Entities.Invoice", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("AccountId")
+                    b.Property<Guid?>("BankId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<bool>("Active")
-                        .HasColumnType("bit");
+                    b.Property<decimal>("BankMoney")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
 
-                    b.Property<decimal>("Balance")
+                    b.Property<decimal>("BillDiscount")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<Guid>("BillDiscountId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("BillExtraId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<decimal>("BillTax")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<Guid>("BillTaxId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<decimal>("BillTaxPercentage")
                         .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)");
 
@@ -7504,42 +6687,305 @@ namespace AribONE.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<decimal>("Credit")
+                    b.Property<decimal?>("EndingBalance")
                         .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<Guid?>("CustomerId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("InternalNote")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
 
-                    b.Property<int>("Dealing")
-                        .HasColumnType("int");
-
-                    b.Property<decimal>("Debit")
-                        .HasPrecision(18, 2)
-                        .HasColumnType("decimal(18,2)");
+                    b.Property<bool>("IsCash")
+                        .HasColumnType("bit");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
+                    b.Property<bool>("IsPaid")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("IssuedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("ItemCount")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("ItemDiscount")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<Guid>("ItemDiscountId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<decimal>("ItemTotal")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("Money")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<Guid>("MoneyId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<decimal?>("MoneyTotalPaid")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("Note")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<string>("Num")
+                        .IsRequired()
+                        .HasMaxLength(16)
+                        .HasColumnType("nvarchar(16)");
+
+                    b.Property<DateTime?>("PaidDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<decimal?>("PaidDiscount")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<Guid?>("PaidRegNum")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<decimal?>("PaidValue")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<Guid?>("PartnerId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<decimal?>("PreviousBalance")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
                     b.Property<Guid>("RegNum")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<decimal>("Remain")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<Guid?>("ShiftId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<string>("Ship")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("ShipAddress")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("ShipPhone1")
+                        .HasMaxLength(12)
+                        .HasColumnType("nvarchar(12)");
+
+                    b.Property<string>("ShipPhone2")
+                        .HasMaxLength(12)
+                        .HasColumnType("nvarchar(12)");
+
+                    b.Property<decimal>("Total")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("TotalDiscount")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("TotalExtra")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("TotalMoney")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<int>("Type")
+                        .HasColumnType("int");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("WalletId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<decimal>("WalletMoney")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("warehouse")
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AccountId");
+                    b.HasIndex("BranchId");
+
+                    b.HasIndex("PartnerId");
+
+                    b.HasIndex("ShiftId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Invoices", t =>
+                        {
+                            t.HasTrigger("Invoices_dms_sync");
+                        });
+
+                    b.HasDiscriminator<int>("Type");
+
+                    b
+                        .UseTphMappingStrategy()
+                        .HasAnnotation("SqlServer:UseSqlOutputClause", false);
+                });
+
+            modelBuilder.Entity("AribONE.Models.Entities.InvoiceLine", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("BranchId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<decimal>("Discount")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("DiscountPercentage")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("Discriminator")
+                        .IsRequired()
+                        .HasMaxLength(21)
+                        .HasColumnType("nvarchar(21)");
+
+                    b.Property<DateTime?>("ExpireDt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("FromOrder")
+                        .HasColumnType("bit");
+
+                    b.Property<Guid>("InvoiceId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool>("IsDelete")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsPaid")
+                        .HasColumnType("bit");
+
+                    b.Property<decimal>("ItemCost")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<int>("Num")
+                        .HasColumnType("int");
+
+                    b.Property<Guid?>("PartnerId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<decimal>("Price")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<Guid>("ProductId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<decimal>("Qty")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<Guid>("RegNum")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<decimal>("Tax")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("Total")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("TotalQty")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<Guid>("UnitId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("WarehouseId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
 
                     b.HasIndex("BranchId");
 
-                    b.HasIndex("CustomerId");
+                    b.HasIndex("InvoiceId");
 
-                    b.ToTable("JournalEntries", t =>
+                    b.HasIndex("PartnerId");
+
+                    b.HasIndex("ProductId");
+
+                    b.HasIndex("UnitId");
+
+                    b.HasIndex("WarehouseId");
+
+                    b.ToTable("InvoiceLines", t =>
                         {
-                            t.HasTrigger("JournalEntries_dms_sync");
+                            t.HasTrigger("InvoiceLines_dms_sync");
+                        });
+
+                    b.HasDiscriminator<string>("Discriminator").HasValue("InvoiceLine");
+
+                    b
+                        .UseTphMappingStrategy()
+                        .HasAnnotation("SqlServer:UseSqlOutputClause", false);
+                });
+
+            modelBuilder.Entity("AribONE.Models.Entities.InvoicePayment", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<decimal>("Amount")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<Guid>("BranchId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("CashRegNum")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("InvoiceId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("PaidAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("ShiftId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("InvoiceId");
+
+                    b.HasIndex("ShiftId");
+
+                    b.ToTable("InvoicePayments", t =>
+                        {
+                            t.HasTrigger("InvoicePayments_dms_sync");
                         });
 
                     b.HasAnnotation("SqlServer:UseSqlOutputClause", false);
@@ -7633,17 +7079,17 @@ namespace AribONE.Migrations
                     b.Property<Guid>("FulfilledByUserId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("OrderEntryId")
+                    b.Property<Guid>("OrderLineId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<decimal>("Qty")
                         .HasPrecision(18, 3)
                         .HasColumnType("decimal(18,3)");
 
-                    b.Property<Guid?>("ReSaleEntryId")
+                    b.Property<Guid?>("SaleLineId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("SaleEntryId")
+                    b.Property<Guid?>("SalesReturnLineId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("Type")
@@ -7653,15 +7099,326 @@ namespace AribONE.Migrations
 
                     b.HasIndex("BranchId");
 
-                    b.HasIndex("OrderEntryId");
+                    b.HasIndex("OrderLineId");
 
-                    b.HasIndex("ReSaleEntryId");
+                    b.HasIndex("SaleLineId");
 
-                    b.HasIndex("SaleEntryId");
+                    b.HasIndex("SalesReturnLineId");
 
                     b.ToTable("OrderFulfillments", t =>
                         {
                             t.HasTrigger("OrderFulfillments_dms_sync");
+                        });
+
+                    b.HasAnnotation("SqlServer:UseSqlOutputClause", false);
+                });
+
+            modelBuilder.Entity("AribONE.Models.Entities.Partner", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("AccountId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Address")
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<Guid?>("AreaId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<decimal>("Balance")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("BankBrunch")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("BankName")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("BankNum")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<Guid>("BranchId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Company")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<DateTime?>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<decimal>("Credit")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("CreditLimit")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("Debit")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<Guid>("FromId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("GroupId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("ImageId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsCredit")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsDoubleType")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Mail")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("Note")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<int>("Num")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("OpenBalance")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("Phone1")
+                        .IsRequired()
+                        .HasMaxLength(12)
+                        .HasColumnType("nvarchar(12)");
+
+                    b.Property<string>("Phone2")
+                        .HasMaxLength(12)
+                        .HasColumnType("nvarchar(12)");
+
+                    b.Property<string>("Phone3")
+                        .HasMaxLength(12)
+                        .HasColumnType("nvarchar(12)");
+
+                    b.Property<int?>("PriceTier")
+                        .HasColumnType("int");
+
+                    b.Property<Guid?>("RegNum")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("Type")
+                        .HasColumnType("int");
+
+                    b.Property<string>("WebSite")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AreaId");
+
+                    b.HasIndex("GroupId");
+
+                    b.HasIndex("ImageId");
+
+                    b.ToTable("Partners", t =>
+                        {
+                            t.HasTrigger("Partners_dms_sync");
+                        });
+
+                    b.HasAnnotation("SqlServer:UseSqlOutputClause", false);
+                });
+
+            modelBuilder.Entity("AribONE.Models.Entities.PartnerLedgerEntry", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<decimal>("Balance")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<Guid>("BranchId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<decimal>("Credit")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<int>("Dealing")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("Debit")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("Discount")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("Extra")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("Note")
+                        .HasMaxLength(1000)
+                        .HasColumnType("nvarchar(1000)");
+
+                    b.Property<Guid?>("PartnerId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<decimal>("Pay")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<Guid>("RegNum")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<decimal>("Remain")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<Guid?>("ShiftId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<decimal>("Tax")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("Total")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PartnerId");
+
+                    b.HasIndex("ShiftId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("PartnerLedgerEntries", t =>
+                        {
+                            t.HasTrigger("PartnerLedgerEntries_dms_sync");
+                        });
+
+                    b.HasAnnotation("SqlServer:UseSqlOutputClause", false);
+                });
+
+            modelBuilder.Entity("AribONE.Models.Entities.PaymentVoucher", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("AccountId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("BankId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("BranchId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("CurrencyId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<decimal>("CurrencyVal")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<int>("Dealing")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("Discount")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<Guid>("DiscountId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("EWalletId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Note")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Num")
+                        .HasColumnType("int");
+
+                    b.Property<Guid>("PartnerId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("PaymentMethod")
+                        .HasColumnType("int");
+
+                    b.Property<Guid>("RegNum")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<decimal>("Total")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<Guid?>("TreasuryId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("Type")
+                        .HasColumnType("int");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<decimal>("Value")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BankId");
+
+                    b.HasIndex("BranchId");
+
+                    b.HasIndex("CurrencyId");
+
+                    b.HasIndex("EWalletId");
+
+                    b.HasIndex("PartnerId");
+
+                    b.HasIndex("TreasuryId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("PaymentVouchers", t =>
+                        {
+                            t.HasTrigger("PaymentVouchers_dms_sync");
                         });
 
                     b.HasAnnotation("SqlServer:UseSqlOutputClause", false);
@@ -7987,6 +7744,338 @@ namespace AribONE.Migrations
                         });
                 });
 
+            modelBuilder.Entity("AribONE.Models.Entities.PostingAccount", b =>
+                {
+                    b.Property<string>("Role")
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
+
+                    b.Property<Guid>("AccountId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("LabelAr")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("LabelEn")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.HasKey("Role");
+
+                    b.ToTable("PostingAccounts", t =>
+                        {
+                            t.HasTrigger("PostingAccounts_dms_sync");
+                        });
+
+                    b.HasAnnotation("SqlServer:UseSqlOutputClause", false);
+
+                    b.HasData(
+                        new
+                        {
+                            Role = "InventoryAdjustmentDifferences",
+                            AccountId = new Guid("00000001-0000-7000-a000-000000001252"),
+                            LabelAr = "تسويه جرديه",
+                            LabelEn = "Inventory Adjustment"
+                        },
+                        new
+                        {
+                            Role = "Asset",
+                            AccountId = new Guid("00000001-0000-7000-a000-000000000001"),
+                            LabelAr = "الاصول",
+                            LabelEn = "Asset"
+                        },
+                        new
+                        {
+                            Role = "FixedAssetsDepreciation",
+                            AccountId = new Guid("00000001-0000-7000-a000-000000000164"),
+                            LabelAr = "إهلاك الأصول الثابتة",
+                            LabelEn = "Fixed Assets Depreciation"
+                        },
+                        new
+                        {
+                            Role = "MaintenanceAndRepairExpenses",
+                            AccountId = new Guid("00000001-0000-7000-a000-000000000189"),
+                            LabelAr = "مصروفات صيانة واصلاح",
+                            LabelEn = ""
+                        },
+                        new
+                        {
+                            Role = "BadDebit",
+                            AccountId = new Guid("00000001-0000-7000-a000-000000000195"),
+                            LabelAr = "ديون معدومة",
+                            LabelEn = "Bad Debit"
+                        },
+                        new
+                        {
+                            Role = "Bank",
+                            AccountId = new Guid("00000001-0000-7000-a000-000000000034"),
+                            LabelAr = "البنوك",
+                            LabelEn = "Banks"
+                        },
+                        new
+                        {
+                            Role = "EWallet",
+                            AccountId = new Guid("00000001-0000-7000-a000-000000004270"),
+                            LabelAr = "المحافظ الاليكترونيه",
+                            LabelEn = "EWallets"
+                        },
+                        new
+                        {
+                            Role = "BankExpenses",
+                            AccountId = new Guid("00000001-0000-7000-a000-000000000181"),
+                            LabelAr = "مصروفات البنوك",
+                            LabelEn = "BankExpenses"
+                        },
+                        new
+                        {
+                            Role = "CashBranchesTransfer",
+                            AccountId = new Guid("00000001-0000-7000-a000-000000000062"),
+                            LabelAr = "تحويلات النقديه بين الفروع",
+                            LabelEn = "Cash Branches Transfer"
+                        },
+                        new
+                        {
+                            Role = "OpeningBalances",
+                            AccountId = new Guid("00000001-0000-7000-a000-000000004263"),
+                            LabelAr = "ارصدة افتتاحيه",
+                            LabelEn = "Opening Balances"
+                        },
+                        new
+                        {
+                            Role = "Capital",
+                            AccountId = new Guid("00000001-0000-7000-a000-000000000126"),
+                            LabelAr = "راس المال",
+                            LabelEn = "Capital"
+                        },
+                        new
+                        {
+                            Role = "CashDiscountIn",
+                            AccountId = new Guid("00000001-0000-7000-a000-000000000217"),
+                            LabelAr = "خصم مكتسب (المشتريات)",
+                            LabelEn = "Cash Discount In"
+                        },
+                        new
+                        {
+                            Role = "CashDiscountOut",
+                            AccountId = new Guid("00000001-0000-7000-a000-000000001245"),
+                            LabelAr = "خصم مسموح به ( مبيعات )",
+                            LabelEn = "Cash Discount Out"
+                        },
+                        new
+                        {
+                            Role = "Customers",
+                            AccountId = new Guid("00000001-0000-7000-a000-000000000052"),
+                            LabelAr = "العملاء",
+                            LabelEn = "Customers"
+                        },
+                        new
+                        {
+                            Role = "Vendor",
+                            AccountId = new Guid("00000001-0000-7000-a000-000000000084"),
+                            LabelAr = "الموردون",
+                            LabelEn = "Vendor"
+                        },
+                        new
+                        {
+                            Role = "CustomersAdjustment",
+                            AccountId = new Guid("00000001-0000-7000-a000-000000000205"),
+                            LabelAr = "تسويات ماليه",
+                            LabelEn = "Customers Adjustment"
+                        },
+                        new
+                        {
+                            Role = "Tax",
+                            AccountId = new Guid("00000001-0000-7000-a000-000000000093"),
+                            LabelAr = "الضريبة",
+                            LabelEn = "Tax"
+                        },
+                        new
+                        {
+                            Role = "WithholdingTax",
+                            AccountId = new Guid("00000001-0000-7000-a000-000000004264"),
+                            LabelAr = "ضريبة الخصم و الإضافة",
+                            LabelEn = "Withholding Tax"
+                        },
+                        new
+                        {
+                            Role = "DeliveryIncome",
+                            AccountId = new Guid("00000001-0000-7000-a000-000000004268"),
+                            LabelAr = "التوصيل للمنازل",
+                            LabelEn = "Delivery Income"
+                        },
+                        new
+                        {
+                            Role = "DueRevenue",
+                            AccountId = new Guid("00000001-0000-7000-a000-000000000059"),
+                            LabelAr = "إيرادات مستحقة",
+                            LabelEn = "DueRevenue"
+                        },
+                        new
+                        {
+                            Role = "EarnedProfit",
+                            AccountId = new Guid("00000001-0000-7000-a000-000000004266"),
+                            LabelAr = "أرباح محققة",
+                            LabelEn = "EarnedProfit"
+                        },
+                        new
+                        {
+                            Role = "Gifts",
+                            AccountId = new Guid("00000001-0000-7000-a000-000000000173"),
+                            LabelAr = "هدايا",
+                            LabelEn = "Gifts"
+                        },
+                        new
+                        {
+                            Role = "WasteStock",
+                            AccountId = new Guid("00000001-0000-7000-a000-000000000174"),
+                            LabelAr = "هالك المخزون",
+                            LabelEn = "Waste Stock"
+                        },
+                        new
+                        {
+                            Role = "Incentive",
+                            AccountId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            LabelAr = "حوافذ",
+                            LabelEn = "Incentive"
+                        },
+                        new
+                        {
+                            Role = "Insurance",
+                            AccountId = new Guid("00000001-0000-7000-a000-000000000096"),
+                            LabelAr = "التأمينات الاجتماعية",
+                            LabelEn = "Insurance"
+                        },
+                        new
+                        {
+                            Role = "Treasury",
+                            AccountId = new Guid("00000001-0000-7000-a000-000000000033"),
+                            LabelAr = "الخزينة",
+                            LabelEn = "Treasury"
+                        },
+                        new
+                        {
+                            Role = "Pledge",
+                            AccountId = new Guid("00000001-0000-7000-a000-000000000035"),
+                            LabelAr = "عهد الموظفين",
+                            LabelEn = "Pledge"
+                        },
+                        new
+                        {
+                            Role = "QtyDiscountIn",
+                            AccountId = new Guid("00000001-0000-7000-a000-000000001243"),
+                            LabelAr = "خصم كميه مكتسب",
+                            LabelEn = "Qty Discount In"
+                        },
+                        new
+                        {
+                            Role = "QtyDiscountOut",
+                            AccountId = new Guid("00000001-0000-7000-a000-000000001244"),
+                            LabelAr = "خصم كمية مسموح به",
+                            LabelEn = "Qty Discount Out"
+                        },
+                        new
+                        {
+                            Role = "Sadka",
+                            AccountId = new Guid("00000001-0000-7000-a000-000000000201"),
+                            LabelAr = "الصدقه",
+                            LabelEn = "Sadka"
+                        },
+                        new
+                        {
+                            Role = "Sale",
+                            AccountId = new Guid("00000001-0000-7000-a000-000000000210"),
+                            LabelAr = "المبيعات",
+                            LabelEn = "Sale"
+                        },
+                        new
+                        {
+                            Role = "SaleCost",
+                            AccountId = new Guid("00000001-0000-7000-a000-000000000137"),
+                            LabelAr = "تكلفة المبيعات",
+                            LabelEn = "Sale Cost"
+                        },
+                        new
+                        {
+                            Role = "SaleReturn",
+                            AccountId = new Guid("00000001-0000-7000-a000-000000000211"),
+                            LabelAr = "مرتجع المبيعات",
+                            LabelEn = "SaleReturn"
+                        },
+                        new
+                        {
+                            Role = "Shortage",
+                            AccountId = new Guid("00000001-0000-7000-a000-000000003264"),
+                            LabelAr = "عجز في إغلاق اليومية",
+                            LabelEn = "Shortage"
+                        },
+                        new
+                        {
+                            Role = "Surplus",
+                            AccountId = new Guid("00000001-0000-7000-a000-000000003263"),
+                            LabelAr = "فائض إغلاق اليومية",
+                            LabelEn = "Surplus"
+                        },
+                        new
+                        {
+                            Role = "AdvancesToEmployees",
+                            AccountId = new Guid("00000001-0000-7000-a000-000000000061"),
+                            LabelAr = "سلف الموظفين",
+                            LabelEn = "Advances To Employees"
+                        },
+                        new
+                        {
+                            Role = "Stock",
+                            AccountId = new Guid("00000001-0000-7000-a000-000000000039"),
+                            LabelAr = "مخزون البضاعة",
+                            LabelEn = "Stock"
+                        },
+                        new
+                        {
+                            Role = "WarehouseTransfer",
+                            AccountId = new Guid("00000001-0000-7000-a000-000000003262"),
+                            LabelAr = "تحويلات المخازن",
+                            LabelEn = "Warehouse Transfer"
+                        },
+                        new
+                        {
+                            Role = "WorkSalary",
+                            AccountId = new Guid("00000001-0000-7000-a000-000000000150"),
+                            LabelAr = "أجور نقدية",
+                            LabelEn = "Work Salary"
+                        },
+                        new
+                        {
+                            Role = "BillSaleExtra",
+                            AccountId = new Guid("00000001-0000-7000-a000-000000000218"),
+                            LabelAr = "اضافى على الفاتورة",
+                            LabelEn = "Extra on Bill"
+                        },
+                        new
+                        {
+                            Role = "BillPurchaseExtra",
+                            AccountId = new Guid("00000001-0000-7000-a000-000000000156"),
+                            LabelAr = "خدمات مشتراة",
+                            LabelEn = "Extra on Purchase"
+                        },
+                        new
+                        {
+                            Role = "SoldServices",
+                            AccountId = new Guid("00000001-0000-7000-a000-000000000218"),
+                            LabelAr = "خدمات مباعة",
+                            LabelEn = "Sold Services"
+                        },
+                        new
+                        {
+                            Role = "PurchasedServices",
+                            AccountId = new Guid("00000001-0000-7000-a000-000000000156"),
+                            LabelAr = "خدمات مشتراة",
+                            LabelEn = "Purchased Services"
+                        });
+                });
+
             modelBuilder.Entity("AribONE.Models.Entities.Product", b =>
                 {
                     b.Property<Guid>("Id")
@@ -8232,95 +8321,6 @@ namespace AribONE.Migrations
                     b.ToTable("ProductOpeningBalances", t =>
                         {
                             t.HasTrigger("ProductOpeningBalances_dms_sync");
-                        });
-
-                    b.HasAnnotation("SqlServer:UseSqlOutputClause", false);
-                });
-
-            modelBuilder.Entity("AribONE.Models.Entities.RevenueExpenses", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("AccountId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("BankId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("BranchId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("CreateAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<Guid>("CurrencyId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<decimal>("CurrencyVal")
-                        .HasPrecision(18, 2)
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<int>("Dealing")
-                        .HasColumnType("int");
-
-                    b.Property<Guid?>("EwalletId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Note")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Num")
-                        .HasColumnType("int");
-
-                    b.Property<int>("PaymentMethod")
-                        .HasColumnType("int");
-
-                    b.Property<Guid>("RegNum")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("ShiftId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<decimal>("Total")
-                        .HasPrecision(18, 2)
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<Guid?>("TreasuryId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<decimal>("Value")
-                        .HasPrecision(18, 2)
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<int?>("WorkId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("AccountId");
-
-                    b.HasIndex("BankId");
-
-                    b.HasIndex("BranchId");
-
-                    b.HasIndex("CurrencyId");
-
-                    b.HasIndex("EwalletId");
-
-                    b.HasIndex("ShiftId");
-
-                    b.HasIndex("TreasuryId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("RevenueExpenses", t =>
-                        {
-                            t.HasTrigger("RevenueExpenses_dms_sync");
                         });
 
                     b.HasAnnotation("SqlServer:UseSqlOutputClause", false);
@@ -9049,9 +9049,6 @@ namespace AribONE.Migrations
                         .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<Guid?>("CustomerId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<int>("Deal")
                         .HasColumnType("int");
 
@@ -9069,6 +9066,9 @@ namespace AribONE.Migrations
 
                     b.Property<int>("Num")
                         .HasColumnType("int");
+
+                    b.Property<Guid?>("PartnerId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("RegNum")
                         .HasColumnType("uniqueidentifier");
@@ -9436,80 +9436,7 @@ namespace AribONE.Migrations
                     b.HasAnnotation("SqlServer:UseSqlOutputClause", false);
                 });
 
-            modelBuilder.Entity("AribONE.Models.Entities.Order", b =>
-                {
-                    b.HasBaseType("AribONE.Models.Entities.Bill");
-
-                    b.Property<int>("Status")
-                        .HasColumnType("int");
-
-                    b.HasDiscriminator().HasValue(300);
-                });
-
-            modelBuilder.Entity("AribONE.Models.Entities.Purchase", b =>
-                {
-                    b.HasBaseType("AribONE.Models.Entities.Bill");
-
-                    b.HasDiscriminator().HasValue(200);
-                });
-
-            modelBuilder.Entity("AribONE.Models.Entities.RePurchase", b =>
-                {
-                    b.HasBaseType("AribONE.Models.Entities.Bill");
-
-                    b.HasDiscriminator().HasValue(201);
-                });
-
-            modelBuilder.Entity("AribONE.Models.Entities.ReSale", b =>
-                {
-                    b.HasBaseType("AribONE.Models.Entities.Bill");
-
-                    b.HasDiscriminator().HasValue(101);
-                });
-
-            modelBuilder.Entity("AribONE.Models.Entities.Sale", b =>
-                {
-                    b.HasBaseType("AribONE.Models.Entities.Bill");
-
-                    b.HasDiscriminator().HasValue(100);
-                });
-
-            modelBuilder.Entity("AribONE.Models.Entities.OrderEntry", b =>
-                {
-                    b.HasBaseType("AribONE.Models.Entities.BillEntry");
-
-                    b.HasDiscriminator().HasValue("OrderEntry");
-                });
-
-            modelBuilder.Entity("AribONE.Models.Entities.PurchaseEntry", b =>
-                {
-                    b.HasBaseType("AribONE.Models.Entities.BillEntry");
-
-                    b.HasDiscriminator().HasValue("PurchaseEntry");
-                });
-
-            modelBuilder.Entity("AribONE.Models.Entities.RePurchaseEntry", b =>
-                {
-                    b.HasBaseType("AribONE.Models.Entities.BillEntry");
-
-                    b.HasDiscriminator().HasValue("RePurchaseEntry");
-                });
-
-            modelBuilder.Entity("AribONE.Models.Entities.ReSaleEntry", b =>
-                {
-                    b.HasBaseType("AribONE.Models.Entities.BillEntry");
-
-                    b.HasDiscriminator().HasValue("ReSaleEntry");
-                });
-
-            modelBuilder.Entity("AribONE.Models.Entities.SaleEntry", b =>
-                {
-                    b.HasBaseType("AribONE.Models.Entities.BillEntry");
-
-                    b.HasDiscriminator().HasValue("SaleEntry");
-                });
-
-            modelBuilder.Entity("AribONE.Models.Entities.CustomerGroup", b =>
+            modelBuilder.Entity("AribONE.Models.Entities.PartnerGroup", b =>
                 {
                     b.HasBaseType("AribONE.Models.Entities.Group");
 
@@ -9526,7 +9453,80 @@ namespace AribONE.Migrations
                     b.HasDiscriminator().HasValue("Product");
                 });
 
-            modelBuilder.Entity("AribONE.Models.Entities.Bank", b =>
+            modelBuilder.Entity("AribONE.Models.Entities.Order", b =>
+                {
+                    b.HasBaseType("AribONE.Models.Entities.Invoice");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.HasDiscriminator().HasValue(300);
+                });
+
+            modelBuilder.Entity("AribONE.Models.Entities.Purchase", b =>
+                {
+                    b.HasBaseType("AribONE.Models.Entities.Invoice");
+
+                    b.HasDiscriminator().HasValue(200);
+                });
+
+            modelBuilder.Entity("AribONE.Models.Entities.PurchaseReturn", b =>
+                {
+                    b.HasBaseType("AribONE.Models.Entities.Invoice");
+
+                    b.HasDiscriminator().HasValue(201);
+                });
+
+            modelBuilder.Entity("AribONE.Models.Entities.Sale", b =>
+                {
+                    b.HasBaseType("AribONE.Models.Entities.Invoice");
+
+                    b.HasDiscriminator().HasValue(100);
+                });
+
+            modelBuilder.Entity("AribONE.Models.Entities.SalesReturn", b =>
+                {
+                    b.HasBaseType("AribONE.Models.Entities.Invoice");
+
+                    b.HasDiscriminator().HasValue(101);
+                });
+
+            modelBuilder.Entity("AribONE.Models.Entities.OrderLine", b =>
+                {
+                    b.HasBaseType("AribONE.Models.Entities.InvoiceLine");
+
+                    b.HasDiscriminator().HasValue("OrderEntry");
+                });
+
+            modelBuilder.Entity("AribONE.Models.Entities.PurchaseLine", b =>
+                {
+                    b.HasBaseType("AribONE.Models.Entities.InvoiceLine");
+
+                    b.HasDiscriminator().HasValue("PurchaseEntry");
+                });
+
+            modelBuilder.Entity("AribONE.Models.Entities.PurchaseReturnLine", b =>
+                {
+                    b.HasBaseType("AribONE.Models.Entities.InvoiceLine");
+
+                    b.HasDiscriminator().HasValue("RePurchaseEntry");
+                });
+
+            modelBuilder.Entity("AribONE.Models.Entities.SaleLine", b =>
+                {
+                    b.HasBaseType("AribONE.Models.Entities.InvoiceLine");
+
+                    b.HasDiscriminator().HasValue("SaleEntry");
+                });
+
+            modelBuilder.Entity("AribONE.Models.Entities.SalesReturnLine", b =>
+                {
+                    b.HasBaseType("AribONE.Models.Entities.InvoiceLine");
+
+                    b.HasDiscriminator().HasValue("ReSaleEntry");
+                });
+
+            modelBuilder.Entity("AribONE.Models.Entities.BankAccount", b =>
                 {
                     b.HasOne("AribONE.Models.Entities.Account", "Account")
                         .WithMany()
@@ -9555,7 +9555,7 @@ namespace AribONE.Migrations
 
             modelBuilder.Entity("AribONE.Models.Entities.BankTransaction", b =>
                 {
-                    b.HasOne("AribONE.Models.Entities.Bank", "Bank")
+                    b.HasOne("AribONE.Models.Entities.BankAccount", "Bank")
                         .WithMany()
                         .HasForeignKey("BankId")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -9567,9 +9567,9 @@ namespace AribONE.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("AribONE.Models.Entities.Customer", "Customer")
+                    b.HasOne("AribONE.Models.Entities.Partner", "Partner")
                         .WithMany()
-                        .HasForeignKey("CustomerId");
+                        .HasForeignKey("PartnerId");
 
                     b.HasOne("AribONE.Models.Entities.User", "User")
                         .WithMany()
@@ -9581,94 +9581,9 @@ namespace AribONE.Migrations
 
                     b.Navigation("Currency");
 
-                    b.Navigation("Customer");
+                    b.Navigation("Partner");
 
                     b.Navigation("User");
-                });
-
-            modelBuilder.Entity("AribONE.Models.Entities.Bill", b =>
-                {
-                    b.HasOne("AribONE.Models.Entities.Branch", "Branch")
-                        .WithMany()
-                        .HasForeignKey("BranchId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("AribONE.Models.Entities.Customer", "Customer")
-                        .WithMany()
-                        .HasForeignKey("CustomerId");
-
-                    b.HasOne("AribONE.Models.Entities.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Branch");
-
-                    b.Navigation("Customer");
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("AribONE.Models.Entities.BillEntry", b =>
-                {
-                    b.HasOne("AribONE.Models.Entities.Bill", "Bill")
-                        .WithMany("BillEntries")
-                        .HasForeignKey("BillId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("AribONE.Models.Entities.Branch", "Branch")
-                        .WithMany()
-                        .HasForeignKey("BranchId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("AribONE.Models.Entities.Customer", "Customer")
-                        .WithMany()
-                        .HasForeignKey("CustomerId");
-
-                    b.HasOne("AribONE.Models.Entities.Product", "Product")
-                        .WithMany()
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("AribONE.Models.Entities.UnitOfMeasure", "Unit")
-                        .WithMany()
-                        .HasForeignKey("UnitId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("AribONE.Models.Entities.Warehouse", "Warehouse")
-                        .WithMany()
-                        .HasForeignKey("WarehouseId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("Bill");
-
-                    b.Navigation("Branch");
-
-                    b.Navigation("Customer");
-
-                    b.Navigation("Product");
-
-                    b.Navigation("Unit");
-
-                    b.Navigation("Warehouse");
-                });
-
-            modelBuilder.Entity("AribONE.Models.Entities.BillPayment", b =>
-                {
-                    b.HasOne("AribONE.Models.Entities.Bill", "Bill")
-                        .WithMany()
-                        .HasForeignKey("BillId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Bill");
                 });
 
             modelBuilder.Entity("AribONE.Models.Entities.Branch", b =>
@@ -9680,59 +9595,6 @@ namespace AribONE.Migrations
                         .IsRequired();
 
                     b.Navigation("Company");
-                });
-
-            modelBuilder.Entity("AribONE.Models.Entities.Cash", b =>
-                {
-                    b.HasOne("AribONE.Models.Entities.Bank", "Bank")
-                        .WithMany()
-                        .HasForeignKey("BankId");
-
-                    b.HasOne("AribONE.Models.Entities.Branch", "Branch")
-                        .WithMany()
-                        .HasForeignKey("BranchId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("AribONE.Models.Entities.Currency", "Currency")
-                        .WithMany()
-                        .HasForeignKey("CurrencyId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("AribONE.Models.Entities.Customer", "Customer")
-                        .WithMany()
-                        .HasForeignKey("CustomerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("AribONE.Models.Entities.EWallet", "EWallet")
-                        .WithMany()
-                        .HasForeignKey("EWalletId");
-
-                    b.HasOne("AribONE.Models.Entities.Treasury", "Treasury")
-                        .WithMany()
-                        .HasForeignKey("TreasuryId");
-
-                    b.HasOne("AribONE.Models.Entities.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Bank");
-
-                    b.Navigation("Branch");
-
-                    b.Navigation("Currency");
-
-                    b.Navigation("Customer");
-
-                    b.Navigation("EWallet");
-
-                    b.Navigation("Treasury");
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("AribONE.Models.Entities.Company", b =>
@@ -9750,44 +9612,6 @@ namespace AribONE.Migrations
                     b.Navigation("Currency");
 
                     b.Navigation("Logo");
-                });
-
-            modelBuilder.Entity("AribONE.Models.Entities.Customer", b =>
-                {
-                    b.HasOne("AribONE.Models.Entities.Area", "Area")
-                        .WithMany("Customers")
-                        .HasForeignKey("AreaId");
-
-                    b.HasOne("AribONE.Models.Entities.CustomerGroup", "Group")
-                        .WithMany()
-                        .HasForeignKey("GroupId");
-
-                    b.HasOne("AribONE.Models.Entities.Image", "Image")
-                        .WithMany()
-                        .HasForeignKey("ImageId");
-
-                    b.Navigation("Area");
-
-                    b.Navigation("Group");
-
-                    b.Navigation("Image");
-                });
-
-            modelBuilder.Entity("AribONE.Models.Entities.CustomerTransaction", b =>
-                {
-                    b.HasOne("AribONE.Models.Entities.Customer", "Customer")
-                        .WithMany()
-                        .HasForeignKey("CustomerId");
-
-                    b.HasOne("AribONE.Models.Entities.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Customer");
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("AribONE.Models.Entities.EWallet", b =>
@@ -9811,15 +9635,15 @@ namespace AribONE.Migrations
 
             modelBuilder.Entity("AribONE.Models.Entities.EWalletTransaction", b =>
                 {
-                    b.HasOne("AribONE.Models.Entities.Customer", "Customer")
-                        .WithMany()
-                        .HasForeignKey("CustomerId");
-
                     b.HasOne("AribONE.Models.Entities.EWallet", "EWallet")
                         .WithMany()
                         .HasForeignKey("EWalletId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("AribONE.Models.Entities.Partner", "Partner")
+                        .WithMany()
+                        .HasForeignKey("PartnerId");
 
                     b.HasOne("AribONE.Models.Entities.User", "User")
                         .WithMany()
@@ -9827,11 +9651,89 @@ namespace AribONE.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Customer");
-
                     b.Navigation("EWallet");
 
+                    b.Navigation("Partner");
+
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("AribONE.Models.Entities.ExpenseIncomeVoucher", b =>
+                {
+                    b.HasOne("AribONE.Models.Entities.Account", "Account")
+                        .WithMany()
+                        .HasForeignKey("AccountId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("AribONE.Models.Entities.BankAccount", "Bank")
+                        .WithMany()
+                        .HasForeignKey("BankId");
+
+                    b.HasOne("AribONE.Models.Entities.Branch", "Branch")
+                        .WithMany()
+                        .HasForeignKey("BranchId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("AribONE.Models.Entities.Currency", "Currency")
+                        .WithMany()
+                        .HasForeignKey("CurrencyId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("AribONE.Models.Entities.EWallet", "Ewallet")
+                        .WithMany()
+                        .HasForeignKey("EwalletId");
+
+                    b.HasOne("AribONE.Models.Entities.Treasury", "Treasury")
+                        .WithMany()
+                        .HasForeignKey("TreasuryId");
+
+                    b.HasOne("AribONE.Models.Entities.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Account");
+
+                    b.Navigation("Bank");
+
+                    b.Navigation("Branch");
+
+                    b.Navigation("Currency");
+
+                    b.Navigation("Ewallet");
+
+                    b.Navigation("Treasury");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("AribONE.Models.Entities.GeneralLedgerEntry", b =>
+                {
+                    b.HasOne("AribONE.Models.Entities.Account", "Account")
+                        .WithMany()
+                        .HasForeignKey("AccountId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("AribONE.Models.Entities.Branch", "Branch")
+                        .WithMany()
+                        .HasForeignKey("BranchId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("AribONE.Models.Entities.Partner", "Partner")
+                        .WithMany()
+                        .HasForeignKey("PartnerId");
+
+                    b.Navigation("Account");
+
+                    b.Navigation("Branch");
+
+                    b.Navigation("Partner");
                 });
 
             modelBuilder.Entity("AribONE.Models.Entities.InstallmentItem", b =>
@@ -9858,13 +9760,13 @@ namespace AribONE.Migrations
 
             modelBuilder.Entity("AribONE.Models.Entities.InstallmentPlan", b =>
                 {
-                    b.HasOne("AribONE.Models.Entities.Customer", "Customer")
+                    b.HasOne("AribONE.Models.Entities.Partner", "Partner")
                         .WithMany()
-                        .HasForeignKey("CustomerId")
+                        .HasForeignKey("PartnerId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.Navigation("Customer");
+                    b.Navigation("Partner");
                 });
 
             modelBuilder.Entity("AribONE.Models.Entities.InventoryAdjustment", b =>
@@ -9918,9 +9820,9 @@ namespace AribONE.Migrations
 
             modelBuilder.Entity("AribONE.Models.Entities.InventoryMovement", b =>
                 {
-                    b.HasOne("AribONE.Models.Entities.Customer", "Customer")
+                    b.HasOne("AribONE.Models.Entities.Partner", "Partner")
                         .WithMany()
-                        .HasForeignKey("CustomerId");
+                        .HasForeignKey("PartnerId");
 
                     b.HasOne("AribONE.Models.Entities.Product", "Product")
                         .WithMany()
@@ -9934,36 +9836,96 @@ namespace AribONE.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Customer");
+                    b.Navigation("Partner");
 
                     b.Navigation("Product");
 
                     b.Navigation("Warehouse");
                 });
 
-            modelBuilder.Entity("AribONE.Models.Entities.JournalEntry", b =>
+            modelBuilder.Entity("AribONE.Models.Entities.Invoice", b =>
                 {
-                    b.HasOne("AribONE.Models.Entities.Account", "Account")
-                        .WithMany()
-                        .HasForeignKey("AccountId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("AribONE.Models.Entities.Branch", "Branch")
                         .WithMany()
                         .HasForeignKey("BranchId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("AribONE.Models.Entities.Customer", "Customer")
+                    b.HasOne("AribONE.Models.Entities.Partner", "Partner")
                         .WithMany()
-                        .HasForeignKey("CustomerId");
+                        .HasForeignKey("PartnerId");
 
-                    b.Navigation("Account");
+                    b.HasOne("AribONE.Models.Entities.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Branch");
 
-                    b.Navigation("Customer");
+                    b.Navigation("Partner");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("AribONE.Models.Entities.InvoiceLine", b =>
+                {
+                    b.HasOne("AribONE.Models.Entities.Branch", "Branch")
+                        .WithMany()
+                        .HasForeignKey("BranchId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("AribONE.Models.Entities.Invoice", "Invoice")
+                        .WithMany("InvoiceLines")
+                        .HasForeignKey("InvoiceId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("AribONE.Models.Entities.Partner", "Partner")
+                        .WithMany()
+                        .HasForeignKey("PartnerId");
+
+                    b.HasOne("AribONE.Models.Entities.Product", "Product")
+                        .WithMany()
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("AribONE.Models.Entities.UnitOfMeasure", "Unit")
+                        .WithMany()
+                        .HasForeignKey("UnitId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("AribONE.Models.Entities.Warehouse", "Warehouse")
+                        .WithMany()
+                        .HasForeignKey("WarehouseId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Branch");
+
+                    b.Navigation("Invoice");
+
+                    b.Navigation("Partner");
+
+                    b.Navigation("Product");
+
+                    b.Navigation("Unit");
+
+                    b.Navigation("Warehouse");
+                });
+
+            modelBuilder.Entity("AribONE.Models.Entities.InvoicePayment", b =>
+                {
+                    b.HasOne("AribONE.Models.Entities.Invoice", "Invoice")
+                        .WithMany()
+                        .HasForeignKey("InvoiceId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Invoice");
                 });
 
             modelBuilder.Entity("AribONE.Models.Entities.NotificationReadState", b =>
@@ -9985,27 +9947,118 @@ namespace AribONE.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("AribONE.Models.Entities.OrderEntry", "OrderEntry")
+                    b.HasOne("AribONE.Models.Entities.OrderLine", "OrderLine")
                         .WithMany("Fulfillments")
-                        .HasForeignKey("OrderEntryId")
+                        .HasForeignKey("OrderLineId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("AribONE.Models.Entities.ReSaleEntry", "ReSaleEntry")
+                    b.HasOne("AribONE.Models.Entities.SaleLine", "SaleLine")
                         .WithMany()
-                        .HasForeignKey("ReSaleEntryId");
+                        .HasForeignKey("SaleLineId");
 
-                    b.HasOne("AribONE.Models.Entities.SaleEntry", "SaleEntry")
+                    b.HasOne("AribONE.Models.Entities.SalesReturnLine", "SalesReturnLine")
                         .WithMany()
-                        .HasForeignKey("SaleEntryId");
+                        .HasForeignKey("SalesReturnLineId");
 
                     b.Navigation("Branch");
 
-                    b.Navigation("OrderEntry");
+                    b.Navigation("OrderLine");
 
-                    b.Navigation("ReSaleEntry");
+                    b.Navigation("SaleLine");
 
-                    b.Navigation("SaleEntry");
+                    b.Navigation("SalesReturnLine");
+                });
+
+            modelBuilder.Entity("AribONE.Models.Entities.Partner", b =>
+                {
+                    b.HasOne("AribONE.Models.Entities.Area", "Area")
+                        .WithMany("Partners")
+                        .HasForeignKey("AreaId");
+
+                    b.HasOne("AribONE.Models.Entities.PartnerGroup", "Group")
+                        .WithMany()
+                        .HasForeignKey("GroupId");
+
+                    b.HasOne("AribONE.Models.Entities.Image", "Image")
+                        .WithMany()
+                        .HasForeignKey("ImageId");
+
+                    b.Navigation("Area");
+
+                    b.Navigation("Group");
+
+                    b.Navigation("Image");
+                });
+
+            modelBuilder.Entity("AribONE.Models.Entities.PartnerLedgerEntry", b =>
+                {
+                    b.HasOne("AribONE.Models.Entities.Partner", "Partner")
+                        .WithMany()
+                        .HasForeignKey("PartnerId");
+
+                    b.HasOne("AribONE.Models.Entities.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Partner");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("AribONE.Models.Entities.PaymentVoucher", b =>
+                {
+                    b.HasOne("AribONE.Models.Entities.BankAccount", "Bank")
+                        .WithMany()
+                        .HasForeignKey("BankId");
+
+                    b.HasOne("AribONE.Models.Entities.Branch", "Branch")
+                        .WithMany()
+                        .HasForeignKey("BranchId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("AribONE.Models.Entities.Currency", "Currency")
+                        .WithMany()
+                        .HasForeignKey("CurrencyId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("AribONE.Models.Entities.EWallet", "EWallet")
+                        .WithMany()
+                        .HasForeignKey("EWalletId");
+
+                    b.HasOne("AribONE.Models.Entities.Partner", "Partner")
+                        .WithMany()
+                        .HasForeignKey("PartnerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("AribONE.Models.Entities.Treasury", "Treasury")
+                        .WithMany()
+                        .HasForeignKey("TreasuryId");
+
+                    b.HasOne("AribONE.Models.Entities.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Bank");
+
+                    b.Navigation("Branch");
+
+                    b.Navigation("Currency");
+
+                    b.Navigation("EWallet");
+
+                    b.Navigation("Partner");
+
+                    b.Navigation("Treasury");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("AribONE.Models.Entities.Product", b =>
@@ -10053,59 +10106,6 @@ namespace AribONE.Migrations
                     b.Navigation("Product");
 
                     b.Navigation("Warehouse");
-                });
-
-            modelBuilder.Entity("AribONE.Models.Entities.RevenueExpenses", b =>
-                {
-                    b.HasOne("AribONE.Models.Entities.Account", "Account")
-                        .WithMany()
-                        .HasForeignKey("AccountId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("AribONE.Models.Entities.Bank", "Bank")
-                        .WithMany()
-                        .HasForeignKey("BankId");
-
-                    b.HasOne("AribONE.Models.Entities.Branch", "Branch")
-                        .WithMany()
-                        .HasForeignKey("BranchId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("AribONE.Models.Entities.Currency", "Currency")
-                        .WithMany()
-                        .HasForeignKey("CurrencyId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("AribONE.Models.Entities.EWallet", "Ewallet")
-                        .WithMany()
-                        .HasForeignKey("EwalletId");
-
-                    b.HasOne("AribONE.Models.Entities.Treasury", "Treasury")
-                        .WithMany()
-                        .HasForeignKey("TreasuryId");
-
-                    b.HasOne("AribONE.Models.Entities.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Account");
-
-                    b.Navigation("Bank");
-
-                    b.Navigation("Branch");
-
-                    b.Navigation("Currency");
-
-                    b.Navigation("Ewallet");
-
-                    b.Navigation("Treasury");
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("AribONE.Models.Entities.RolePermission", b =>
@@ -10281,12 +10281,7 @@ namespace AribONE.Migrations
 
             modelBuilder.Entity("AribONE.Models.Entities.Area", b =>
                 {
-                    b.Navigation("Customers");
-                });
-
-            modelBuilder.Entity("AribONE.Models.Entities.Bill", b =>
-                {
-                    b.Navigation("BillEntries");
+                    b.Navigation("Partners");
                 });
 
             modelBuilder.Entity("AribONE.Models.Entities.Branch", b =>
@@ -10309,6 +10304,11 @@ namespace AribONE.Migrations
             modelBuilder.Entity("AribONE.Models.Entities.InstallmentPlan", b =>
                 {
                     b.Navigation("Installments");
+                });
+
+            modelBuilder.Entity("AribONE.Models.Entities.Invoice", b =>
+                {
+                    b.Navigation("InvoiceLines");
                 });
 
             modelBuilder.Entity("AribONE.Models.Entities.Permission", b =>
@@ -10345,7 +10345,7 @@ namespace AribONE.Migrations
                     b.Navigation("WarehouseProductInventories");
                 });
 
-            modelBuilder.Entity("AribONE.Models.Entities.OrderEntry", b =>
+            modelBuilder.Entity("AribONE.Models.Entities.OrderLine", b =>
                 {
                     b.Navigation("Fulfillments");
                 });

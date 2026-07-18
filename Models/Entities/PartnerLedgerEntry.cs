@@ -3,14 +3,14 @@ using System.ComponentModel.DataAnnotations;
 
 namespace AribONE.Models.Entities;
 
-public class CustomerTransaction : IShiftScoped
+public class PartnerLedgerEntry : IShiftScoped
 {
     public Guid Id { get; set; }
 
     public DateTime CreatedAt { get; set; }
 
-    public Guid? CustomerId { get; set; }
-    public Customer? Customer { get; set; }
+    public Guid? PartnerId { get; set; }
+    public Partner? Partner { get; set; }
 
     public decimal Credit { get; set; }
 

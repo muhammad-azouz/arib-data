@@ -1,10 +1,10 @@
 namespace AribONE.Models;
 
-public enum BillType
+public enum InvoiceType
 {
     Sale = 100,
-    ReSale = 101,
+    SalesReturn = 101,
     Purchase = 200,
-    RePurchase = 201,
+    PurchaseReturn = 201,
     Order = 300
 }

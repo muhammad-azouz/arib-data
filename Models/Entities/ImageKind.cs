@@ -2,7 +2,7 @@ namespace AribONE.Models.Entities;
 
 public enum ImageKind
 {
-    Customer,
+    Partner,
     Company,
     Product
 }

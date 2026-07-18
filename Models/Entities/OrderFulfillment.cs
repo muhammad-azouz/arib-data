@@ -7,14 +7,14 @@ public class OrderFulfillment
 {
     public Guid Id { get; set; }
 
-    public Guid OrderEntryId { get; set; }
-    public OrderEntry OrderEntry { get; set; } = null!;
+    public Guid OrderLineId { get; set; }
+    public OrderLine OrderLine { get; set; } = null!;
 
-    public Guid? SaleEntryId { get; set; }
-    public SaleEntry? SaleEntry { get; set; }
+    public Guid? SaleLineId { get; set; }
+    public SaleLine? SaleLine { get; set; }
 
-    public Guid? ReSaleEntryId { get; set; }
-    public ReSaleEntry? ReSaleEntry { get; set; }
+    public Guid? SalesReturnLineId { get; set; }
+    public SalesReturnLine? SalesReturnLine { get; set; }
 
     [Precision(18, 3)] public decimal Qty { get; set; }
 

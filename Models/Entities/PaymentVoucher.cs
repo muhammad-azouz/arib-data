@@ -15,15 +15,15 @@ public enum PaymentMethod
     BankTransfer,
 }
 
-public class Cash
+public class PaymentVoucher
 {
     public Guid Id { get; set; }
     public int Num { get; set; }
     public PaymentMethod PaymentMethod { get; set; }
     public Guid AccountId { get; set; }
     public Guid DiscountId { get; set; }
-    public Guid CustomerId { get; set; }
-    public Customer Customer { get; set; } = null!;
+    public Guid PartnerId { get; set; }
+    public Partner Partner { get; set; } = null!;
     public DateTime CreatedAt { get; set; }
 
     public Guid CurrencyId { get; set; }
@@ -39,7 +39,7 @@ public class Cash
     public Dealing Dealing { get; set; }
 
     public Guid? BankId { get; set; }
-    public Bank? Bank { get; set; }
+    public BankAccount? Bank { get; set; }
 
     public Guid? EWalletId { get; set; }
     public EWallet? EWallet { get; set; }

@@ -4,10 +4,10 @@ using Microsoft.EntityFrameworkCore;
 
 namespace AribONE.Models.Entities;
 
-[PrimaryKey(nameof(Operand))]
-public class AccountOperand
+[PrimaryKey(nameof(Role))]
+public class PostingAccount
 {
-    [MaxLength(30)] public string Operand { get; set; } = string.Empty;
+    [MaxLength(30)] public string Role { get; set; } = string.Empty;
     public Guid AccountId { get; set; }
     [MaxLength(100)] public string LabelAr { get; set; } = string.Empty;
     [MaxLength(100)] public string LabelEn { get; set; } = string.Empty;
