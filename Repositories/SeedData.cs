@@ -82,7 +82,12 @@ public static class SeedData
             // Shift vs Treasury (drawer/safe cash ownership) — lets a user post an
             // expense/income/cash-in-out from the branch safe instead of the
             // cashier's drawer, bypassing the open-shift requirement for that flow.
-            new Permission { Id = SeedGuid(TableCodes.Permission, 49), Name = "التعامل مع نقدية الخزنة الرئيسية", Description = "يمكنه تسجيل حركات نقدية من خزنة الفرع مباشرة بدلاً من درج الكاشير" }
+            new Permission { Id = SeedGuid(TableCodes.Permission, 49), Name = "التعامل مع نقدية الخزنة الرئيسية", Description = "يمكنه تسجيل حركات نقدية من خزنة الفرع مباشرة بدلاً من درج الكاشير" },
+            // Fiscal year management — HQ-only (roadmap D6-style gating, like
+            // EditMasterData above): Manager/Cashier deliberately lack these.
+            new Permission { Id = SeedGuid(TableCodes.Permission, 50), Name = "ادارة السنوات المالية", Description = "يمكنه إعداد وإعادة تشكيل تسلسل السنوات المالية" },
+            new Permission { Id = SeedGuid(TableCodes.Permission, 51), Name = "اغلاق السنة المالية", Description = "يمكنه إغلاق سنة مالية" },
+            new Permission { Id = SeedGuid(TableCodes.Permission, 52), Name = "اعادة فتح السنة المالية", Description = "يمكنه إعادة فتح آخر سنة مالية مغلقة" }
         );
 
         // Seed RolePermissions
@@ -90,6 +95,16 @@ public static class SeedData
         // Administrator role (all permissions)
         modelBuilder.Entity<RolePermission>().HasData(
             Enumerable.Range(1, 49).Select(id => new RolePermission { Id = SeedGuid(TableCodes.RolePermission, id + 29), RoleId = SeedGuid(TableCodes.Role, 1), PermissionId = SeedGuid(TableCodes.Permission, id) }).ToArray()
+        );
+
+        // Fiscal year permissions (50/51/52) — granted to Administrator only, like
+        // EditMasterData; NOT added via the id+29 range above because that offset
+        // (up to 78) already collides with RolePermission id 79 (Manager/UseSafeCash,
+        // added out-of-sequence) — next free ids are 80/81/82.
+        modelBuilder.Entity<RolePermission>().HasData(
+            new RolePermission { Id = SeedGuid(TableCodes.RolePermission, 80), RoleId = SeedGuid(TableCodes.Role, 1), PermissionId = SeedGuid(TableCodes.Permission, 50) }, // ادارة السنوات المالية
+            new RolePermission { Id = SeedGuid(TableCodes.RolePermission, 81), RoleId = SeedGuid(TableCodes.Role, 1), PermissionId = SeedGuid(TableCodes.Permission, 51) }, // اغلاق السنة المالية
+            new RolePermission { Id = SeedGuid(TableCodes.RolePermission, 82), RoleId = SeedGuid(TableCodes.Role, 1), PermissionId = SeedGuid(TableCodes.Permission, 52) }  // اعادة فتح السنة المالية
         );
 
         // Manager role permissions
