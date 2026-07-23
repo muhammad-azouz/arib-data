@@ -56,7 +56,11 @@ public static class SyncScope
     /// FiscalYears table to the master tier.
     /// v9: Inventory cost/GL reconciliation Phase 1
     /// (tasks/spec-inventory-cost-reconciliation.md) — added nullable
-    /// InventoryBatches.LandedUnitCost; no other shape change.</summary>
+    /// InventoryBatches.LandedUnitCost. Folded into the same unpushed flag-day
+    /// (tasks/spec-inventory-cost-restatement.md OQ2, decided 2026-07-23):
+    /// widened WeightedAverageCosts.Price and WarehousesProductInventories.UnitCost
+    /// from (18,2) to (18,4) — per-unit costs, not money, matching
+    /// InventoryBatches.UnitCost's existing precision.</summary>
     public const int SchemaVersion = 9;
 
     /// <summary>

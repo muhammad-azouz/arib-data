@@ -248,9 +248,17 @@ public class AribContext : DbContext
             .Property(x => x.LastInQty).HasPrecision(18, 3);
         modelBuilder.Entity<WarehouseProductInventory>()
             .Property(x => x.LastOutQty).HasPrecision(18, 3);
+        // Per-unit cost, not money — matches InventoryBatch.UnitCost's (18,4). Left at
+        // the (18,2) money default, WA's 2dp-rounded UnitCost drifted from
+        // WeightedAverageCost.Cost (accumulated at full precision) by ~0.36 per 156
+        // units; see tasks/finding-unit-cost-precision-drift.md.
+        modelBuilder.Entity<WarehouseProductInventory>()
+            .Property(x => x.UnitCost).HasPrecision(18, 4);
 
         modelBuilder.Entity<WeightedAverageCost>()
             .Property(x => x.Qty).HasPrecision(18, 3);
+        modelBuilder.Entity<WeightedAverageCost>()
+            .Property(x => x.Price).HasPrecision(18, 4);
 
         modelBuilder.Entity<ProductOpeningBalance>()
             .Property(x => x.Qty).HasPrecision(18, 3);
