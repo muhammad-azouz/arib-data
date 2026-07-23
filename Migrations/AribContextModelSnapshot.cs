@@ -9458,8 +9458,8 @@ namespace AribONE.Migrations
                         .HasColumnType("decimal(18,3)");
 
                     b.Property<decimal>("UnitCost")
-                        .HasPrecision(18, 2)
-                        .HasColumnType("decimal(18,2)");
+                        .HasPrecision(18, 4)
+                        .HasColumnType("decimal(18,4)");
 
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("datetime2");
@@ -9497,8 +9497,8 @@ namespace AribONE.Migrations
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<decimal>("Price")
-                        .HasPrecision(18, 2)
-                        .HasColumnType("decimal(18,2)");
+                        .HasPrecision(18, 4)
+                        .HasColumnType("decimal(18,4)");
 
                     b.Property<Guid>("ProductId")
                         .HasColumnType("uniqueidentifier");
