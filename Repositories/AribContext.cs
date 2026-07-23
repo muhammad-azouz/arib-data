@@ -274,6 +274,8 @@ public class AribContext : DbContext
         modelBuilder.Entity<InventoryBatch>()
             .Property(x => x.UnitCost).HasPrecision(18, 4);
         modelBuilder.Entity<InventoryBatch>()
+            .Property(x => x.LandedUnitCost).HasPrecision(18, 4);
+        modelBuilder.Entity<InventoryBatch>()
             .HasIndex(x => new { x.ProductId, x.WarehouseId, x.RemainingQty });
         modelBuilder.Entity<InventoryBatch>()
             .HasIndex(x => x.ExpiryDate);

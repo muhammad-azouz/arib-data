@@ -53,8 +53,11 @@ public static class SyncScope
     /// ExpenseIncomeVouchers, Banks→BankAccounts. A fleet flag-day in principle,
     /// but zero production tenants existed at rename time (2026-07-18).
     /// v8: Fiscal Year (tasks/spec-fiscal-year.md) — added the company-wide
-    /// FiscalYears table to the master tier.</summary>
-    public const int SchemaVersion = 8;
+    /// FiscalYears table to the master tier.
+    /// v9: Inventory cost/GL reconciliation Phase 1
+    /// (tasks/spec-inventory-cost-reconciliation.md) — added nullable
+    /// InventoryBatches.LandedUnitCost; no other shape change.</summary>
+    public const int SchemaVersion = 9;
 
     /// <summary>
     /// Tier A (D9a): masters, replicated in full to every branch.

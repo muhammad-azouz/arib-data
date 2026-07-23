@@ -35,6 +35,13 @@ public class InventoryBatch
     /// <summary>Cost per base unit for this layer.</summary>
     public decimal UnitCost { get; set; }
 
+    /// <summary>
+    /// Full IAS 2 cost-of-purchase per base unit — <see cref="UnitCost"/> plus this
+    /// batch's share of bill-level discount/extra (tasks/spec-inventory-cost-reconciliation.md).
+    /// Captured for future landed-cost reporting; nothing reads it yet.
+    /// </summary>
+    public decimal? LandedUnitCost { get; set; }
+
     /// <summary>RegNum of the bill / adjustment / opening balance that created this layer.</summary>
     public Guid SourceRegNum { get; set; }
 
