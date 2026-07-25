@@ -88,6 +88,11 @@ public static class SeedData
             new Permission { Id = SeedGuid(TableCodes.Permission, 50), Name = "ادارة السنوات المالية", Description = "يمكنه إعداد وإعادة تشكيل تسلسل السنوات المالية" },
             new Permission { Id = SeedGuid(TableCodes.Permission, 51), Name = "اغلاق السنة المالية", Description = "يمكنه إغلاق سنة مالية" },
             new Permission { Id = SeedGuid(TableCodes.Permission, 52), Name = "اعادة فتح السنة المالية", Description = "يمكنه إعادة فتح آخر سنة مالية مغلقة" }
+            // NOTE: ids 53/54 were briefly used for the inventory-restatement and cash/ledger
+            // repair screens. Those admin tools now hide behind developer mode
+            // (Services/DeveloperMode.cs) instead — a one-shot tool we run ourselves does not
+            // deserve a permission row, a seed guid and a migration on every client. Start the
+            // next real permission at 55 rather than reusing 53/54.
         );
 
         // Seed RolePermissions
