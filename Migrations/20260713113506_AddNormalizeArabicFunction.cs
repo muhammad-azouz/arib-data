@@ -13,6 +13,12 @@ namespace AribONE.Migrations
             // CREATE OR ALTER so this migration is safe to apply against databases
             // where the function was already created by hand (the pre-existing
             // workaround this migration replaces).
+            //
+            // Edit both together: AribONE's Services/ArabicText.cs is the in-memory
+            // mirror of these rules, used where the text being searched is already
+            // loaded and no query can be issued. If the folding rules below change,
+            // that class must change identically, or the same search text will match
+            // different rows depending on where it was resolved.
             migrationBuilder.Sql(
                 """
                 CREATE OR ALTER FUNCTION [dbo].[NormalizeArabic] (@input NVARCHAR(MAX))
