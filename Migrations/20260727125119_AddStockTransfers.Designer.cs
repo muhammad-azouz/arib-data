@@ -4,6 +4,7 @@ using AribONE.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AribONE.Migrations
 {
     [DbContext(typeof(AribContext))]
-    partial class AribContextModelSnapshot : ModelSnapshot
+    [Migration("20260727125119_AddStockTransfers")]
+    partial class AddStockTransfers
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -9067,12 +9070,6 @@ namespace AribONE.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTime?>("CancelledAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<Guid?>("CancelledByUserId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<Guid>("DispatchRegNum")
                         .HasColumnType("uniqueidentifier");
 
@@ -9120,8 +9117,6 @@ namespace AribONE.Migrations
                         .HasColumnType("decimal(18,2)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("CancelledByUserId");
 
                     b.HasIndex("DispatchedByUserId");
 
@@ -10416,11 +10411,6 @@ namespace AribONE.Migrations
 
             modelBuilder.Entity("AribONE.Models.Entities.StockTransfer", b =>
                 {
-                    b.HasOne("AribONE.Models.Entities.User", "CancelledByUser")
-                        .WithMany()
-                        .HasForeignKey("CancelledByUserId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
                     b.HasOne("AribONE.Models.Entities.User", "DispatchedByUser")
                         .WithMany()
                         .HasForeignKey("DispatchedByUserId")
@@ -10443,8 +10433,6 @@ namespace AribONE.Migrations
                         .HasForeignKey("ToBranchId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
-
-                    b.Navigation("CancelledByUser");
 
                     b.Navigation("DispatchedByUser");
 

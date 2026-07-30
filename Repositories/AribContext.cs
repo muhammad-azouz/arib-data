@@ -149,6 +149,10 @@ public class AribContext : DbContext
 
     public DbSet<InventoryAdjustment> InventoryAdjustments { get; set; }
 
+    public DbSet<StockTransfer> StockTransfers { get; set; }
+    public DbSet<StockTransferLine> StockTransferLines { get; set; }
+    public DbSet<StockTransferLayer> StockTransferLayers { get; set; }
+
     public DbSet<InstallmentPlan> InstallmentPlans { get; set; }
     public DbSet<InstallmentItem> InstallmentItems { get; set; }
     public DbSet<InstallmentPayment> InstallmentPayments { get; set; }
@@ -432,6 +436,68 @@ public class AribContext : DbContext
         modelBuilder.Entity<OrderFulfillment>()
             .HasOne(x => x.Branch).WithMany().HasForeignKey(x => x.BranchId)
             .OnDelete(DeleteBehavior.Restrict);
+
+        // Stock transfer between warehouses (tasks/spec-warehouse-transfer.md). A two-sided
+        // document — FromBranchId/ToBranchId are denormalized onto every child row so the D4
+        // sync filter (FromBranchId = @BranchId OR ToBranchId = @BranchId) can match without a
+        // join. Quantities 18,3; per-unit costs 18,4, matching InventoryBatch. ToWarehouseId/
+        // ToWarehouse are nullable (D2 — chosen by the receiver, not the dispatcher).
+        modelBuilder.Entity<StockTransferLine>()
+            .Property(x => x.Qty).HasPrecision(18, 3);
+        modelBuilder.Entity<StockTransferLine>()
+            .Property(x => x.ReceivedQty).HasPrecision(18, 3);
+        modelBuilder.Entity<StockTransferLine>()
+            .Property(x => x.UnitCost).HasPrecision(18, 4);
+        modelBuilder.Entity<StockTransferLayer>()
+            .Property(x => x.Qty).HasPrecision(18, 3);
+        modelBuilder.Entity<StockTransferLayer>()
+            .Property(x => x.UnitCost).HasPrecision(18, 4);
+
+        modelBuilder.Entity<StockTransfer>()
+            .HasOne(x => x.FromBranch).WithMany().HasForeignKey(x => x.FromBranchId)
+            .OnDelete(DeleteBehavior.Restrict);
+        modelBuilder.Entity<StockTransfer>()
+            .HasOne(x => x.ToBranch).WithMany().HasForeignKey(x => x.ToBranchId)
+            .OnDelete(DeleteBehavior.Restrict);
+        modelBuilder.Entity<StockTransfer>()
+            .HasOne(x => x.DispatchedByUser).WithMany().HasForeignKey(x => x.DispatchedByUserId)
+            .OnDelete(DeleteBehavior.Restrict);
+        modelBuilder.Entity<StockTransfer>()
+            .HasOne(x => x.ReceivedByUser).WithMany().HasForeignKey(x => x.ReceivedByUserId)
+            .OnDelete(DeleteBehavior.Restrict);
+        modelBuilder.Entity<StockTransfer>()
+            .HasOne(x => x.CancelledByUser).WithMany().HasForeignKey(x => x.CancelledByUserId)
+            .OnDelete(DeleteBehavior.Restrict);
+        // FromWarehouseId/ToWarehouseId are deliberately unconstrained scalars — see the
+        // doc comment on StockTransfer.FromWarehouseId. Indexed anyway for the "what moved
+        // through this warehouse" lookup.
+        modelBuilder.Entity<StockTransfer>()
+            .HasIndex(x => x.FromWarehouseId);
+        modelBuilder.Entity<StockTransfer>()
+            .HasIndex(x => x.ToWarehouseId);
+        modelBuilder.Entity<StockTransfer>()
+            .HasIndex(x => x.FromBranchId);
+        modelBuilder.Entity<StockTransfer>()
+            .HasIndex(x => new { x.ToBranchId, x.Status });
+
+        modelBuilder.Entity<StockTransferLine>()
+            .HasOne(x => x.StockTransfer).WithMany(x => x.Lines).HasForeignKey(x => x.StockTransferId)
+            .OnDelete(DeleteBehavior.Cascade);
+        modelBuilder.Entity<StockTransferLine>()
+            .HasOne(x => x.Product).WithMany().HasForeignKey(x => x.ProductId)
+            .OnDelete(DeleteBehavior.Restrict);
+        modelBuilder.Entity<StockTransferLine>()
+            .HasOne(x => x.Unit).WithMany().HasForeignKey(x => x.UnitId)
+            .OnDelete(DeleteBehavior.Restrict);
+        modelBuilder.Entity<StockTransferLine>()
+            .HasIndex(x => x.StockTransferId);
+
+        modelBuilder.Entity<StockTransferLayer>()
+            .HasOne(x => x.StockTransferLine).WithMany(x => x.Layers)
+            .HasForeignKey(x => x.StockTransferLineId)
+            .OnDelete(DeleteBehavior.Cascade);
+        modelBuilder.Entity<StockTransferLayer>()
+            .HasIndex(x => x.StockTransferLineId);
 
         // InstallmentPlan money columns (Principal, RoundingStep, Amount, PaidAmount)
         // inherit the global decimal(18,2) money convention — no precision override.
