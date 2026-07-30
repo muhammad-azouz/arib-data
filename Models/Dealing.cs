@@ -21,5 +21,6 @@ public enum Dealing
     CloseTreasury = 1100,
     TreasuryTransfer = 1200,
     InventoryAdjustment = 2000,
-    YearClose = 2100
+    YearClose = 2100,
+    WarehouseTransfer = 2200
 }

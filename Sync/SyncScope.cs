@@ -60,8 +60,13 @@ public static class SyncScope
     /// (tasks/spec-inventory-cost-restatement.md OQ2, decided 2026-07-23):
     /// widened WeightedAverageCosts.Price and WarehousesProductInventories.UnitCost
     /// from (18,2) to (18,4) — per-unit costs, not money, matching
-    /// InventoryBatches.UnitCost's existing precision.</summary>
-    public const int SchemaVersion = 9;
+    /// InventoryBatches.UnitCost's existing precision.
+    /// v10: stock transfer between warehouses (tasks/spec-warehouse-transfer.md) — added
+    /// StockTransfers/StockTransferLines/StockTransferLayers to the branch tier, each with
+    /// the two-sided <see cref="TwoSidedBranchTables"/> filter rather than an OwnColumnFilters
+    /// entry, since a transfer document must be visible to both its sending and receiving
+    /// branch (single-column equality can't express that).</summary>
+    public const int SchemaVersion = 10;
 
     /// <summary>
     /// Tier A (D9a): masters, replicated in full to every branch.
@@ -124,6 +129,10 @@ public static class SyncScope
         "OrderFulfillments",
         "Shifts",
         "InvoicePayments",
+        // v10: stock transfer between warehouses — two-sided filter, see TwoSidedBranchTables.
+        "StockTransfers",
+        "StockTransferLines",
+        "StockTransferLayers",
     ];
 
     /// <summary>
@@ -149,6 +158,20 @@ public static class SyncScope
         "CreatedAt",
         "Note",
         "BranchId",
+    ];
+
+    /// <summary>
+    /// Tier-B tables visible to both the branch that dispatched them and the branch they were
+    /// sent to (D4) — a stock transfer document must sync to both sides, which single-column
+    /// equality (<see cref="OwnColumnFilters"/>) cannot express. Every row on these tables
+    /// carries its own <c>FromBranchId</c>/<c>ToBranchId</c> pair (denormalized onto the line
+    /// and layer tables too), so each filters on itself with no join.
+    /// </summary>
+    public static readonly string[] TwoSidedBranchTables =
+    [
+        "StockTransfers",
+        "StockTransferLines",
+        "StockTransferLayers",
     ];
 
     /// <summary>All synced tables, both tiers.</summary>
@@ -205,6 +228,26 @@ public static class SyncScope
             var filter = new SetupFilter(table);
             filter.AddParameter(BranchIdParameter, DbType.Guid);
             filter.AddWhere(column, table, BranchIdParameter);
+            setup.Filters.Add(filter);
+        }
+
+        // D4: OR across FromBranchId/ToBranchId. AddWhere only expresses column = parameter
+        // (ANDed together), so the two-sided match needs AddCustomWhere instead. Dotmim.Sync
+        // replaces {{{...}}} with a provider-quoted identifier ([...] on SQL Server, "..." on
+        // Postgres) in the generated SQL. "base" is the fixed alias it gives the filtered table
+        // in every stored procedure/command it builds — deliberately UNquoted here: on SQL
+        // Server the alias itself is written bracket-quoted ([base]) but bare "base" still
+        // resolves to it (brackets are quoting syntax, not part of the identifier); on Postgres
+        // the alias is generated bare, so a literal "[base]" hits the parser as invalid syntax
+        // (42601) the moment a filter with a custom where — e.g. this one — runs against a
+        // Postgres-central DB. Keep this alias bracket-free.
+        foreach (var table in TwoSidedBranchTables)
+        {
+            var filter = new SetupFilter(table);
+            filter.AddParameter(BranchIdParameter, DbType.Guid);
+            filter.AddCustomWhere(
+                "base.{{{FromBranchId}}} = @" + BranchIdParameter +
+                " OR base.{{{ToBranchId}}} = @" + BranchIdParameter);
             setup.Filters.Add(filter);
         }
 
