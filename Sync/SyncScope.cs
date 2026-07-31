@@ -68,8 +68,11 @@ public static class SyncScope
     /// branch (single-column equality can't express that).
     /// v11: one-click invoice return (tasks/spec-invoice-return.md) — added SaleLineReturns
     /// (the Sale→SalesReturn return ledger, structural twin of OrderFulfillments) to the
-    /// branch tier with its own BranchId column/filter.</summary>
-    public const int SchemaVersion = 11;
+    /// branch tier with its own BranchId column/filter.
+    /// v12: one-click purchase return (tasks/spec-purchase-return.md) — added
+    /// PurchaseLineReturns (the Purchase→PurchaseReturn return ledger, structural twin of
+    /// SaleLineReturns) to the branch tier with its own BranchId column/filter.</summary>
+    public const int SchemaVersion = 12;
 
     /// <summary>
     /// Tier A (D9a): masters, replicated in full to every branch.
@@ -138,6 +141,8 @@ public static class SyncScope
         "StockTransferLayers",
         // v11: Sale→SalesReturn return ledger.
         "SaleLineReturns",
+        // v12: Purchase→PurchaseReturn return ledger.
+        "PurchaseLineReturns",
     ];
 
     /// <summary>
@@ -221,6 +226,8 @@ public static class SyncScope
         ("InvoicePayments", "BranchId"),
         // v11: one-click invoice return
         ("SaleLineReturns", "BranchId"),
+        // v12: one-click purchase return
+        ("PurchaseLineReturns", "BranchId"),
     ];
 
     /// <summary>Builds the canonical <see cref="SyncSetup"/>: both tiers, the
