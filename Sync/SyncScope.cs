@@ -65,8 +65,11 @@ public static class SyncScope
     /// StockTransfers/StockTransferLines/StockTransferLayers to the branch tier, each with
     /// the two-sided <see cref="TwoSidedBranchTables"/> filter rather than an OwnColumnFilters
     /// entry, since a transfer document must be visible to both its sending and receiving
-    /// branch (single-column equality can't express that).</summary>
-    public const int SchemaVersion = 10;
+    /// branch (single-column equality can't express that).
+    /// v11: one-click invoice return (tasks/spec-invoice-return.md) — added SaleLineReturns
+    /// (the Sale→SalesReturn return ledger, structural twin of OrderFulfillments) to the
+    /// branch tier with its own BranchId column/filter.</summary>
+    public const int SchemaVersion = 11;
 
     /// <summary>
     /// Tier A (D9a): masters, replicated in full to every branch.
@@ -133,6 +136,8 @@ public static class SyncScope
         "StockTransfers",
         "StockTransferLines",
         "StockTransferLayers",
+        // v11: Sale→SalesReturn return ledger.
+        "SaleLineReturns",
     ];
 
     /// <summary>
@@ -214,6 +219,8 @@ public static class SyncScope
         // v4: shift management
         ("Shifts", "BranchId"),
         ("InvoicePayments", "BranchId"),
+        // v11: one-click invoice return
+        ("SaleLineReturns", "BranchId"),
     ];
 
     /// <summary>Builds the canonical <see cref="SyncSetup"/>: both tiers, the

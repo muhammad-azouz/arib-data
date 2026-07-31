@@ -67,6 +67,13 @@ public abstract class Invoice : IShiftScoped
     public decimal? EndingBalance { get; set; }
 
     public Guid RegNum { get; set; }
+
+    /// <summary>For a SalesReturn created via the one-click return flow, the Sale it
+    /// returns. A correlation id, not an enforced FK — same posture as RegNum, which
+    /// avoids a self-referential FK on this TPH table. Null for manually-entered
+    /// returns and every other invoice type.</summary>
+    public Guid? OriginalInvoiceId { get; set; }
+
     public int ItemCount { get; set; }
     public bool IsCash { get; set; }
     public bool IsPaid { get; set; }

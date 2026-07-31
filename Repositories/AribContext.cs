@@ -126,6 +126,7 @@ public class AribContext : DbContext
 
     public DbSet<SalesReturn> SalesReturns { get; set; }
     public DbSet<SalesReturnLine> SalesReturnLines { get; set; }
+    public DbSet<SaleLineReturn> SaleLineReturns { get; set; }
 
     public DbSet<Order> Orders { get; set; }
     public DbSet<OrderLine> OrderLines { get; set; }
@@ -362,6 +363,27 @@ public class AribContext : DbContext
 
         modelBuilder.Entity<OrderFulfillment>()
             .Property(x => x.Qty).HasPrecision(18, 3);
+
+        // Sale→SalesReturn return ledger (tasks/spec-invoice-return.md), the
+        // structural twin of OrderFulfillment above. Restrict on both InvoiceLine
+        // FKs (not the convention default Cascade) — deleting a return deliberately
+        // removes its own rows first (BillsViewModel.RemoveBillAsync), and a cascade
+        // would let the origin SaleLine's rows vanish silently through the join.
+        modelBuilder.Entity<SaleLineReturn>()
+            .Property(x => x.Qty).HasPrecision(18, 3);
+        modelBuilder.Entity<SaleLineReturn>()
+            .HasOne(x => x.SaleLine).WithMany().HasForeignKey(x => x.SaleLineId)
+            .OnDelete(DeleteBehavior.Restrict);
+        modelBuilder.Entity<SaleLineReturn>()
+            .HasOne(x => x.SalesReturnLine).WithMany().HasForeignKey(x => x.SalesReturnLineId)
+            .OnDelete(DeleteBehavior.Restrict);
+        modelBuilder.Entity<SaleLineReturn>()
+            .HasOne(x => x.Branch).WithMany().HasForeignKey(x => x.BranchId)
+            .OnDelete(DeleteBehavior.Restrict);
+        modelBuilder.Entity<SaleLineReturn>()
+            .HasIndex(x => x.SaleLineId);
+        modelBuilder.Entity<SaleLineReturn>()
+            .HasIndex(x => x.SalesReturnLineId);
 
         modelBuilder.Entity<TreasuryTransaction>()
             .HasOne(x => x.Treasury)
