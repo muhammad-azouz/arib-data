@@ -120,6 +120,7 @@ public class AribContext : DbContext
 
     public DbSet<PurchaseReturn> PurchaseReturns { get; set; }
     public DbSet<PurchaseReturnLine> PurchaseReturnLines { get; set; }
+    public DbSet<PurchaseLineReturn> PurchaseLineReturns { get; set; }
 
     public DbSet<Sale> Sales { get; set; }
     public DbSet<SaleLine> SaleLines { get; set; }
@@ -384,6 +385,27 @@ public class AribContext : DbContext
             .HasIndex(x => x.SaleLineId);
         modelBuilder.Entity<SaleLineReturn>()
             .HasIndex(x => x.SalesReturnLineId);
+
+        // Purchase→PurchaseReturn return ledger (tasks/spec-purchase-return.md), the
+        // structural twin of SaleLineReturn above — same Restrict-on-both-FKs posture:
+        // deleting a return deliberately removes its own rows first
+        // (BillsViewModel.RemoveBillAsync), and a cascade would let the origin
+        // PurchaseLine's rows vanish silently through the join.
+        modelBuilder.Entity<PurchaseLineReturn>()
+            .Property(x => x.Qty).HasPrecision(18, 3);
+        modelBuilder.Entity<PurchaseLineReturn>()
+            .HasOne(x => x.PurchaseLine).WithMany().HasForeignKey(x => x.PurchaseLineId)
+            .OnDelete(DeleteBehavior.Restrict);
+        modelBuilder.Entity<PurchaseLineReturn>()
+            .HasOne(x => x.PurchaseReturnLine).WithMany().HasForeignKey(x => x.PurchaseReturnLineId)
+            .OnDelete(DeleteBehavior.Restrict);
+        modelBuilder.Entity<PurchaseLineReturn>()
+            .HasOne(x => x.Branch).WithMany().HasForeignKey(x => x.BranchId)
+            .OnDelete(DeleteBehavior.Restrict);
+        modelBuilder.Entity<PurchaseLineReturn>()
+            .HasIndex(x => x.PurchaseLineId);
+        modelBuilder.Entity<PurchaseLineReturn>()
+            .HasIndex(x => x.PurchaseReturnLineId);
 
         modelBuilder.Entity<TreasuryTransaction>()
             .HasOne(x => x.Treasury)
