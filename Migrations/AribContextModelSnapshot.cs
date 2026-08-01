@@ -6877,13 +6877,13 @@ namespace AribONE.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("BranchId");
-
                     b.HasIndex("PartnerId");
 
                     b.HasIndex("ShiftId");
 
                     b.HasIndex("UserId");
+
+                    b.HasIndex("BranchId", "Num");
 
                     b.ToTable("Invoices", t =>
                         {
