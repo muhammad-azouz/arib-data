@@ -29,7 +29,7 @@ public class GeneralLedgerEntry
 
     public bool IsDeleted { get; set; }
 
-    [MaxLength(50)] public string Ship { get; set; } = string.Empty;
+    [MaxLength(100)] public string Ship { get; set; } = string.Empty;
 
     public Guid BranchId { get; set; }
     public Branch Branch { get; set; } = null!;
