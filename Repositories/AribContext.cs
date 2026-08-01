@@ -323,6 +323,13 @@ public class AribContext : DbContext
             .HasValue<PurchaseReturn>(InvoiceType.PurchaseReturn)
             .HasValue<Order>(InvoiceType.Order);
 
+        // Backs InvoiceLookupService's receipt-barcode lookup (Bills jump-to-box, the
+        // sale return-by-scan popup) — a seek on (BranchId, Num) instead of a scan. Num
+        // alone is not globally unique (each branch mints its own running counter), so
+        // BranchId leads the composite.
+        modelBuilder.Entity<Invoice>()
+            .HasIndex(x => new { x.BranchId, x.Num });
+
         // Pins the TPH discriminator to the pre-rename class names — EF's default
         // convention writes the CLR type name, which would silently drift to the new
         // class names (SaleLine, etc.) for newly-inserted rows otherwise, corrupting
