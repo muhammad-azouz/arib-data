@@ -55,7 +55,7 @@ public abstract class Invoice : IShiftScoped
     /// <summary>Ledger-based snapshot of the customer's/supplier's account
     /// balance strictly before this invoice's own PartnerLedgerEntry row,
     /// computed once at finalize time (SUM(Debit-Credit) over all earlier
-    /// ledger rows). Null when never computed (no Partner, an Order invoice, or
+    /// ledger rows). Null when never computed (no Partner, a Reservation invoice, or
     /// an invoice predating this feature) — PrintingService falls back to a live
     /// recompute in that case. Frozen forever after finalize: never touched
     /// by later payments, reversals, or deletions of earlier invoices.</summary>

@@ -67,12 +67,17 @@ public static class SyncScope
     /// entry, since a transfer document must be visible to both its sending and receiving
     /// branch (single-column equality can't express that).
     /// v11: one-click invoice return (tasks/spec-invoice-return.md) — added SaleLineReturns
-    /// (the Sale→SalesReturn return ledger, structural twin of OrderFulfillments) to the
+    /// (the Sale→SalesReturn return ledger, structural twin of ReservationFulfillments) to the
     /// branch tier with its own BranchId column/filter.
     /// v12: one-click purchase return (tasks/spec-purchase-return.md) — added
     /// PurchaseLineReturns (the Purchase→PurchaseReturn return ledger, structural twin of
-    /// SaleLineReturns) to the branch tier with its own BranchId column/filter.</summary>
-    public const int SchemaVersion = 12;
+    /// SaleLineReturns) to the branch tier with its own BranchId column/filter.
+    /// v13: order management (tasks/spec-order-management.md) — added Orders/OrderLines
+    /// to the branch tier, each with its own BranchId column/filter. Single-branch
+    /// ownership (D7: a transfer closes the origin row and inserts a new one at the
+    /// destination, never moves a row between branches), so both use OwnColumnFilters,
+    /// not TwoSidedBranchTables.</summary>
+    public const int SchemaVersion = 13;
 
     /// <summary>
     /// Tier A (D9a): masters, replicated in full to every branch.
@@ -106,9 +111,10 @@ public static class SyncScope
     /// Every table here carries its own BranchId column (v2 added it to the
     /// warehouse/order-scoped tables that used to be join-filtered), so each
     /// filters on itself. Invoice subtypes (Sale/Purchase/…) share the TPH tables
-    /// <c>Invoices</c>/<c>InvoiceLines</c>. <c>OrderFulfillments</c> backs the
-    /// HQ-ordering workflow (D13: HQ writes Order rows, the branch answers with
-    /// fulfillment rows).
+    /// <c>Invoices</c>/<c>InvoiceLines</c>. <c>ReservationFulfillments</c> backs the
+    /// in-store reservation workflow (renamed from <c>OrderFulfillments</c> in T1 of
+    /// tasks/spec-order-management.md, to free the <c>Order</c>/<c>OrderLine</c> names
+    /// for the unrelated order-management feature added in v13).
     /// </summary>
     public static readonly string[] BranchTables =
     [
@@ -132,7 +138,7 @@ public static class SyncScope
         "InventoryAdjustments",
         "ExpenseIncomeVouchers",
         "WeightedAverageCosts",
-        "OrderFulfillments",
+        "ReservationFulfillments",
         "Shifts",
         "InvoicePayments",
         // v10: stock transfer between warehouses — two-sided filter, see TwoSidedBranchTables.
@@ -143,6 +149,9 @@ public static class SyncScope
         "SaleLineReturns",
         // v12: Purchase→PurchaseReturn return ledger.
         "PurchaseLineReturns",
+        // v13: order management — single-branch ownership (D7), own-column filter.
+        "Orders",
+        "OrderLines",
     ];
 
     /// <summary>
@@ -220,7 +229,7 @@ public static class SyncScope
         ("InventoryBatchConsumptions", "BranchId"),
         ("InventoryAdjustments", "BranchId"),
         ("ProductOpeningBalances", "BranchId"),
-        ("OrderFulfillments", "BranchId"),
+        ("ReservationFulfillments", "BranchId"),
         // v4: shift management
         ("Shifts", "BranchId"),
         ("InvoicePayments", "BranchId"),
@@ -228,6 +237,9 @@ public static class SyncScope
         ("SaleLineReturns", "BranchId"),
         // v12: one-click purchase return
         ("PurchaseLineReturns", "BranchId"),
+        // v13: order management
+        ("Orders", "BranchId"),
+        ("OrderLines", "BranchId"),
     ];
 
     /// <summary>Builds the canonical <see cref="SyncSetup"/>: both tiers, the

@@ -129,9 +129,9 @@ public class AribContext : DbContext
     public DbSet<SalesReturnLine> SalesReturnLines { get; set; }
     public DbSet<SaleLineReturn> SaleLineReturns { get; set; }
 
-    public DbSet<Order> Orders { get; set; }
-    public DbSet<OrderLine> OrderLines { get; set; }
-    public DbSet<OrderFulfillment> OrderFulfillments { get; set; }
+    public DbSet<Reservation> Reservations { get; set; }
+    public DbSet<ReservationLine> ReservationLines { get; set; }
+    public DbSet<ReservationFulfillment> ReservationFulfillments { get; set; }
 
     public DbSet<User> Users { get; set; }
     public DbSet<Role> Roles { get; set; }
@@ -154,6 +154,9 @@ public class AribContext : DbContext
     public DbSet<StockTransfer> StockTransfers { get; set; }
     public DbSet<StockTransferLine> StockTransferLines { get; set; }
     public DbSet<StockTransferLayer> StockTransferLayers { get; set; }
+
+    public DbSet<Order> Orders { get; set; }
+    public DbSet<OrderLine> OrderLines { get; set; }
 
     public DbSet<InstallmentPlan> InstallmentPlans { get; set; }
     public DbSet<InstallmentItem> InstallmentItems { get; set; }
@@ -321,7 +324,7 @@ public class AribContext : DbContext
             .HasValue<SalesReturn>(InvoiceType.SalesReturn)
             .HasValue<Purchase>(InvoiceType.Purchase)
             .HasValue<PurchaseReturn>(InvoiceType.PurchaseReturn)
-            .HasValue<Order>(InvoiceType.Order);
+            .HasValue<Reservation>(InvoiceType.Reservation);
 
         // Backs InvoiceLookupService's receipt-barcode lookup (Bills jump-to-box, the
         // sale return-by-scan popup) — a seek on (BranchId, Num) instead of a scan. Num
@@ -341,7 +344,7 @@ public class AribContext : DbContext
             .HasValue<PurchaseLine>("PurchaseEntry")
             .HasValue<SalesReturnLine>("ReSaleEntry")
             .HasValue<PurchaseReturnLine>("RePurchaseEntry")
-            .HasValue<OrderLine>("OrderEntry");
+            .HasValue<ReservationLine>("OrderEntry");
 
         // modelBuilder.Entity<Invoice>().Property("Type").HasMaxLength(3)
 
@@ -369,11 +372,11 @@ public class AribContext : DbContext
             .HasForeignKey(x => x.ProductId)
             .OnDelete(DeleteBehavior.Restrict);
 
-        modelBuilder.Entity<OrderFulfillment>()
+        modelBuilder.Entity<ReservationFulfillment>()
             .Property(x => x.Qty).HasPrecision(18, 3);
 
         // Sale→SalesReturn return ledger (tasks/spec-invoice-return.md), the
-        // structural twin of OrderFulfillment above. Restrict on both InvoiceLine
+        // structural twin of ReservationFulfillment above. Restrict on both InvoiceLine
         // FKs (not the convention default Cascade) — deleting a return deliberately
         // removes its own rows first (BillsViewModel.RemoveBillAsync), and a cascade
         // would let the origin SaleLine's rows vanish silently through the join.
@@ -484,7 +487,7 @@ public class AribContext : DbContext
         modelBuilder.Entity<InventoryAdjustment>()
             .HasOne(x => x.Branch).WithMany().HasForeignKey(x => x.BranchId)
             .OnDelete(DeleteBehavior.Restrict);
-        modelBuilder.Entity<OrderFulfillment>()
+        modelBuilder.Entity<ReservationFulfillment>()
             .HasOne(x => x.Branch).WithMany().HasForeignKey(x => x.BranchId)
             .OnDelete(DeleteBehavior.Restrict);
 
@@ -549,6 +552,46 @@ public class AribContext : DbContext
             .OnDelete(DeleteBehavior.Cascade);
         modelBuilder.Entity<StockTransferLayer>()
             .HasIndex(x => x.StockTransferLineId);
+
+        // Order / OrderLine (tasks/spec-order-management.md). Qty is 18,3; every money
+        // column (Price, Total, DeliveryFee) is left to the global decimal(18,2) convention.
+        // SaleId/PreviousOrderId are deliberately unconstrained scalars — see their doc
+        // comments on Order.
+        modelBuilder.Entity<OrderLine>()
+            .Property(x => x.Qty).HasPrecision(18, 3);
+
+        modelBuilder.Entity<Order>()
+            .HasOne(x => x.Branch).WithMany().HasForeignKey(x => x.BranchId)
+            .OnDelete(DeleteBehavior.Restrict);
+        modelBuilder.Entity<Order>()
+            .HasOne(x => x.Partner).WithMany().HasForeignKey(x => x.PartnerId)
+            .OnDelete(DeleteBehavior.Restrict);
+        modelBuilder.Entity<Order>()
+            .HasOne(x => x.User).WithMany().HasForeignKey(x => x.UserId)
+            .OnDelete(DeleteBehavior.Restrict);
+        modelBuilder.Entity<Order>()
+            .HasOne(x => x.AcceptedByUser).WithMany().HasForeignKey(x => x.AcceptedByUserId)
+            .OnDelete(DeleteBehavior.Restrict);
+        modelBuilder.Entity<Order>()
+            .HasIndex(x => new { x.BranchId, x.Status });
+        modelBuilder.Entity<Order>()
+            .HasIndex(x => x.Ref);
+        modelBuilder.Entity<Order>()
+            .HasIndex(x => x.PartnerId);
+
+        modelBuilder.Entity<OrderLine>()
+            .HasOne(x => x.Order).WithMany(x => x.Lines).HasForeignKey(x => x.OrderId)
+            .OnDelete(DeleteBehavior.Cascade);
+        modelBuilder.Entity<OrderLine>()
+            .HasOne(x => x.Product).WithMany().HasForeignKey(x => x.ProductId)
+            .OnDelete(DeleteBehavior.Restrict);
+        modelBuilder.Entity<OrderLine>()
+            .HasOne(x => x.Unit).WithMany().HasForeignKey(x => x.UnitId)
+            .OnDelete(DeleteBehavior.Restrict);
+        modelBuilder.Entity<OrderLine>()
+            .HasIndex(x => x.OrderId);
+        modelBuilder.Entity<OrderLine>()
+            .HasIndex(x => x.BranchId);
 
         // InstallmentPlan money columns (Principal, RoundingStep, Amount, PaidAmount)
         // inherit the global decimal(18,2) money convention — no precision override.

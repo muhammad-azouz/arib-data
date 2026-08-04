@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 namespace AribONE.Models.Entities;
 
 /// <summary>Ledger of how much of a sale line has been returned so far, mirroring
-/// OrderFulfillment's Order→Sale/SalesReturn linkage for the Sale→SalesReturn case.
+/// ReservationFulfillment's Reservation→Sale/SalesReturn linkage for the Sale→SalesReturn case.
 /// One row per return line traced back to the sale line it pays back; remaining
 /// returnable qty is TotalQty minus the sum of these rows, never a cached column.</summary>
 public class SaleLineReturn
