@@ -3,12 +3,12 @@ using Microsoft.EntityFrameworkCore;
 
 namespace AribONE.Models.Entities;
 
-public class OrderFulfillment
+public class ReservationFulfillment
 {
     public Guid Id { get; set; }
 
     public Guid OrderLineId { get; set; }
-    public OrderLine OrderLine { get; set; } = null!;
+    public ReservationLine OrderLine { get; set; } = null!;
 
     public Guid? SaleLineId { get; set; }
     public SaleLine? SaleLine { get; set; }

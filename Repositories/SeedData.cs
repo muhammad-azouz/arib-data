@@ -87,12 +87,16 @@ public static class SeedData
             // EditMasterData above): Manager/Cashier deliberately lack these.
             new Permission { Id = SeedGuid(TableCodes.Permission, 50), Name = "ادارة السنوات المالية", Description = "يمكنه إعداد وإعادة تشكيل تسلسل السنوات المالية" },
             new Permission { Id = SeedGuid(TableCodes.Permission, 51), Name = "اغلاق السنة المالية", Description = "يمكنه إغلاق سنة مالية" },
-            new Permission { Id = SeedGuid(TableCodes.Permission, 52), Name = "اعادة فتح السنة المالية", Description = "يمكنه إعادة فتح آخر سنة مالية مغلقة" }
+            new Permission { Id = SeedGuid(TableCodes.Permission, 52), Name = "اعادة فتح السنة المالية", Description = "يمكنه إعادة فتح آخر سنة مالية مغلقة" },
             // NOTE: ids 53/54 were briefly used for the inventory-restatement and cash/ledger
             // repair screens. Those admin tools now hide behind developer mode
             // (Services/DeveloperMode.cs) instead — a one-shot tool we run ourselves does not
             // deserve a permission row, a seed guid and a migration on every client. Start the
             // next real permission at 55 rather than reusing 53/54.
+            // Order management (tasks/spec-order-management.md D12) — transferring an order to
+            // another branch is a different authority from working your own queue (ManageOrders,
+            // permission 18, already covers create/advance/cancel and is reused as-is).
+            new Permission { Id = SeedGuid(TableCodes.Permission, 55), Name = "تحويل الطلب", Description = "يمكنه تحويل الطلب إلى فرع آخر" }
         );
 
         // Seed RolePermissions
@@ -110,6 +114,12 @@ public static class SeedData
             new RolePermission { Id = SeedGuid(TableCodes.RolePermission, 80), RoleId = SeedGuid(TableCodes.Role, 1), PermissionId = SeedGuid(TableCodes.Permission, 50) }, // ادارة السنوات المالية
             new RolePermission { Id = SeedGuid(TableCodes.RolePermission, 81), RoleId = SeedGuid(TableCodes.Role, 1), PermissionId = SeedGuid(TableCodes.Permission, 51) }, // اغلاق السنة المالية
             new RolePermission { Id = SeedGuid(TableCodes.RolePermission, 82), RoleId = SeedGuid(TableCodes.Role, 1), PermissionId = SeedGuid(TableCodes.Permission, 52) }  // اعادة فتح السنة المالية
+        );
+
+        // Order transfer — Administrator only, like EditMasterData/fiscal-year above: handing an
+        // order to another branch is a distinct, stronger authority than ManageOrders (D12).
+        modelBuilder.Entity<RolePermission>().HasData(
+            new RolePermission { Id = SeedGuid(TableCodes.RolePermission, 83), RoleId = SeedGuid(TableCodes.Role, 1), PermissionId = SeedGuid(TableCodes.Permission, 55) } // تحويل الطلب
         );
 
         // Manager role permissions

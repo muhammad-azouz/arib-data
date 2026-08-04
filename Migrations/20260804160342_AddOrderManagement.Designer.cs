@@ -4,6 +4,7 @@ using AribONE.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AribONE.Migrations
 {
     [DbContext(typeof(AribContext))]
-    partial class AribContextModelSnapshot : ModelSnapshot
+    [Migration("20260804160342_AddOrderManagement")]
+    partial class AddOrderManagement
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -7225,12 +7228,7 @@ namespace AribONE.Migrations
 
                     b.HasIndex("BranchId", "Status");
 
-                    b.ToTable("Orders", t =>
-                        {
-                            t.HasTrigger("Orders_dms_sync");
-                        });
-
-                    b.HasAnnotation("SqlServer:UseSqlOutputClause", false);
+                    b.ToTable("Orders");
                 });
 
             modelBuilder.Entity("AribONE.Models.Entities.OrderLine", b =>
@@ -7273,12 +7271,7 @@ namespace AribONE.Migrations
 
                     b.HasIndex("UnitId");
 
-                    b.ToTable("OrderLines", t =>
-                        {
-                            t.HasTrigger("OrderLines_dms_sync");
-                        });
-
-                    b.HasAnnotation("SqlServer:UseSqlOutputClause", false);
+                    b.ToTable("OrderLines");
                 });
 
             modelBuilder.Entity("AribONE.Models.Entities.Partner", b =>
@@ -7927,12 +7920,6 @@ namespace AribONE.Migrations
                             Id = new Guid("00000003-0000-7000-a000-000000000052"),
                             Description = "يمكنه إعادة فتح آخر سنة مالية مغلقة",
                             Name = "اعادة فتح السنة المالية"
-                        },
-                        new
-                        {
-                            Id = new Guid("00000003-0000-7000-a000-000000000055"),
-                            Description = "يمكنه تحويل الطلب إلى فرع آخر",
-                            Name = "تحويل الطلب"
                         });
                 });
 
@@ -8992,12 +8979,6 @@ namespace AribONE.Migrations
                         {
                             Id = new Guid("00000004-0000-7000-a000-000000000082"),
                             PermissionId = new Guid("00000003-0000-7000-a000-000000000052"),
-                            RoleId = new Guid("00000002-0000-7000-a000-000000000001")
-                        },
-                        new
-                        {
-                            Id = new Guid("00000004-0000-7000-a000-000000000083"),
-                            PermissionId = new Guid("00000003-0000-7000-a000-000000000055"),
                             RoleId = new Guid("00000002-0000-7000-a000-000000000001")
                         },
                         new

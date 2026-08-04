@@ -1,16 +1,27 @@
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
+using System;
 
 namespace AribONE.Models.Entities;
 
-public class OrderLine : InvoiceLine
+/// <summary>One product/qty row on an <see cref="Order"/> (tasks/spec-order-management.md).
+/// <see cref="Price"/> is snapshotted at order time — a quote, not a fact (D6).</summary>
+public class OrderLine
 {
-    public ICollection<OrderFulfillment> Fulfillments { get; set; } = null!;
+    public Guid Id { get; set; }
 
-    [NotMapped]
-    public decimal NetReleasedQty => Fulfillments
-        ?.Sum(f => f.Type == FulfillmentType.Release ? f.Qty : -f.Qty) ?? 0;
+    public Guid OrderId { get; set; }
+    public Order Order { get; set; } = null!;
 
-    [NotMapped] public decimal RemainingQty => Qty - NetReleasedQty;
+    /// <summary>Denormalized for its own sync filter, as <see cref="StockTransferLine"/>
+    /// does — deliberately no FK, just an indexed scalar.</summary>
+    public Guid BranchId { get; set; }
+
+    public Guid ProductId { get; set; }
+    public Product Product { get; set; } = null!;
+
+    public Guid UnitId { get; set; }
+    public UnitOfMeasure Unit { get; set; } = null!;
+
+    public decimal Qty { get; set; }
+    public decimal Price { get; set; }
+    public decimal Total { get; set; }
 }

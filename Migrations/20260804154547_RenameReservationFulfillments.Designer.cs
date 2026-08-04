@@ -4,6 +4,7 @@ using AribONE.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AribONE.Migrations
 {
     [DbContext(typeof(AribContext))]
-    partial class AribContextModelSnapshot : ModelSnapshot
+    [Migration("20260804154547_RenameReservationFulfillments")]
+    partial class RenameReservationFulfillments
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -5705,10 +5708,6 @@ namespace AribONE.Migrations
                         .HasMaxLength(150)
                         .HasColumnType("nvarchar(150)");
 
-                    b.Property<string>("Code")
-                        .HasMaxLength(4)
-                        .HasColumnType("nvarchar(4)");
-
                     b.Property<Guid>("CompanyId")
                         .HasColumnType("uniqueidentifier");
 
@@ -7121,166 +7120,6 @@ namespace AribONE.Migrations
                     b.ToTable("NotificationSettings");
                 });
 
-            modelBuilder.Entity("AribONE.Models.Entities.Order", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("AcceptedByUserId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("BranchId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("CancelReason")
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
-
-                    b.Property<int>("Channel")
-                        .HasColumnType("int");
-
-                    b.Property<string>("ContactAddress")
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
-
-                    b.Property<string>("ContactName")
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<string>("ContactPhone")
-                        .HasMaxLength(12)
-                        .HasColumnType("nvarchar(12)");
-
-                    b.Property<string>("CourierName")
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("CreatedByName")
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<DateTime?>("DeliveredAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<decimal?>("DeliveryFee")
-                        .HasPrecision(18, 2)
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<DateTime?>("DispatchedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime?>("DueAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("ItemCount")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Mode")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Note")
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
-
-                    b.Property<Guid>("PartnerId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("PreviousOrderId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Ref")
-                        .IsRequired()
-                        .HasMaxLength(16)
-                        .HasColumnType("nvarchar(16)");
-
-                    b.Property<Guid?>("SaleId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<int>("Status")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime?>("StatusChangedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<decimal>("Total")
-                        .HasPrecision(18, 2)
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("AcceptedByUserId");
-
-                    b.HasIndex("PartnerId");
-
-                    b.HasIndex("Ref");
-
-                    b.HasIndex("UserId");
-
-                    b.HasIndex("BranchId", "Status");
-
-                    b.ToTable("Orders", t =>
-                        {
-                            t.HasTrigger("Orders_dms_sync");
-                        });
-
-                    b.HasAnnotation("SqlServer:UseSqlOutputClause", false);
-                });
-
-            modelBuilder.Entity("AribONE.Models.Entities.OrderLine", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("BranchId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("OrderId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<decimal>("Price")
-                        .HasPrecision(18, 2)
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<Guid>("ProductId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<decimal>("Qty")
-                        .HasPrecision(18, 3)
-                        .HasColumnType("decimal(18,3)");
-
-                    b.Property<decimal>("Total")
-                        .HasPrecision(18, 2)
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<Guid>("UnitId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("BranchId");
-
-                    b.HasIndex("OrderId");
-
-                    b.HasIndex("ProductId");
-
-                    b.HasIndex("UnitId");
-
-                    b.ToTable("OrderLines", t =>
-                        {
-                            t.HasTrigger("OrderLines_dms_sync");
-                        });
-
-                    b.HasAnnotation("SqlServer:UseSqlOutputClause", false);
-                });
-
             modelBuilder.Entity("AribONE.Models.Entities.Partner", b =>
                 {
                     b.Property<Guid>("Id")
@@ -7927,12 +7766,6 @@ namespace AribONE.Migrations
                             Id = new Guid("00000003-0000-7000-a000-000000000052"),
                             Description = "يمكنه إعادة فتح آخر سنة مالية مغلقة",
                             Name = "اعادة فتح السنة المالية"
-                        },
-                        new
-                        {
-                            Id = new Guid("00000003-0000-7000-a000-000000000055"),
-                            Description = "يمكنه تحويل الطلب إلى فرع آخر",
-                            Name = "تحويل الطلب"
                         });
                 });
 
@@ -8992,12 +8825,6 @@ namespace AribONE.Migrations
                         {
                             Id = new Guid("00000004-0000-7000-a000-000000000082"),
                             PermissionId = new Guid("00000003-0000-7000-a000-000000000052"),
-                            RoleId = new Guid("00000002-0000-7000-a000-000000000001")
-                        },
-                        new
-                        {
-                            Id = new Guid("00000004-0000-7000-a000-000000000083"),
-                            PermissionId = new Guid("00000003-0000-7000-a000-000000000055"),
                             RoleId = new Guid("00000002-0000-7000-a000-000000000001")
                         },
                         new
@@ -10462,67 +10289,6 @@ namespace AribONE.Migrations
                     b.Navigation("Notification");
                 });
 
-            modelBuilder.Entity("AribONE.Models.Entities.Order", b =>
-                {
-                    b.HasOne("AribONE.Models.Entities.User", "AcceptedByUser")
-                        .WithMany()
-                        .HasForeignKey("AcceptedByUserId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.HasOne("AribONE.Models.Entities.Branch", "Branch")
-                        .WithMany()
-                        .HasForeignKey("BranchId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("AribONE.Models.Entities.Partner", "Partner")
-                        .WithMany()
-                        .HasForeignKey("PartnerId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("AribONE.Models.Entities.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("AcceptedByUser");
-
-                    b.Navigation("Branch");
-
-                    b.Navigation("Partner");
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("AribONE.Models.Entities.OrderLine", b =>
-                {
-                    b.HasOne("AribONE.Models.Entities.Order", "Order")
-                        .WithMany("Lines")
-                        .HasForeignKey("OrderId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("AribONE.Models.Entities.Product", "Product")
-                        .WithMany()
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("AribONE.Models.Entities.UnitOfMeasure", "Unit")
-                        .WithMany()
-                        .HasForeignKey("UnitId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("Order");
-
-                    b.Navigation("Product");
-
-                    b.Navigation("Unit");
-                });
-
             modelBuilder.Entity("AribONE.Models.Entities.Partner", b =>
                 {
                     b.HasOne("AribONE.Models.Entities.Area", "Area")
@@ -11026,11 +10792,6 @@ namespace AribONE.Migrations
             modelBuilder.Entity("AribONE.Models.Entities.Invoice", b =>
                 {
                     b.Navigation("InvoiceLines");
-                });
-
-            modelBuilder.Entity("AribONE.Models.Entities.Order", b =>
-                {
-                    b.Navigation("Lines");
                 });
 
             modelBuilder.Entity("AribONE.Models.Entities.Permission", b =>

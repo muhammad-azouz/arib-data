@@ -38,6 +38,11 @@ public sealed class Branch
     /// DB-resident like ShiftModeEnabled.</summary>
     public bool ShowCurrentBalanceOnReceipt { get; set; }
 
+    /// <summary>Short tag used as the origin segment of a branch-minted <see cref="Order.Ref"/>
+    /// (tasks/spec-order-management.md D5). Cloud-authoritative, not synced — the hex-of-Id
+    /// fallback (<see cref="Id"/>'s first 4 hex chars) is used until a code is set.</summary>
+    [MaxLength(4)] public string? Code { get; set; }
+
     public Guid CompanyId { get; set; }
     public Company Company { get; set; } = null!;
 
