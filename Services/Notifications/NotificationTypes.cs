@@ -8,6 +8,7 @@ public static class NotificationCategories
     public const string Expiry = "Expiry";
     public const string Finance = "Finance";
     public const string System = "System";
+    public const string Sales = "Sales";
 }
 
 public static class NotificationTypes
@@ -29,4 +30,6 @@ public static class NotificationTypes
     public const string SystemSyncFailed = "System.SyncFailed";
     public const string SystemUpdateRequired = "System.UpdateRequired";
     public const string SystemBackupMissing = "System.BackupMissing";
+
+    public const string SalesNewOrder = "Sales.NewOrder";
 }

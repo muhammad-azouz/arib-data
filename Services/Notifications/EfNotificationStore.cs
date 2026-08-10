@@ -24,7 +24,7 @@ namespace AribONE.Services.Notifications;
 /// </summary>
 public sealed class EfNotificationStore : INotificationStore
 {
-    public async Task<int> ReconcileAsync(
+    public async Task<ReconcileResult> ReconcileAsync(
         IReadOnlyCollection<string> ownedTypes,
         IReadOnlyList<NotificationDraft> drafts,
         CancellationToken ct = default)
@@ -50,7 +50,7 @@ public sealed class EfNotificationStore : INotificationStore
         try
         {
             if (!await TryAcquireLockAsync(db, lockResource, ct))
-                return 0; // another terminal is reconciling this rule right now — skip.
+                return new ReconcileResult(0, []); // another terminal is reconciling this rule right now — skip.
 
             // Up to two attempts: if a writer somehow slips past the lock (e.g. the proc is
             // unavailable) and collides on the unique DedupKey, reset and retry once.
@@ -76,7 +76,7 @@ public sealed class EfNotificationStore : INotificationStore
     /// <summary>The reconcile read-modify-write itself: upsert each draft by DedupKey,
     /// re-alert reactivated/grown groups, resolve the obsolete ones. Re-queryable so the
     /// caller can retry it after clearing the change tracker.</summary>
-    private static async Task<int> ApplyAsync(
+    private static async Task<ReconcileResult> ApplyAsync(
         AribContext db,
         Dictionary<string, NotificationDraft> draftByKey,
         List<string> draftKeys,
@@ -95,6 +95,7 @@ public sealed class EfNotificationStore : INotificationStore
         var byKey = existing.ToDictionary(n => n.DedupKey);
 
         var now = DateTime.Now;
+        var freshlyAlerted = new List<AppNotification>();
 
         foreach (var (key, draft) in draftByKey)
         {
@@ -131,11 +132,12 @@ public sealed class EfNotificationStore : INotificationStore
                     row.ResolvedAt = null;
                     row.AlertSeq += 1;
                     row.CreatedAt = now;
+                    freshlyAlerted.Add(row);
                 }
             }
             else
             {
-                db.AppNotifications.Add(new AppNotification
+                var added = new AppNotification
                 {
                     Type = draft.Type,
                     Category = draft.Category,
@@ -152,7 +154,9 @@ public sealed class EfNotificationStore : INotificationStore
                     ExpiresAt = draft.ExpiresAt,
                     CreatedAt = now,
                     BranchId = branchId,
-                });
+                };
+                db.AppNotifications.Add(added);
+                freshlyAlerted.Add(added);
             }
         }
 
@@ -166,7 +170,8 @@ public sealed class EfNotificationStore : INotificationStore
             row.UpdatedAt = now;
         }
 
-        return await db.SaveChangesAsync(ct);
+        var changed = await db.SaveChangesAsync(ct);
+        return new ReconcileResult(changed, freshlyAlerted);
     }
 
     /// <summary>True when <paramref name="newSig"/> contains at least one member not present in
