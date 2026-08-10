@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using AribONE.Models;
+using AribONE.Models.Entities;
 using AribONE.Repositories;
 
 namespace AribONE.Services.Notifications;
@@ -39,29 +40,36 @@ public sealed class NotificationEngine
                 drafts = [];
             }
 
-            var changed = await _store.ReconcileAsync(rule.OwnedTypes, drafts, ct);
-            return new RuleRunResult(rule, changed, null);
+            var reconciled = await _store.ReconcileAsync(rule.OwnedTypes, drafts, ct);
+            return new RuleRunResult(rule, reconciled.Changed, reconciled.FreshlyAlerted, null);
         }
         catch (Exception ex)
         {
-            return new RuleRunResult(rule, 0, ex);
+            return new RuleRunResult(rule, 0, [], ex);
         }
     }
 
-    /// <summary>Runs all rules sequentially. Returns the total number of rows changed
-    /// across rules (so the host can decide whether to notify the UI).</summary>
-    public async Task<int> RunAsync(IEnumerable<INotificationRule> rules, CancellationToken ct = default)
+    /// <summary>Runs all rules sequentially, aggregating each rule's row-change count and
+    /// newly-active notifications (so the host can decide whether to notify the UI, or
+    /// surface a subset of the freshly-alerted rows as toasts).</summary>
+    public async Task<EngineRunResult> RunAsync(IEnumerable<INotificationRule> rules, CancellationToken ct = default)
     {
         var totalChanged = 0;
+        var freshlyAlerted = new List<AppNotification>();
         foreach (var rule in rules)
         {
             ct.ThrowIfCancellationRequested();
             var result = await RunRuleAsync(rule, ct);
             totalChanged += result.Changed;
+            freshlyAlerted.AddRange(result.FreshlyAlerted);
         }
-        return totalChanged;
+        return new EngineRunResult(totalChanged, freshlyAlerted);
     }
 }
 
-/// <summary>Outcome of a single rule run: rows changed and the fault, if any.</summary>
-public sealed record RuleRunResult(INotificationRule Rule, int Changed, Exception? Error);
+/// <summary>Outcome of a single rule run: rows changed, newly-active rows, and the fault, if any.</summary>
+public sealed record RuleRunResult(
+    INotificationRule Rule, int Changed, IReadOnlyList<AppNotification> FreshlyAlerted, Exception? Error);
+
+/// <summary>Outcome of a full <see cref="NotificationEngine.RunAsync"/> pass.</summary>
+public sealed record EngineRunResult(int TotalChanged, IReadOnlyList<AppNotification> FreshlyAlerted);
