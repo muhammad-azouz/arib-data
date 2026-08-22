@@ -96,7 +96,12 @@ public static class SeedData
             // Order management (tasks/spec-order-management.md D12) — transferring an order to
             // another branch is a different authority from working your own queue (ManageOrders,
             // permission 18, already covers create/advance/cancel and is reused as-is).
-            new Permission { Id = SeedGuid(TableCodes.Permission, 55), Name = "تحويل الطلب", Description = "يمكنه تحويل الطلب إلى فرع آخر" }
+            new Permission { Id = SeedGuid(TableCodes.Permission, 55), Name = "تحويل الطلب", Description = "يمكنه تحويل الطلب إلى فرع آخر" },
+            // Delivery couriers (tasks/spec-delivery-couriers.md D10) — gates the المندوبين screen
+            // and the delivery-tariff tab. Dispatching deliberately does NOT need it: خروج للتوصيل
+            // stays under ManageOrders (permission 18), so a cashier can send an order out without
+            // being able to hire a courier or reprice a zone.
+            new Permission { Id = SeedGuid(TableCodes.Permission, 56), Name = "ادارة المندوبين", Description = "يمكنه إدارة المندوبين وتعريفة التوصيل" }
         );
 
         // Seed RolePermissions
@@ -120,6 +125,13 @@ public static class SeedData
         // order to another branch is a distinct, stronger authority than ManageOrders (D12).
         modelBuilder.Entity<RolePermission>().HasData(
             new RolePermission { Id = SeedGuid(TableCodes.RolePermission, 83), RoleId = SeedGuid(TableCodes.Role, 1), PermissionId = SeedGuid(TableCodes.Permission, 55) } // تحويل الطلب
+        );
+
+        // Courier management — Administrator only, for the same reason as the three blocks above,
+        // and added explicitly for the same reason too: the Enumerable.Range(1, 49) block's id+29
+        // offset cannot absorb permission 56 (it already collides at 79). Next free id is 84.
+        modelBuilder.Entity<RolePermission>().HasData(
+            new RolePermission { Id = SeedGuid(TableCodes.RolePermission, 84), RoleId = SeedGuid(TableCodes.Role, 1), PermissionId = SeedGuid(TableCodes.Permission, 56) } // ادارة المندوبين
         );
 
         // Manager role permissions

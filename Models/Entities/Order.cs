@@ -52,9 +52,38 @@ public class Order
 
     public FulfillmentMode Mode { get; set; }
 
-    /// <summary>Free text, not a <see cref="User"/> FK — couriers are frequently not system
-    /// users (D15).</summary>
+    /// <summary>The registered courier carrying this order (tasks/spec-delivery-couriers.md D1).
+    /// <b>Sticky</b>: رجوع للفرع deliberately leaves it set (D2/D6) — the failure is attributed via
+    /// <see cref="FailedByCourierId"/>, and the last carrier stays visible on the order. Null on
+    /// every order placed before the couriers feature, and on pickup orders.</summary>
+    public Guid? CourierId { get; set; }
+    public Courier? Courier { get; set; }
+
+    /// <summary>The courier's name as it read <i>at dispatch</i> — kept alongside
+    /// <see cref="CourierId"/>, not replaced by it (D1). It keeps every pre-feature order readable
+    /// with no backfill (those rows carry a name and a null <see cref="CourierId"/>; no migration
+    /// invents <see cref="Courier"/> rows from historical free text), and it survives a courier
+    /// being renamed. Was free text typed at every dispatch until the couriers feature.</summary>
     [MaxLength(100)] public string? CourierName { get; set; }
+
+    /// <summary>Who was carrying the order when it came back to the branch — captured before any
+    /// redispatch overwrites <see cref="CourierId"/>, which is what lets the period report
+    /// attribute a failure to courier A after courier B has delivered it (D6).</summary>
+    public Guid? FailedByCourierId { get; set; }
+    public Courier? FailedByCourier { get; set; }
+
+    /// <summary>When the last failed attempt came back — the period report date-filters on this.</summary>
+    public DateTime? FailedAt { get; set; }
+
+    /// <summary>From a fixed list (لم يرد / عنوان خطأ / العميل رفض الاستلام / أخرى) plus free text.</summary>
+    [MaxLength(200)] public string? FailedReason { get; set; }
+
+    /// <summary>Incremented on every رجوع للفرع, so a repeatedly-failing order is visible.
+    /// The three <c>Failed*</c> fields above are <b>last-attempt</b> values, not a log (D6): if two
+    /// different couriers fail the same order only the second is counted. The full narrative stays
+    /// in <see cref="DocumentAuditEntry"/> (D7), and reading it into the report later needs no
+    /// schema change — which is why a DeliveryAttempt table is not worth a fleet flag day.</summary>
+    public int FailedCount { get; set; }
 
     /// <summary>Prefills the Sale's existing bill extra at delivery (D6/D15) — no new
     /// accounting.</summary>

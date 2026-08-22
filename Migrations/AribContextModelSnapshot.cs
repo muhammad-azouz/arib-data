@@ -5712,6 +5712,10 @@ namespace AribONE.Migrations
                     b.Property<Guid>("CompanyId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<decimal?>("DefaultDeliveryFee")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
                     b.Property<bool>("DynamicBalanceModeEnabled")
                         .HasColumnType("bit");
 
@@ -5819,6 +5823,51 @@ namespace AribONE.Migrations
                     b.ToTable("Companies");
                 });
 
+            modelBuilder.Entity("AribONE.Models.Entities.Courier", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("BranchId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("Note")
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<string>("Phone")
+                        .HasMaxLength(12)
+                        .HasColumnType("nvarchar(12)");
+
+                    b.Property<Guid?>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.HasIndex("BranchId", "IsActive");
+
+                    b.ToTable("Couriers", t =>
+                        {
+                            t.HasTrigger("Couriers_dms_sync");
+                        });
+
+                    b.HasAnnotation("SqlServer:UseSqlOutputClause", false);
+                });
+
             modelBuilder.Entity("AribONE.Models.Entities.Currency", b =>
                 {
                     b.Property<Guid>("Id")
@@ -5875,6 +5924,37 @@ namespace AribONE.Migrations
                             IsDefault = false,
                             Value = 1m
                         });
+                });
+
+            modelBuilder.Entity("AribONE.Models.Entities.DeliveryTariff", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("AreaId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("BranchId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<decimal>("Fee")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AreaId");
+
+                    b.HasIndex("BranchId", "AreaId")
+                        .IsUnique();
+
+                    b.ToTable("DeliveryTariffs", t =>
+                        {
+                            t.HasTrigger("DeliveryTariffs_dms_sync");
+                        });
+
+                    b.HasAnnotation("SqlServer:UseSqlOutputClause", false);
                 });
 
             modelBuilder.Entity("AribONE.Models.Entities.DocumentAuditEntry", b =>
@@ -7225,6 +7305,9 @@ namespace AribONE.Migrations
                         .HasMaxLength(12)
                         .HasColumnType("nvarchar(12)");
 
+                    b.Property<Guid?>("CourierId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<string>("CourierName")
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
@@ -7248,6 +7331,19 @@ namespace AribONE.Migrations
 
                     b.Property<DateTime?>("DueAt")
                         .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("FailedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("FailedByCourierId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("FailedCount")
+                        .HasColumnType("int");
+
+                    b.Property<string>("FailedReason")
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
 
                     b.Property<int>("ItemCount")
                         .HasColumnType("int");
@@ -7289,6 +7385,10 @@ namespace AribONE.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("AcceptedByUserId");
+
+                    b.HasIndex("CourierId");
+
+                    b.HasIndex("FailedByCourierId");
 
                     b.HasIndex("PartnerId");
 
@@ -7405,6 +7505,10 @@ namespace AribONE.Migrations
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<decimal>("Debit")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal?>("DeliveryFee")
                         .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)");
 
@@ -8006,6 +8110,12 @@ namespace AribONE.Migrations
                             Id = new Guid("00000003-0000-7000-a000-000000000055"),
                             Description = "يمكنه تحويل الطلب إلى فرع آخر",
                             Name = "تحويل الطلب"
+                        },
+                        new
+                        {
+                            Id = new Guid("00000003-0000-7000-a000-000000000056"),
+                            Description = "يمكنه إدارة المندوبين وتعريفة التوصيل",
+                            Name = "ادارة المندوبين"
                         });
                 });
 
@@ -9071,6 +9181,12 @@ namespace AribONE.Migrations
                         {
                             Id = new Guid("00000004-0000-7000-a000-000000000083"),
                             PermissionId = new Guid("00000003-0000-7000-a000-000000000055"),
+                            RoleId = new Guid("00000002-0000-7000-a000-000000000001")
+                        },
+                        new
+                        {
+                            Id = new Guid("00000004-0000-7000-a000-000000000084"),
+                            PermissionId = new Guid("00000003-0000-7000-a000-000000000056"),
                             RoleId = new Guid("00000002-0000-7000-a000-000000000001")
                         },
                         new
@@ -10210,6 +10326,43 @@ namespace AribONE.Migrations
                     b.Navigation("Logo");
                 });
 
+            modelBuilder.Entity("AribONE.Models.Entities.Courier", b =>
+                {
+                    b.HasOne("AribONE.Models.Entities.Branch", "Branch")
+                        .WithMany()
+                        .HasForeignKey("BranchId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("AribONE.Models.Entities.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.Navigation("Branch");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("AribONE.Models.Entities.DeliveryTariff", b =>
+                {
+                    b.HasOne("AribONE.Models.Entities.Area", "Area")
+                        .WithMany()
+                        .HasForeignKey("AreaId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("AribONE.Models.Entities.Branch", "Branch")
+                        .WithMany()
+                        .HasForeignKey("BranchId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Area");
+
+                    b.Navigation("Branch");
+                });
+
             modelBuilder.Entity("AribONE.Models.Entities.DocumentAuditEntry", b =>
                 {
                     b.HasOne("AribONE.Models.Entities.Branch", "Branch")
@@ -10567,6 +10720,16 @@ namespace AribONE.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
+                    b.HasOne("AribONE.Models.Entities.Courier", "Courier")
+                        .WithMany()
+                        .HasForeignKey("CourierId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("AribONE.Models.Entities.Courier", "FailedByCourier")
+                        .WithMany()
+                        .HasForeignKey("FailedByCourierId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
                     b.HasOne("AribONE.Models.Entities.Partner", "Partner")
                         .WithMany()
                         .HasForeignKey("PartnerId")
@@ -10582,6 +10745,10 @@ namespace AribONE.Migrations
                     b.Navigation("AcceptedByUser");
 
                     b.Navigation("Branch");
+
+                    b.Navigation("Courier");
+
+                    b.Navigation("FailedByCourier");
 
                     b.Navigation("Partner");
 
