@@ -84,8 +84,19 @@ public static class SyncScope
     /// rename of ReservationFulfillments.OrderLineId → ReservationLineId (D11b): OrderLine now
     /// names an unrelated v13 entity, so the old column pointed readers at the wrong table.
     /// The rename rides here deliberately — on its own it would have cost a second flag day
-    /// for a purely cosmetic fix, which is why it had waited.</summary>
-    public const int SchemaVersion = 14;
+    /// for a purely cosmetic fix, which is why it had waited.
+    /// v15: delivery couriers &amp; automatic delivery pricing
+    /// (tasks/spec-delivery-couriers.md) — added Couriers and DeliveryTariffs to the branch
+    /// tier, each with its own BranchId column/filter (single-branch ownership, D5/OQ1, so
+    /// OwnColumnFilters and not TwoSidedBranchTables). The same flag day carries five nullable
+    /// columns on Orders (CourierId/FailedByCourierId/FailedAt/FailedReason/FailedCount) and
+    /// Partners.DeliveryFee, the per-customer fee override. Branches.DefaultDeliveryFee rides
+    /// along too but is not a sync surface — Branches is cloud-authoritative and never DMS-synced.
+    /// <b>Adding tables changes the scope shape</b>, so the v15 rollout must reprovision every
+    /// tenant with <c>overwrite: true</c>: a plain re-provision returns success while silently
+    /// leaving the scope at the old table count, with no _tracking tables for the two new ones
+    /// and therefore no sync of them at all.</summary>
+    public const int SchemaVersion = 15;
 
     /// <summary>
     /// Tier A (D9a): masters, replicated in full to every branch.
@@ -163,6 +174,10 @@ public static class SyncScope
         // v14: generic append-only document audit trail. Append-only means no update or
         // delete ever reaches it, so ServerWins conflict resolution has nothing to resolve.
         "DocumentAuditEntries",
+        // v15: delivery couriers & per-zone delivery pricing. Single-branch ownership
+        // (a courier and a zone price both belong to one branch), so own-column filters.
+        "Couriers",
+        "DeliveryTariffs",
     ];
 
     /// <summary>
@@ -253,6 +268,9 @@ public static class SyncScope
         ("OrderLines", "BranchId"),
         // v14: document audit trail
         ("DocumentAuditEntries", "BranchId"),
+        // v15: delivery couriers & zone pricing
+        ("Couriers", "BranchId"),
+        ("DeliveryTariffs", "BranchId"),
     ];
 
     /// <summary>Builds the canonical <see cref="SyncSetup"/>: both tiers, the

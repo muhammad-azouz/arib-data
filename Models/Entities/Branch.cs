@@ -43,6 +43,13 @@ public sealed class Branch
     /// fallback (<see cref="Id"/>'s first 4 hex chars) is used until a code is set.</summary>
     [MaxLength(4)] public string? Code { get; set; }
 
+    /// <summary>The branch's fallback delivery fee — the bottom layer of D4's three-layer
+    /// resolution (tasks/spec-delivery-couriers.md); a customer with no area, or in an unpriced
+    /// one, lands here rather than blocking the order. Null falls through to 0. Per-branch and
+    /// DB-resident like <see cref="ShiftModeEnabled"/>; <c>Branches</c> is cloud-authoritative and
+    /// never DMS-synced. Money — global decimal(18,2) convention, no precision override.</summary>
+    public decimal? DefaultDeliveryFee { get; set; }
+
     public Guid CompanyId { get; set; }
     public Company Company { get; set; } = null!;
 

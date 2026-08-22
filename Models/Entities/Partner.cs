@@ -41,5 +41,12 @@ public class Partner
     public Guid BranchId { get; set; }
     public Guid? AreaId { get; set; }
     public virtual Area? Area { get; set; }
+
+    /// <summary>"This customer always pays this for delivery" — the top layer of D4's three-layer
+    /// resolution (tasks/spec-delivery-couriers.md), beating the zone tariff and the branch default.
+    /// <b>Null is the only miss</b>: a stored <c>0</c> means free delivery for this customer and
+    /// deliberately wins over a priced zone. Money — global decimal(18,2) convention, no override.
+    /// Not master-gated (D5): it rides the customer record, which branches already edit.</summary>
+    public decimal? DeliveryFee { get; set; }
     [MaxLength(200)] public string? Address { get; set; }
 }

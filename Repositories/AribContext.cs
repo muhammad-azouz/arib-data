@@ -162,6 +162,10 @@ public class AribContext : DbContext
     public DbSet<Order> Orders { get; set; }
     public DbSet<OrderLine> OrderLines { get; set; }
 
+    // Delivery couriers & zone pricing (tasks/spec-delivery-couriers.md).
+    public DbSet<Courier> Couriers { get; set; }
+    public DbSet<DeliveryTariff> DeliveryTariffs { get; set; }
+
     public DbSet<InstallmentPlan> InstallmentPlans { get; set; }
     public DbSet<InstallmentItem> InstallmentItems { get; set; }
     public DbSet<InstallmentPayment> InstallmentPayments { get; set; }
@@ -597,6 +601,46 @@ public class AribContext : DbContext
         modelBuilder.Entity<OrderLine>()
             .HasIndex(x => x.BranchId);
 
+        // Delivery couriers & zone pricing (tasks/spec-delivery-couriers.md). Both tables are
+        // Tier B with their own BranchId filter (SyncScope v15). Every FK is Restrict: a
+        // courier is deactivated, never deleted (D12), and an order must keep naming the
+        // courier who carried it long after he stops working here. Courier.Fee/DeliveryFee are
+        // money → global decimal(18,2) convention, no precision override anywhere below.
+        modelBuilder.Entity<Courier>()
+            .HasOne(x => x.Branch).WithMany().HasForeignKey(x => x.BranchId)
+            .OnDelete(DeleteBehavior.Restrict);
+        // The D11 seam — no code reads this navigation in v1.
+        modelBuilder.Entity<Courier>()
+            .HasOne(x => x.User).WithMany().HasForeignKey(x => x.UserId)
+            .OnDelete(DeleteBehavior.Restrict);
+        // Backs every picker and the live board: the branch's active couriers.
+        modelBuilder.Entity<Courier>()
+            .HasIndex(x => new { x.BranchId, x.IsActive });
+
+        modelBuilder.Entity<DeliveryTariff>()
+            .HasOne(x => x.Branch).WithMany().HasForeignKey(x => x.BranchId)
+            .OnDelete(DeleteBehavior.Restrict);
+        modelBuilder.Entity<DeliveryTariff>()
+            .HasOne(x => x.Area).WithMany().HasForeignKey(x => x.AreaId)
+            .OnDelete(DeleteBehavior.Restrict);
+        // One price per zone per branch — the unique index is the upsert key (D5).
+        modelBuilder.Entity<DeliveryTariff>()
+            .HasIndex(x => new { x.BranchId, x.AreaId }).IsUnique();
+
+        // Restrict, again: deactivation (D12) is the only way a courier leaves, so these two
+        // FKs must never be able to take an order's history with them.
+        modelBuilder.Entity<Order>()
+            .HasOne(x => x.Courier).WithMany().HasForeignKey(x => x.CourierId)
+            .OnDelete(DeleteBehavior.Restrict);
+        modelBuilder.Entity<Order>()
+            .HasOne(x => x.FailedByCourier).WithMany().HasForeignKey(x => x.FailedByCourierId)
+            .OnDelete(DeleteBehavior.Restrict);
+        // The live board groups by CourierId; the period report filters failures by
+        // FailedByCourierId (D8). Both are indexed so neither scans Orders.
+        modelBuilder.Entity<Order>()
+            .HasIndex(x => x.CourierId);
+        modelBuilder.Entity<Order>()
+            .HasIndex(x => x.FailedByCourierId);
 
         // InstallmentPlan money columns (Principal, RoundingStep, Amount, PaidAmount)
         // inherit the global decimal(18,2) money convention — no precision override.
