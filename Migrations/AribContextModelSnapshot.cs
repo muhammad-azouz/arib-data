@@ -5877,6 +5877,79 @@ namespace AribONE.Migrations
                         });
                 });
 
+            modelBuilder.Entity("AribONE.Models.Entities.DocumentAuditEntry", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("Action")
+                        .HasColumnType("int");
+
+                    b.Property<Guid>("BatchId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("BranchId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("DocumentId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("EntityId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("EntityType")
+                        .IsRequired()
+                        .HasMaxLength(40)
+                        .HasColumnType("nvarchar(40)");
+
+                    b.Property<string>("Field")
+                        .HasMaxLength(40)
+                        .HasColumnType("nvarchar(40)");
+
+                    b.Property<string>("NewValue")
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<string>("OldValue")
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<string>("Reason")
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<Guid?>("ShiftId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Subject")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BranchId");
+
+                    b.HasIndex("ShiftId");
+
+                    b.HasIndex("UserId");
+
+                    b.HasIndex("DocumentId", "CreatedAt");
+
+                    b.ToTable("DocumentAuditEntries", t =>
+                        {
+                            t.HasTrigger("DocumentAuditEntries_dms_sync");
+                        });
+
+                    b.HasAnnotation("SqlServer:UseSqlOutputClause", false);
+                });
+
             modelBuilder.Entity("AribONE.Models.Entities.EWallet", b =>
                 {
                     b.Property<Guid>("Id")
@@ -8578,12 +8651,12 @@ namespace AribONE.Migrations
                     b.Property<Guid>("FulfilledByUserId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("OrderLineId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<decimal>("Qty")
                         .HasPrecision(18, 3)
                         .HasColumnType("decimal(18,3)");
+
+                    b.Property<Guid>("ReservationLineId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid?>("SaleLineId")
                         .HasColumnType("uniqueidentifier");
@@ -8598,7 +8671,7 @@ namespace AribONE.Migrations
 
                     b.HasIndex("BranchId");
 
-                    b.HasIndex("OrderLineId");
+                    b.HasIndex("ReservationLineId");
 
                     b.HasIndex("SaleLineId");
 
@@ -10137,6 +10210,25 @@ namespace AribONE.Migrations
                     b.Navigation("Logo");
                 });
 
+            modelBuilder.Entity("AribONE.Models.Entities.DocumentAuditEntry", b =>
+                {
+                    b.HasOne("AribONE.Models.Entities.Branch", "Branch")
+                        .WithMany()
+                        .HasForeignKey("BranchId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("AribONE.Models.Entities.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Branch");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("AribONE.Models.Entities.EWallet", b =>
                 {
                     b.HasOne("AribONE.Models.Entities.Account", "Account")
@@ -10696,9 +10788,9 @@ namespace AribONE.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("AribONE.Models.Entities.ReservationLine", "OrderLine")
+                    b.HasOne("AribONE.Models.Entities.ReservationLine", "ReservationLine")
                         .WithMany("Fulfillments")
-                        .HasForeignKey("OrderLineId")
+                        .HasForeignKey("ReservationLineId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -10712,7 +10804,7 @@ namespace AribONE.Migrations
 
                     b.Navigation("Branch");
 
-                    b.Navigation("OrderLine");
+                    b.Navigation("ReservationLine");
 
                     b.Navigation("SaleLine");
 

@@ -76,8 +76,16 @@ public static class SyncScope
     /// to the branch tier, each with its own BranchId column/filter. Single-branch
     /// ownership (D7: a transfer closes the origin row and inserts a new one at the
     /// destination, never moves a row between branches), so both use OwnColumnFilters,
-    /// not TwoSidedBranchTables.</summary>
-    public const int SchemaVersion = 13;
+    /// not TwoSidedBranchTables.
+    /// v14: reservation audit &amp; management (tasks/spec-reservation-audit-management.md) —
+    /// added DocumentAuditEntries, the generic append-only document audit trail, to the branch
+    /// tier with its own BranchId column/filter; an audit trail that never reaches central
+    /// cannot be audited from HQ, which is the point of it (D8). The same flag day carries a
+    /// rename of ReservationFulfillments.OrderLineId → ReservationLineId (D11b): OrderLine now
+    /// names an unrelated v13 entity, so the old column pointed readers at the wrong table.
+    /// The rename rides here deliberately — on its own it would have cost a second flag day
+    /// for a purely cosmetic fix, which is why it had waited.</summary>
+    public const int SchemaVersion = 14;
 
     /// <summary>
     /// Tier A (D9a): masters, replicated in full to every branch.
@@ -152,6 +160,9 @@ public static class SyncScope
         // v13: order management — single-branch ownership (D7), own-column filter.
         "Orders",
         "OrderLines",
+        // v14: generic append-only document audit trail. Append-only means no update or
+        // delete ever reaches it, so ServerWins conflict resolution has nothing to resolve.
+        "DocumentAuditEntries",
     ];
 
     /// <summary>
@@ -240,6 +251,8 @@ public static class SyncScope
         // v13: order management
         ("Orders", "BranchId"),
         ("OrderLines", "BranchId"),
+        // v14: document audit trail
+        ("DocumentAuditEntries", "BranchId"),
     ];
 
     /// <summary>Builds the canonical <see cref="SyncSetup"/>: both tiers, the

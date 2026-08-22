@@ -133,6 +133,10 @@ public class AribContext : DbContext
     public DbSet<ReservationLine> ReservationLines { get; set; }
     public DbSet<ReservationFulfillment> ReservationFulfillments { get; set; }
 
+    // Append-only audit trail for any document (tasks/spec-reservation-audit-management.md).
+    // Nothing may update or delete a row here.
+    public DbSet<DocumentAuditEntry> DocumentAuditEntries { get; set; }
+
     public DbSet<User> Users { get; set; }
     public DbSet<Role> Roles { get; set; }
     public DbSet<Permission> Permissions { get; set; }
@@ -593,6 +597,7 @@ public class AribContext : DbContext
         modelBuilder.Entity<OrderLine>()
             .HasIndex(x => x.BranchId);
 
+
         // InstallmentPlan money columns (Principal, RoundingStep, Amount, PaidAmount)
         // inherit the global decimal(18,2) money convention — no precision override.
         modelBuilder.Entity<InstallmentPlan>()
@@ -672,6 +677,26 @@ public class AribContext : DbContext
         modelBuilder.Entity<PartnerLedgerEntry>().HasIndex(x => x.ShiftId);
         modelBuilder.Entity<InventoryAdjustment>().HasIndex(x => x.ShiftId);
         modelBuilder.Entity<InvoicePayment>().HasIndex(x => x.ShiftId);
+
+        // Generic document audit trail (tasks/spec-reservation-audit-management.md).
+        // Restrict on both FKs: an audit row outliving the user or branch that produced it is
+        // the point — a cascade would delete the evidence along with the actor.
+        modelBuilder.Entity<DocumentAuditEntry>()
+            .HasOne(x => x.User).WithMany().HasForeignKey(x => x.UserId)
+            .OnDelete(DeleteBehavior.Restrict);
+        modelBuilder.Entity<DocumentAuditEntry>()
+            .HasOne(x => x.Branch).WithMany().HasForeignKey(x => x.BranchId)
+            .OnDelete(DeleteBehavior.Restrict);
+        // The only access path the history screen uses: one document's whole trail, in order.
+        modelBuilder.Entity<DocumentAuditEntry>()
+            .HasIndex(x => new { x.DocumentId, x.CreatedAt });
+        // Tier-B sync filter column (SyncScope.OwnColumnFilters).
+        modelBuilder.Entity<DocumentAuditEntry>()
+            .HasIndex(x => x.BranchId);
+        // ShiftId here is a plain column, NOT an IShiftScoped tag — see the entity remarks.
+        // Indexed anyway so "what did this shift change?" stays cheap.
+        modelBuilder.Entity<DocumentAuditEntry>()
+            .HasIndex(x => x.ShiftId);
 
         // seed data here
         modelBuilder.Seed();
