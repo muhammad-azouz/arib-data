@@ -95,7 +95,11 @@ public static class SyncScope
     /// <b>Adding tables changes the scope shape</b>, so the v15 rollout must reprovision every
     /// tenant with <c>overwrite: true</c>: a plain re-provision returns success while silently
     /// leaving the scope at the old table count, with no _tracking tables for the two new ones
-    /// and therefore no sync of them at all.</summary>
+    /// and therefore no sync of them at all. <see cref="BranchTables"/> declares
+    /// <c>Couriers</c>/<c>DeliveryTariffs</c> ahead of <c>Orders</c>/<c>OrderLines</c> — see the
+    /// comment there — because Orders' new FK to Couriers made array order load-bearing for
+    /// apply-time correctness, not just documentation; that reordering also needs the same
+    /// <c>overwrite: true</c> reprovision to take effect on an already-provisioned tenant.</summary>
     public const int SchemaVersion = 15;
 
     /// <summary>
@@ -168,16 +172,26 @@ public static class SyncScope
         "SaleLineReturns",
         // v12: Purchase→PurchaseReturn return ledger.
         "PurchaseLineReturns",
+        // v15: delivery couriers & per-zone delivery pricing. Single-branch ownership
+        // (a courier and a zone price both belong to one branch), so own-column filters.
+        // Declared here, ahead of Orders/OrderLines below, deliberately out of schema-version
+        // order: Order.CourierId/FailedByCourierId carry a hard FK to Couriers, and an upload
+        // batch is applied table-by-table in this array's declared order (not a full
+        // relation-driven topological sort) — Couriers after Orders meant the very first order
+        // dispatched with a brand-new courier upserted Orders before its Couriers row existed
+        // centrally, hit FK_Orders_Couriers_CourierId, rolled back the whole batch before ever
+        // reaching Couriers' own insert, and wedged sync permanently (every retry re-fails the
+        // same way, with OrderLines also failing downstream on FK_OrderLines_Orders_OrderId).
+        // Reproduced 2026-08-23 against the local dev stack; fixed by reordering, not by a
+        // schema change, so no SchemaVersion bump — existing tenants just need overwrite:true.
+        "Couriers",
+        "DeliveryTariffs",
         // v13: order management — single-branch ownership (D7), own-column filter.
         "Orders",
         "OrderLines",
         // v14: generic append-only document audit trail. Append-only means no update or
         // delete ever reaches it, so ServerWins conflict resolution has nothing to resolve.
         "DocumentAuditEntries",
-        // v15: delivery couriers & per-zone delivery pricing. Single-branch ownership
-        // (a courier and a zone price both belong to one branch), so own-column filters.
-        "Couriers",
-        "DeliveryTariffs",
     ];
 
     /// <summary>
