@@ -20,4 +20,16 @@ public enum AuditAction
 
     /// <summary>A child line was removed (soft delete, in the reservation case).</summary>
     LineDeleted = 4,
+
+    /// <summary>An order left the branch for delivery (tasks/spec-delivery-couriers.md D7).
+    /// <c>Subject</c> is the dispatching courier's name.</summary>
+    Dispatched = 5,
+
+    /// <summary>An out-for-delivery order's courier was swapped without a failed attempt (D2/D7).
+    /// <c>Subject</c> is the newly-assigned courier's name.</summary>
+    Reassigned = 6,
+
+    /// <summary>A failed delivery attempt came back to the branch (D6/D7). <c>Subject</c> is the
+    /// courier who was carrying it; <c>Reason</c> is the failure reason.</summary>
+    ReturnedToBranch = 7,
 }
