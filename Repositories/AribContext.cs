@@ -356,6 +356,20 @@ public class AribContext : DbContext
 
         // modelBuilder.Entity<Invoice>().Property("Type").HasMaxLength(3)
 
+        // Quantities 18,3 and per-unit cost 18,4, like every other line table.
+        // These MUST be fluent, not the [Precision] attributes on InvoiceLine: the
+        // pre-convention `Properties<decimal>().HavePrecision(18, 2)` in
+        // ConfigureConventions is applied with an Explicit configuration source, which
+        // outranks a data annotation — so the attributes were silently ignored and the
+        // columns stayed decimal(18,2). That rounded a gram-level sale line (0.126 kg)
+        // to 0.13 on save while the cart still showed what the cashier typed.
+        modelBuilder.Entity<InvoiceLine>()
+            .Property(x => x.Qty).HasPrecision(18, 3);
+        modelBuilder.Entity<InvoiceLine>()
+            .Property(x => x.TotalQty).HasPrecision(18, 3);
+        modelBuilder.Entity<InvoiceLine>()
+            .Property(x => x.ItemCost).HasPrecision(18, 4);
+
         modelBuilder.Entity<InvoiceLine>()
             .HasOne(x => x.Branch)
             .WithMany()

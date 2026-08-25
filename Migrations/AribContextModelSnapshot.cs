@@ -7095,8 +7095,8 @@ namespace AribONE.Migrations
                         .HasColumnType("bit");
 
                     b.Property<decimal>("ItemCost")
-                        .HasPrecision(18, 2)
-                        .HasColumnType("decimal(18,2)");
+                        .HasPrecision(18, 4)
+                        .HasColumnType("decimal(18,4)");
 
                     b.Property<int>("Num")
                         .HasColumnType("int");
@@ -7112,8 +7112,8 @@ namespace AribONE.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<decimal>("Qty")
-                        .HasPrecision(18, 2)
-                        .HasColumnType("decimal(18,2)");
+                        .HasPrecision(18, 3)
+                        .HasColumnType("decimal(18,3)");
 
                     b.Property<Guid>("RegNum")
                         .HasColumnType("uniqueidentifier");
@@ -7127,8 +7127,8 @@ namespace AribONE.Migrations
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<decimal>("TotalQty")
-                        .HasPrecision(18, 2)
-                        .HasColumnType("decimal(18,2)");
+                        .HasPrecision(18, 3)
+                        .HasColumnType("decimal(18,3)");
 
                     b.Property<Guid>("UnitId")
                         .HasColumnType("uniqueidentifier");

@@ -99,8 +99,16 @@ public static class SyncScope
     /// <c>Couriers</c>/<c>DeliveryTariffs</c> ahead of <c>Orders</c>/<c>OrderLines</c> — see the
     /// comment there — because Orders' new FK to Couriers made array order load-bearing for
     /// apply-time correctness, not just documentation; that reordering also needs the same
-    /// <c>overwrite: true</c> reprovision to take effect on an already-provisioned tenant.</summary>
-    public const int SchemaVersion = 15;
+    /// <c>overwrite: true</c> reprovision to take effect on an already-provisioned tenant.
+    /// v16: widened InvoiceLines.{Qty,TotalQty} from (18,2) to (18,3) and
+    /// InvoiceLines.ItemCost from (18,2) to (18,4) — the same "quantities are 18,3,
+    /// per-unit costs are 18,4" rule v9 applied to WeightedAverageCosts/
+    /// WarehousesProductInventories. InvoiceLine carried [Precision] attributes saying
+    /// exactly this, but a data annotation loses to the pre-convention decimal(18,2)
+    /// money default, so the columns had silently stayed 2dp: a sale of 0.126 kg was
+    /// stored as 0.13. Column-type change only — no new tables, so the scope shape is
+    /// unchanged and this does not need an <c>overwrite: true</c> reprovision.</summary>
+    public const int SchemaVersion = 16;
 
     /// <summary>
     /// Tier A (D9a): masters, replicated in full to every branch.
