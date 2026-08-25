@@ -1,5 +1,4 @@
 using System;
-using Microsoft.EntityFrameworkCore;
 
 namespace AribONE.Models.Entities;
 
@@ -20,18 +19,22 @@ public class InvoiceLine
     public Partner? Partner { get; set; }
     public Guid BranchId { get; set; }
     public Branch Branch { get; set; } = null!;
-    [Precision(18, 3)] public decimal Qty { get; set; }
-    [Precision(18, 3)] public decimal TotalQty { get; set; }
-    [Precision(18, 2)] public decimal Price { get; set; }
+    // Precision lives in AribContext.OnModelCreating, not in [Precision] attributes:
+    // the pre-convention decimal(18,2) money default outranks data annotations, so an
+    // attribute here is silently ignored. Qty/TotalQty are 18,3 and ItemCost 18,4;
+    // everything else takes the (18,2) money default.
+    public decimal Qty { get; set; }
+    public decimal TotalQty { get; set; }
+    public decimal Price { get; set; }
     public decimal Total { get; set; }
     public decimal Tax { get; set; }
 
     public Guid RegNum { get; set; }
     public bool IsPaid { get; set; }
-    [Precision(18, 4)] public decimal ItemCost { get; set; }
+    public decimal ItemCost { get; set; }
     public bool FromOrder { get; set; }
     public DateTime? ExpireDt { get; set; }
-    [Precision(4, 2)] public decimal DiscountPercentage { get; set; }
-    [Precision(4, 2)] public decimal Discount { get; set; }
+    public decimal DiscountPercentage { get; set; }
+    public decimal Discount { get; set; }
     public bool IsDelete { get; set; } = false;
 }
