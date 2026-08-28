@@ -107,8 +107,24 @@ public static class SyncScope
     /// exactly this, but a data annotation loses to the pre-convention decimal(18,2)
     /// money default, so the columns had silently stayed 2dp: a sale of 0.126 kg was
     /// stored as 0.13. Column-type change only — no new tables, so the scope shape is
-    /// unchanged and this does not need an <c>overwrite: true</c> reprovision.</summary>
-    public const int SchemaVersion = 16;
+    /// unchanged and this does not need an <c>overwrite: true</c> reprovision.
+    /// v17: promotions &amp; automatic discounts (tasks/spec-promotions.md) — added
+    /// <c>Promotions</c> and <c>PromotionTargets</c> to the master tier (company-wide rules,
+    /// replicated whole so every branch can evaluate them offline — D1) and
+    /// <c>PromotionApplications</c> to the branch tier with its own BranchId column/filter
+    /// (the append-only record of which promotion actually took money off which bill — D6).
+    /// A promotion scoped to one branch is a master row with a non-null <c>BranchId</c>, NOT a
+    /// Tier-B row: every branch must see it to know it does not apply to them, and the alternative
+    /// would make a company-wide promotion unrepresentable. <c>Promotions.BranchId</c> therefore
+    /// carries no FK — <c>Branches</c> is cloud-authoritative and never DMS-synced, so a master
+    /// row replicating everywhere cannot assume the branch it names is in the local cache
+    /// (the same posture <c>Accounts.BranchId</c> already takes).
+    /// <b>Three new tables change the scope shape</b>, so — exactly as in v15 — the rollout must
+    /// reprovision every tenant with <c>overwrite: true</c>: a plain re-provision returns success
+    /// while silently leaving the scope at the old table count, with no _tracking tables for the
+    /// three new ones and therefore no sync of them at all. This is a fleet-wide flag day; a
+    /// branch still on v16 is refused with HTTP 426 until it updates.</summary>
+    public const int SchemaVersion = 17;
 
     /// <summary>
     /// Tier A (D9a): masters, replicated in full to every branch.
@@ -135,6 +151,16 @@ public static class SyncScope
         "UserRoles",
         "RolePermissions",
         "FiscalYears",
+        // v17: promotions. Tier A because a promotion is a company-wide rule that every branch
+        // evaluates locally at billing time (D1), including the branch-scoped ones — a branch has
+        // to see a rule to know it is not theirs. PromotionTargets is declared AFTER Promotions
+        // deliberately: it carries a hard FK to it, and an upload batch is applied table-by-table
+        // in this array's declared order rather than by a relation-driven topological sort, so
+        // the reverse order would fail FK_PromotionTargets_Promotions_PromotionId and roll the
+        // whole batch back before Promotions' own insert ever ran. That is not hypothetical —
+        // it is precisely how v15's Couriers-after-Orders ordering wedged sync permanently.
+        "Promotions",
+        "PromotionTargets",
     ];
 
     /// <summary>
@@ -200,6 +226,15 @@ public static class SyncScope
         // v14: generic append-only document audit trail. Append-only means no update or
         // delete ever reaches it, so ServerWins conflict resolution has nothing to resolve.
         "DocumentAuditEntries",
+        // v17: the audit overlay that makes promotional money separable from money a cashier
+        // typed by hand (D6). Append-only, like DocumentAuditEntries above, so ServerWins has
+        // nothing to resolve. Declared after Invoices/InvoiceLines — load-bearing, same reason
+        // as PromotionTargets in MasterTables: PromotionApplications.InvoiceId is a hard FK, and
+        // a row inserted before its invoice would fail the constraint and roll the batch back.
+        // It carries no FK to Promotions (a branch row pointing at a master row is exactly the
+        // cross-tier shape that wedged v15) and none to InvoiceLines either, so Invoices is its
+        // only apply-order constraint.
+        "PromotionApplications",
     ];
 
     /// <summary>
@@ -293,6 +328,12 @@ public static class SyncScope
         // v15: delivery couriers & zone pricing
         ("Couriers", "BranchId"),
         ("DeliveryTariffs", "BranchId"),
+        // v17: promotion audit trail. Single-branch ownership — an application row records one
+        // bill, which belongs to exactly one branch — so an own-column filter, not
+        // TwoSidedBranchTables. Promotions/PromotionTargets get no entry here at all: they are
+        // Tier A and replicate unfiltered, which is what lets a branch evaluate a company-wide
+        // rule without a round trip.
+        ("PromotionApplications", "BranchId"),
     ];
 
     /// <summary>Builds the canonical <see cref="SyncSetup"/>: both tiers, the
