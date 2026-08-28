@@ -137,6 +137,14 @@ public class AribContext : DbContext
     // Nothing may update or delete a row here.
     public DbSet<DocumentAuditEntry> DocumentAuditEntries { get; set; }
 
+    // Promotions (tasks/spec-promotions.md). Promotions/PromotionTargets are Tier A —
+    // replicated whole, so a branch-scoped promotion is filtered at evaluation time, not at
+    // sync time. PromotionApplications is Tier B and, like DocumentAuditEntries above,
+    // append-only: nothing may update or delete a row there.
+    public DbSet<Promotion> Promotions { get; set; }
+    public DbSet<PromotionTarget> PromotionTargets { get; set; }
+    public DbSet<PromotionApplication> PromotionApplications { get; set; }
+
     public DbSet<User> Users { get; set; }
     public DbSet<Role> Roles { get; set; }
     public DbSet<Permission> Permissions { get; set; }
@@ -655,6 +663,49 @@ public class AribContext : DbContext
             .HasIndex(x => x.CourierId);
         modelBuilder.Entity<Order>()
             .HasIndex(x => x.FailedByCourierId);
+
+        // Promotions (tasks/spec-promotions.md). Value/MinBillTotal/Amount are money and take
+        // the global decimal(18,2) convention with no override; MinQty is a quantity, so 18,3
+        // — set fluently below, never by a [Precision] attribute, for the reason spelled out
+        // over InvoiceLine above.
+        //
+        // Promotion.BranchId gets NO relationship: it is a master-tier row that replicates to
+        // every branch, and Branches is cloud-authoritative and never DMS-synced, so the named
+        // branch may simply not be in a given branch's local cache. Account does the same.
+        modelBuilder.Entity<Promotion>()
+            .Property(x => x.MinQty).HasPrecision(18, 3);
+        // The eligibility predicate the POS runs on every sale-screen open, in one seek.
+        modelBuilder.Entity<Promotion>()
+            .HasIndex(x => new { x.IsDeleted, x.IsActive, x.BranchId, x.StartsOn, x.EndsOn });
+
+        // Cascade: targets belong to their promotion and are replaced wholesale on update
+        // (delete-then-insert in one transaction), so there is nothing to orphan.
+        modelBuilder.Entity<PromotionTarget>()
+            .HasOne(x => x.Promotion).WithMany(x => x.Targets)
+            .HasForeignKey(x => x.PromotionId)
+            .OnDelete(DeleteBehavior.Cascade);
+        modelBuilder.Entity<PromotionTarget>()
+            .HasIndex(x => x.PromotionId);
+        // RefId is polymorphic (a ProductId or a GroupId) and therefore carries no FK; this
+        // index is what makes "which promotions target this product/group?" a seek anyway.
+        modelBuilder.Entity<PromotionTarget>()
+            .HasIndex(x => new { x.Kind, x.RefId });
+
+        // Restrict on both FKs: PromotionApplications is append-only, so a cascade would be a
+        // way to erase an audit trail. PromotionId is deliberately NOT a relationship — it is a
+        // cross-tier reference (branch row → master row), the exact shape that wedged sync in
+        // v15, and the row must outlive its promotion being deleted.
+        modelBuilder.Entity<PromotionApplication>()
+            .HasOne(x => x.Invoice).WithMany().HasForeignKey(x => x.InvoiceId)
+            .OnDelete(DeleteBehavior.Restrict);
+        modelBuilder.Entity<PromotionApplication>()
+            .HasOne(x => x.Branch).WithMany().HasForeignKey(x => x.BranchId)
+            .OnDelete(DeleteBehavior.Restrict);
+        // Reconciling one bill (D6's invariant) and reporting one promotion over a period.
+        modelBuilder.Entity<PromotionApplication>()
+            .HasIndex(x => x.InvoiceId);
+        modelBuilder.Entity<PromotionApplication>()
+            .HasIndex(x => new { x.PromotionId, x.CreatedAt });
 
         // InstallmentPlan money columns (Principal, RoundingStep, Amount, PaidAmount)
         // inherit the global decimal(18,2) money convention — no precision override.
