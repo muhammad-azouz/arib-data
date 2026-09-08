@@ -174,6 +174,11 @@ public class AribContext : DbContext
     public DbSet<Courier> Couriers { get; set; }
     public DbSet<DeliveryTariff> DeliveryTariffs { get; set; }
 
+    // AribLink gateway tickets (tasks/spec-ariblink-gateway.md D4). NOT in SyncScope — an
+    // unredeemed ticket is operational state of one branch's prep counters (D7).
+    public DbSet<TerminalOrder> TerminalOrders { get; set; }
+    public DbSet<TerminalOrderLine> TerminalOrderLines { get; set; }
+
     public DbSet<InstallmentPlan> InstallmentPlans { get; set; }
     public DbSet<InstallmentItem> InstallmentItems { get; set; }
     public DbSet<InstallmentPayment> InstallmentPayments { get; set; }
@@ -663,6 +668,49 @@ public class AribContext : DbContext
             .HasIndex(x => x.CourierId);
         modelBuilder.Entity<Order>()
             .HasIndex(x => x.FailedByCourierId);
+
+        // AribLink gateway (tasks/spec-ariblink-gateway.md D9). The C# property initializer
+        // (`= true`) has no effect on the generated SQL column default — EF's migration scaffolder
+        // otherwise backfills every existing row with the CLR default (false), silently making
+        // every product in a live database integer-only overnight. HasDefaultValue is what makes
+        // AddColumn<bool>(defaultValue: true) show up in the migration.
+        modelBuilder.Entity<Product>()
+            .Property(x => x.AllowsFractionalQty).HasDefaultValue(true);
+
+        // AribLink gateway tickets (tasks/spec-ariblink-gateway.md D4). Money fields
+        // (UnitPrice/LineTotal/TotalAmount) take the global decimal(18,2) convention with no
+        // override; Qty is the one explicit (18,3). TerminalId/SectionId/SaleId are deliberately
+        // unconstrained scalars — see their doc comments on TerminalOrder/TerminalOrderLine.
+        modelBuilder.Entity<TerminalOrderLine>()
+            .Property(x => x.Qty).HasPrecision(18, 3);
+
+        modelBuilder.Entity<TerminalOrder>()
+            .HasOne(x => x.Branch).WithMany().HasForeignKey(x => x.BranchId)
+            .OnDelete(DeleteBehavior.Restrict);
+        modelBuilder.Entity<TerminalOrder>()
+            .HasOne(x => x.CreatedByUser).WithMany().HasForeignKey(x => x.CreatedByUserId)
+            .OnDelete(DeleteBehavior.Restrict);
+        // The ticket-code lookup and the printed barcode (D5) — unique per branch.
+        modelBuilder.Entity<TerminalOrder>()
+            .HasIndex(x => new { x.BranchId, x.TicketCode }).IsUnique();
+        // Idempotency key: the replay log is the ticket itself, not a second store (spec
+        // "Idempotency") — a violation here is the signal to re-read and return the winner.
+        modelBuilder.Entity<TerminalOrder>()
+            .HasIndex(x => new { x.TerminalId, x.ClientRequestId }).IsUnique();
+        // The paged drawer (GET {base}/orders): branch + status, newest first.
+        modelBuilder.Entity<TerminalOrder>()
+            .HasIndex(x => new { x.BranchId, x.Status, x.CreatedAt });
+
+        modelBuilder.Entity<TerminalOrderLine>()
+            .HasOne(x => x.TerminalOrder).WithMany(x => x.Lines).HasForeignKey(x => x.TerminalOrderId)
+            .OnDelete(DeleteBehavior.Cascade);
+        modelBuilder.Entity<TerminalOrderLine>()
+            .HasOne(x => x.Product).WithMany().HasForeignKey(x => x.ProductId)
+            .OnDelete(DeleteBehavior.Restrict);
+        modelBuilder.Entity<TerminalOrderLine>()
+            .HasOne(x => x.AddedByUser).WithMany().HasForeignKey(x => x.AddedByUserId)
+            .OnDelete(DeleteBehavior.Restrict);
+        // EF's automatic FK index on TerminalOrderId already covers "lines for this ticket".
 
         // Promotions (tasks/spec-promotions.md). Value/MinBillTotal/Amount are money and take
         // the global decimal(18,2) convention with no override; MinQty is a quantity, so 18,3

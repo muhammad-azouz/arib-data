@@ -55,4 +55,10 @@ public class Product
     // public ICollection<WarehouseProductInventory> WarehouseProductInventories { get; set; }
 
     public InventoryEvaluateMethod InventoryValuationMethod { get; set; }
+
+    /// <summary>Picks the AribLink keypad — decimal or integer-only (tasks/spec-ariblink-gateway.md
+    /// D9). First-class, not inferred from a unit name: <see cref="UnitOfMeasure"/>.Name is free
+    /// text. Defaults true, matching today's status quo (<c>InvoiceLine.Qty</c> already accepts a
+    /// fractional quantity for any product); an admin unticks it for count items.</summary>
+    public bool AllowsFractionalQty { get; set; } = true;
 }

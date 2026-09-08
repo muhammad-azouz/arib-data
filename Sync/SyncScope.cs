@@ -123,8 +123,19 @@ public static class SyncScope
     /// reprovision every tenant with <c>overwrite: true</c>: a plain re-provision returns success
     /// while silently leaving the scope at the old table count, with no _tracking tables for the
     /// three new ones and therefore no sync of them at all. This is a fleet-wide flag day; a
-    /// branch still on v16 is refused with HTTP 426 until it updates.</summary>
-    public const int SchemaVersion = 17;
+    /// branch still on v16 is refused with HTTP 426 until it updates.
+    /// v18: AribLink gateway (tasks/spec-ariblink-gateway.md D1–D14) — added four columns to two
+    /// Tier-A tables: <c>Users.{PinHash,PinFailedCount,PinLockedUntil}</c> (D10) and
+    /// <c>Products.AllowsFractionalQty</c> (D9). <b>No scope shape changed</b>: the two new tables
+    /// this feature also adds, <c>TerminalOrders</c>/<c>TerminalOrderLines</c>, join neither
+    /// <see cref="MasterTables"/> nor <see cref="BranchTables"/> at all (D7) — an unredeemed ticket
+    /// is operational state of one branch's prep counters, never synced. The bump exists solely so
+    /// a branch on the old column shape is refused with HTTP 426 rather than silently dropping a
+    /// PIN write. Whether an added column on an already-provisioned table needs
+    /// <c>overwrite: true</c> to reach DMS's generated stored procedures (unlike v16's precedent,
+    /// which only widened a column) is verified on the local two-node stack per T1's task list, and
+    /// the answer rides in the v18 flag-day runbook (T13) rather than being assumed here.</summary>
+    public const int SchemaVersion = 18;
 
     /// <summary>
     /// Tier A (D9a): masters, replicated in full to every branch.
