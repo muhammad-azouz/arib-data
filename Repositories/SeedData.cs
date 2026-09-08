@@ -101,7 +101,15 @@ public static class SeedData
             // and the delivery-tariff tab. Dispatching deliberately does NOT need it: خروج للتوصيل
             // stays under ManageOrders (permission 18), so a cashier can send an order out without
             // being able to hire a courier or reprice a zone.
-            new Permission { Id = SeedGuid(TableCodes.Permission, 56), Name = "ادارة المندوبين", Description = "يمكنه إدارة المندوبين وتعريفة التوصيل" }
+            new Permission { Id = SeedGuid(TableCodes.Permission, 56), Name = "ادارة المندوبين", Description = "يمكنه إدارة المندوبين وتعريفة التوصيل" },
+            // AribLink gateway (tasks/spec-ariblink-gateway.md D13) — gates الأجهزة الطرفية:
+            // who holds a seat, force-release, rename a section, delete a dead terminal.
+            new Permission { Id = SeedGuid(TableCodes.Permission, 57), Name = "ادارة الأجهزة الطرفية", Description = "يمكنه إدارة الأجهزة الطرفية ومقاعدها" },
+            // Partner access (tasks/spec-partner-access-permission.md) — which kind of partner
+            // (customer/supplier) a role's users may see in pickers and the Customers grid.
+            // Names MUST match ExtensionMethods.PermissionNames byte-for-byte.
+            new Permission { Id = SeedGuid(TableCodes.Permission, 58), Name = "التعامل مع العملاء", Description = "يمكنه رؤية العملاء في قوائم اختيار العملاء والموردين" },
+            new Permission { Id = SeedGuid(TableCodes.Permission, 59), Name = "التعامل مع الموردين", Description = "يمكنه رؤية الموردين في قوائم اختيار العملاء والموردين" }
         );
 
         // Seed RolePermissions
@@ -132,6 +140,24 @@ public static class SeedData
         // offset cannot absorb permission 56 (it already collides at 79). Next free id is 84.
         modelBuilder.Entity<RolePermission>().HasData(
             new RolePermission { Id = SeedGuid(TableCodes.RolePermission, 84), RoleId = SeedGuid(TableCodes.Role, 1), PermissionId = SeedGuid(TableCodes.Permission, 56) } // ادارة المندوبين
+        );
+
+        // AribLink terminals — Administrator only, for the same reason as the four blocks above:
+        // the Enumerable.Range(1, 49) block's id+29 offset cannot absorb permission 57 (it already
+        // collides at 79). Next free id is 85.
+        modelBuilder.Entity<RolePermission>().HasData(
+            new RolePermission { Id = SeedGuid(TableCodes.RolePermission, 85), RoleId = SeedGuid(TableCodes.Role, 1), PermissionId = SeedGuid(TableCodes.Permission, 57) } // ادارة الأجهزة الطرفية
+        );
+
+        // Partner access — Administrator only via HasData, for the same reason as the five blocks
+        // above: the Enumerable.Range(1, 49) block's id+29 offset cannot absorb permissions 58/59
+        // (it already collides at 79). Next free ids are 86/87. Every other role (seeded and
+        // custom) gets both via the AddPartnerAccessPermissions migration backfill, not here —
+        // HasData only reaches the three seeded roles and this permission must be opt-in-by-default
+        // on upgrade for everyone, not just Administrator.
+        modelBuilder.Entity<RolePermission>().HasData(
+            new RolePermission { Id = SeedGuid(TableCodes.RolePermission, 86), RoleId = SeedGuid(TableCodes.Role, 1), PermissionId = SeedGuid(TableCodes.Permission, 58) }, // التعامل مع العملاء
+            new RolePermission { Id = SeedGuid(TableCodes.RolePermission, 87), RoleId = SeedGuid(TableCodes.Role, 1), PermissionId = SeedGuid(TableCodes.Permission, 59) }  // التعامل مع الموردين
         );
 
         // Manager role permissions
