@@ -109,7 +109,15 @@ public static class SeedData
             // (customer/supplier) a role's users may see in pickers and the Customers grid.
             // Names MUST match ExtensionMethods.PermissionNames byte-for-byte.
             new Permission { Id = SeedGuid(TableCodes.Permission, 58), Name = "التعامل مع العملاء", Description = "يمكنه رؤية العملاء في قوائم اختيار العملاء والموردين" },
-            new Permission { Id = SeedGuid(TableCodes.Permission, 59), Name = "التعامل مع الموردين", Description = "يمكنه رؤية الموردين في قوائم اختيار العملاء والموردين" }
+            new Permission { Id = SeedGuid(TableCodes.Permission, 59), Name = "التعامل مع الموردين", Description = "يمكنه رؤية الموردين في قوائم اختيار العملاء والموردين" },
+            // Deletion (tasks/plan-delete-transactions-permission.md) — gates removing a posted
+            // document: bills (BillsViewModel), cash vouchers (CashesViewModel) and
+            // revenue/expense vouchers (RevenueAndExpensesViewModel). One permission for all
+            // three; a role either unwinds posted money or it does not. Administrator only, with
+            // NO upgrade backfill — an existing installation locks deletion down on update and
+            // the owner grants it back deliberately.
+            // Name MUST match ExtensionMethods.PermissionNames byte-for-byte.
+            new Permission { Id = SeedGuid(TableCodes.Permission, 60), Name = "حذف المستندات", Description = "يمكنه حذف الفواتير والسندات النقدية وسندات الإيرادات والمصروفات" }
         );
 
         // Seed RolePermissions
@@ -158,6 +166,15 @@ public static class SeedData
         modelBuilder.Entity<RolePermission>().HasData(
             new RolePermission { Id = SeedGuid(TableCodes.RolePermission, 86), RoleId = SeedGuid(TableCodes.Role, 1), PermissionId = SeedGuid(TableCodes.Permission, 58) }, // التعامل مع العملاء
             new RolePermission { Id = SeedGuid(TableCodes.RolePermission, 87), RoleId = SeedGuid(TableCodes.Role, 1), PermissionId = SeedGuid(TableCodes.Permission, 59) }  // التعامل مع الموردين
+        );
+
+        // Deletion — Administrator only, and unlike partner access above there is deliberately no
+        // migration backfill: the whole point is that every other role (seeded and custom) loses
+        // the ability to delete on upgrade until the owner grants it. Added as its own block for
+        // the same mechanical reason as the six above — the Enumerable.Range(1, 49) block's id+29
+        // offset cannot absorb permission 60 (it already collides at 79). Next free id is 88.
+        modelBuilder.Entity<RolePermission>().HasData(
+            new RolePermission { Id = SeedGuid(TableCodes.RolePermission, 88), RoleId = SeedGuid(TableCodes.Role, 1), PermissionId = SeedGuid(TableCodes.Permission, 60) } // حذف المستندات
         );
 
         // Manager role permissions
