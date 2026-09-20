@@ -5740,6 +5740,9 @@ namespace AribONE.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
+                    b.Property<bool>("PreventNegativeStock")
+                        .HasColumnType("bit");
+
                     b.Property<bool>("ShiftModeEnabled")
                         .HasColumnType("bit");
 

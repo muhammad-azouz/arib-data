@@ -38,6 +38,16 @@ public sealed class Branch
     /// DB-resident like ShiftModeEnabled.</summary>
     public bool ShowCurrentBalanceOnReceipt { get; set; }
 
+    /// <summary>When true, a sale at this branch cannot draw more of a stock-tracked
+    /// product (<see cref="ProductKind.Product"/>) than the warehouse actually has on
+    /// hand — the add-to-cart paths refuse, and the save re-checks inside its own
+    /// transaction. Default false = unchanged legacy behaviour: the oversell is allowed,
+    /// WarehouseProductInventory.TotalQty goes negative and self-heals on the next
+    /// purchase (tasks/spec-oversell-unit-cost.md parked this as "a separate policy
+    /// question"; this flag is that policy). Per-branch, DB-resident like
+    /// <see cref="ShiftModeEnabled"/> — not preference.json.</summary>
+    public bool PreventNegativeStock { get; set; }
+
     /// <summary>Short tag used as the origin segment of a branch-minted <see cref="Order.Ref"/>
     /// (tasks/spec-order-management.md D5). Cloud-authoritative, not synced — the hex-of-Id
     /// fallback (<see cref="Id"/>'s first 4 hex chars) is used until a code is set.</summary>
