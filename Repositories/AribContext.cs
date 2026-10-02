@@ -244,6 +244,13 @@ public class AribContext : DbContext
                 foreach (var property in entityType.GetProperties())
                     if (property.ClrType == typeof(DateTime) || property.ClrType == typeof(DateTime?))
                         property.SetColumnType("timestamp without time zone");
+
+            // Deliberately no Postgres counterpart for this per-branch opt-in (SQL
+            // Server migration 20260920092206) — Branches is cloud-authoritative
+            // and never DMS-synced, so adding the column changes no sync surface.
+            // Ignored here so EF Core 9+ doesn't throw PendingModelChangesWarning
+            // during Migrate() against a Postgres central.
+            modelBuilder.Entity<Branch>().Ignore(x => x.PreventNegativeStock);
         }
         else
         {
