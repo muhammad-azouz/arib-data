@@ -14,6 +14,18 @@ public abstract class Invoice : IShiftScoped
     /// (Repurposed from a dead pre-GUID int column that was always 0.)</summary>
     public Guid? ShiftId { get; set; }
 
+    /// <summary>Short kitchen/call number (#1, #2, …) printed on the kitchen ticket. Restarts
+    /// at 1 every business day per branch; minted by DailyNumberService at save. Purely
+    /// operational — <see cref="Num"/> stays the fiscal number. Null for invoice types that
+    /// don't get one and for all history predating the feature.</summary>
+    public int? DailyNum { get; set; }
+
+    /// <summary>The business day <see cref="DailyNum"/> belongs to (shifted by the day's
+    /// cutoff hour, so a sale at 1am still counts for the previous day). Stamped once and
+    /// never recomputed; with BranchId it scopes the unique index that stops two tills
+    /// printing the same number.</summary>
+    public DateOnly? DailyNumDate { get; set; }
+
     public InvoiceType Type { get; set; }
     public DateTime CreatedAt { get; set; }
     public DateTime IssuedAt { get; set; }

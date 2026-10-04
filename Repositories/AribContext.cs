@@ -834,6 +834,12 @@ public class AribContext : DbContext
         // ShiftId tag indexes — every shift report aggregates by these, so they must
         // stay fast on large databases.
         modelBuilder.Entity<Invoice>().HasIndex(x => x.ShiftId);
+
+        // Kitchen/call number: unique per branch per business day. Both columns are nullable,
+        // so SQL Server scopes the index to stamped rows on its own (EF adds the IS NOT NULL
+        // filter); it is also the range DailyNumberService locks to serialize tills.
+        modelBuilder.Entity<Invoice>()
+            .HasIndex(x => new { x.BranchId, x.DailyNumDate, x.DailyNum }).IsUnique();
         modelBuilder.Entity<TreasuryTransaction>().HasIndex(x => x.ShiftId);
         modelBuilder.Entity<BankTransaction>().HasIndex(x => x.ShiftId);
         modelBuilder.Entity<EWalletTransaction>().HasIndex(x => x.ShiftId);
