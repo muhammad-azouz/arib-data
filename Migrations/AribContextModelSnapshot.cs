@@ -6897,6 +6897,12 @@ namespace AribONE.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
+                    b.Property<int?>("DailyNum")
+                        .HasColumnType("int");
+
+                    b.Property<DateOnly?>("DailyNumDate")
+                        .HasColumnType("date");
+
                     b.Property<decimal?>("EndingBalance")
                         .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)");
@@ -7044,6 +7050,10 @@ namespace AribONE.Migrations
                     b.HasIndex("UserId");
 
                     b.HasIndex("BranchId", "Num");
+
+                    b.HasIndex("BranchId", "DailyNumDate", "DailyNum")
+                        .IsUnique()
+                        .HasFilter("[DailyNumDate] IS NOT NULL AND [DailyNum] IS NOT NULL");
 
                     b.ToTable("Invoices", t =>
                         {

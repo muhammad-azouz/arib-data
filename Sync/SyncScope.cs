@@ -134,8 +134,11 @@ public static class SyncScope
     /// PIN write. Whether an added column on an already-provisioned table needs
     /// <c>overwrite: true</c> to reach DMS's generated stored procedures (unlike v16's precedent,
     /// which only widened a column) is verified on the local two-node stack per T1's task list, and
-    /// the answer rides in the v18 flag-day runbook (T13) rather than being assumed here.</summary>
-    public const int SchemaVersion = 18;
+    /// the answer rides in the v18 flag-day runbook (T13) rather than being assumed here.
+    /// v19: kitchen ticket — added nullable <c>Invoices.{DailyNum,DailyNumDate}</c>, the short
+    /// per-branch, per-business-day call number printed on the kitchen ticket. Columns only, no
+    /// new table, so the scope shape is unchanged; same added-column question as v18.</summary>
+    public const int SchemaVersion = 19;
 
     /// <summary>
     /// Tier A (D9a): masters, replicated in full to every branch.
