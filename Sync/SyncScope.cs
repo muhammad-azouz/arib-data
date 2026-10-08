@@ -148,8 +148,12 @@ public static class SyncScope
     /// </summary>
     public static readonly string[] MasterTables =
     [
-        "Products",
+        // FK parents before their children throughout (pinned by SyncGuardTests): Groups
+        // before Products, Users before BankAccounts. DMS sorts by the FK relations stored in
+        // the scope and only falls back to this order when those relations are stale (an FK
+        // added after the scope was provisioned), which is how v15 wedged.
         "Groups",
+        "Products",
         "Currencies",
         "UnitOfMeasures",
         "Areas",
@@ -158,8 +162,8 @@ public static class SyncScope
         "Images",
         "Accounts",
         "PostingAccounts",
-        "BankAccounts",
         "Users",
+        "BankAccounts",
         "Roles",
         "Permissions",
         "UserRoles",
@@ -189,18 +193,21 @@ public static class SyncScope
     /// </summary>
     public static readonly string[] BranchTables =
     [
+        // FK parents of the documents below, declared first (pinned by SyncGuardTests):
+        // Invoices/InvoiceLines/GeneralLedgerEntries FK Partners, InvoiceLines FKs Warehouses,
+        // PaymentVouchers FKs Treasuries and EWallets.
+        "Partners",
+        "Treasuries",
+        "EWallets",
+        "Warehouses",
         "Invoices",
         "InvoiceLines",
         "GeneralLedgerEntries",
-        "Partners",
         "PartnerLedgerEntries",
         "PaymentVouchers",
-        "Treasuries",
         "TreasuriesTransactions",
         "BankTransactions",
-        "EWallets",
         "EWalletTransactions",
-        "Warehouses",
         "WarehousesProductInventories",
         "InventoryMovements",
         "InventoryBatches",
