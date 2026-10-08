@@ -269,6 +269,14 @@ public class AribContext : DbContext
         modelBuilder.Entity<Account>().Property(x => x.Credit).HasDefaultValue(0m);
         modelBuilder.Entity<Account>().Property(x => x.Balance).HasDefaultValue(0m);
 
+        // Columns added NOT NULL to an already-synced table after it was created (pinned by
+        // desktop SyncGuardTests). The adding migration backfilled existing rows, but without a
+        // DEFAULT any insert that omits the column (a branch whose DMS scope predates it, a
+        // hand-written insert) fails. 0 is the value the backfill used.
+        modelBuilder.Entity<Product>().Property(x => x.ProductCode).HasDefaultValue(0);
+        modelBuilder.Entity<Order>().Property(x => x.FailedCount).HasDefaultValue(0);
+        modelBuilder.Entity<User>().Property(x => x.PinFailedCount).HasDefaultValue(0);
+
         modelBuilder.Entity<Group>()
             .HasDiscriminator<string>("Kind")
             .HasValue<ProductGroup>("Product")

@@ -7352,7 +7352,9 @@ namespace AribONE.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("FailedCount")
-                        .HasColumnType("int");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(0);
 
                     b.Property<string>("FailedReason")
                         .HasMaxLength(200)
@@ -8536,7 +8538,9 @@ namespace AribONE.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("ProductCode")
-                        .HasColumnType("int");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(0);
 
                     b.Property<int>("ProductKind")
                         .HasColumnType("int");
@@ -10293,7 +10297,9 @@ namespace AribONE.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("PinFailedCount")
-                        .HasColumnType("int");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(0);
 
                     b.Property<string>("PinHash")
                         .HasMaxLength(200)
