@@ -117,7 +117,12 @@ public static class SeedData
             // NO upgrade backfill — an existing installation locks deletion down on update and
             // the owner grants it back deliberately.
             // Name MUST match ExtensionMethods.PermissionNames byte-for-byte.
-            new Permission { Id = SeedGuid(TableCodes.Permission, 60), Name = "حذف المستندات", Description = "يمكنه حذف الفواتير والسندات النقدية وسندات الإيرادات والمصروفات" }
+            new Permission { Id = SeedGuid(TableCodes.Permission, 60), Name = "حذف المستندات", Description = "يمكنه حذف الفواتير والسندات النقدية وسندات الإيرادات والمصروفات" },
+            // App menu (top-corner launcher menu) — grant-style so a role without it has the menu
+            // hidden. Backfilled to every existing role by the AddUseAppMenuPermission migration
+            // so upgrading changes nothing until the owner removes it from a role.
+            // Name MUST match ExtensionMethods.PermissionNames byte-for-byte.
+            new Permission { Id = SeedGuid(TableCodes.Permission, 61), Name = "استخدام قائمة التطبيق", Description = "يمكنه رؤية قائمة التطبيق في أعلى الشاشة (الإعدادات، قاعدة البيانات، بيانات الشركة والفرع، الاستيراد، حول)" }
         );
 
         // Seed RolePermissions
@@ -175,6 +180,12 @@ public static class SeedData
         // offset cannot absorb permission 60 (it already collides at 79). Next free id is 88.
         modelBuilder.Entity<RolePermission>().HasData(
             new RolePermission { Id = SeedGuid(TableCodes.RolePermission, 88), RoleId = SeedGuid(TableCodes.Role, 1), PermissionId = SeedGuid(TableCodes.Permission, 60) } // حذف المستندات
+        );
+
+        // App menu — Administrator via HasData; every other role (seeded and custom) via the
+        // AddUseAppMenuPermission migration backfill. Next free id is 90.
+        modelBuilder.Entity<RolePermission>().HasData(
+            new RolePermission { Id = SeedGuid(TableCodes.RolePermission, 89), RoleId = SeedGuid(TableCodes.Role, 1), PermissionId = SeedGuid(TableCodes.Permission, 61) } // استخدام قائمة التطبيق
         );
 
         // Manager role permissions
