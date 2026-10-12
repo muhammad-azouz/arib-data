@@ -122,7 +122,13 @@ public static class SeedData
             // hidden. Backfilled to every existing role by the AddUseAppMenuPermission migration
             // so upgrading changes nothing until the owner removes it from a role.
             // Name MUST match ExtensionMethods.PermissionNames byte-for-byte.
-            new Permission { Id = SeedGuid(TableCodes.Permission, 61), Name = "استخدام قائمة التطبيق", Description = "يمكنه رؤية قائمة التطبيق في أعلى الشاشة (الإعدادات، قاعدة البيانات، بيانات الشركة والفرع، الاستيراد، حول)" }
+            new Permission { Id = SeedGuid(TableCodes.Permission, 61), Name = "استخدام قائمة التطبيق", Description = "يمكنه رؤية قائمة التطبيق في أعلى الشاشة (الإعدادات، قاعدة البيانات، بيانات الشركة والفرع، الاستيراد، حول)" },
+            // Sell on credit — grant-style so a role without it must take full payment on every
+            // sale to a named customer. Backfilled to every existing role by the
+            // AddSellOnCreditPermission migration so upgrading changes nothing until the owner
+            // removes it from a role. Enforced in NewSaleViewModel.SaveBillToDb.
+            // Name MUST match ExtensionMethods.PermissionNames byte-for-byte.
+            new Permission { Id = SeedGuid(TableCodes.Permission, 62), Name = "البيع الآجل", Description = "يمكنه بيع الفواتير آجلاً للعملاء (ترك مبلغ متبقي على حساب العميل)، وبدونها يجب سداد الفاتورة بالكامل" }
         );
 
         // Seed RolePermissions
@@ -183,9 +189,15 @@ public static class SeedData
         );
 
         // App menu — Administrator via HasData; every other role (seeded and custom) via the
-        // AddUseAppMenuPermission migration backfill. Next free id is 90.
+        // AddUseAppMenuPermission migration backfill.
         modelBuilder.Entity<RolePermission>().HasData(
             new RolePermission { Id = SeedGuid(TableCodes.RolePermission, 89), RoleId = SeedGuid(TableCodes.Role, 1), PermissionId = SeedGuid(TableCodes.Permission, 61) } // استخدام قائمة التطبيق
+        );
+
+        // Sell on credit — Administrator via HasData; every other role via the
+        // AddSellOnCreditPermission migration backfill. Next free id is 91.
+        modelBuilder.Entity<RolePermission>().HasData(
+            new RolePermission { Id = SeedGuid(TableCodes.RolePermission, 90), RoleId = SeedGuid(TableCodes.Role, 1), PermissionId = SeedGuid(TableCodes.Permission, 62) } // البيع الآجل
         );
 
         // Manager role permissions
