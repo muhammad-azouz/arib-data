@@ -8966,6 +8966,9 @@ namespace AribONE.Migrations
                     b.Property<Guid>("FulfilledByUserId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid?>("PurchaseLineId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<decimal>("Qty")
                         .HasPrecision(18, 3)
                         .HasColumnType("decimal(18,3)");
@@ -8985,6 +8988,8 @@ namespace AribONE.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("BranchId");
+
+                    b.HasIndex("PurchaseLineId");
 
                     b.HasIndex("ReservationLineId");
 
@@ -10637,6 +10642,13 @@ namespace AribONE.Migrations
                     b.HasDiscriminator().HasValue("ReSaleEntry");
                 });
 
+            modelBuilder.Entity("AribONE.Models.Entities.PurchaseReservation", b =>
+                {
+                    b.HasBaseType("AribONE.Models.Entities.Reservation");
+
+                    b.HasDiscriminator().HasValue(301);
+                });
+
             modelBuilder.Entity("AribONE.Models.Entities.BankAccount", b =>
                 {
                     b.HasOne("AribONE.Models.Entities.Account", "Account")
@@ -11384,6 +11396,10 @@ namespace AribONE.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
+                    b.HasOne("AribONE.Models.Entities.PurchaseLine", "PurchaseLine")
+                        .WithMany()
+                        .HasForeignKey("PurchaseLineId");
+
                     b.HasOne("AribONE.Models.Entities.ReservationLine", "ReservationLine")
                         .WithMany("Fulfillments")
                         .HasForeignKey("ReservationLineId")
@@ -11399,6 +11415,8 @@ namespace AribONE.Migrations
                         .HasForeignKey("SalesReturnLineId");
 
                     b.Navigation("Branch");
+
+                    b.Navigation("PurchaseLine");
 
                     b.Navigation("ReservationLine");
 

@@ -137,8 +137,13 @@ public static class SyncScope
     /// the answer rides in the v18 flag-day runbook (T13) rather than being assumed here.
     /// v19: kitchen ticket — added nullable <c>Invoices.{DailyNum,DailyNumDate}</c>, the short
     /// per-branch, per-business-day call number printed on the kitchen ticket. Columns only, no
-    /// new table, so the scope shape is unchanged; same added-column question as v18.</summary>
-    public const int SchemaVersion = 19;
+    /// new table, so the scope shape is unchanged; same added-column question as v18.
+    /// v20: purchase reservation (tasks/spec-purchase-reservation.md) — added nullable
+    /// <c>ReservationFulfillments.PurchaseLineId</c> (the purchase line that received a reserved
+    /// quantity). Column only, no new table, so the scope shape is unchanged; same added-column
+    /// question as v18/v19. The new <c>PurchaseReservation</c> rows (<c>Invoices.Type = 301</c>) ride
+    /// the existing <c>Invoices</c>/<c>InvoiceLines</c> tables — a discriminator value, not a column.</summary>
+    public const int SchemaVersion = 20;
 
     /// <summary>
     /// Tier A (D9a): masters, replicated in full to every branch.
