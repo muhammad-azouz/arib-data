@@ -360,7 +360,8 @@ public class AribContext : DbContext
             .HasValue<SalesReturn>(InvoiceType.SalesReturn)
             .HasValue<Purchase>(InvoiceType.Purchase)
             .HasValue<PurchaseReturn>(InvoiceType.PurchaseReturn)
-            .HasValue<Reservation>(InvoiceType.Reservation);
+            .HasValue<Reservation>(InvoiceType.Reservation)
+            .HasValue<PurchaseReservation>(InvoiceType.PurchaseReservation);
 
         // Backs InvoiceLookupService's receipt-barcode lookup (Bills jump-to-box, the
         // sale return-by-scan popup) — a seek on (BranchId, Num) instead of a scan. Num

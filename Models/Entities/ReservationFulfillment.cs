@@ -20,6 +20,12 @@ public class ReservationFulfillment
     public Guid? SalesReturnLineId { get; set; }
     public SalesReturnLine? SalesReturnLine { get; set; }
 
+    /// <summary>The purchase line that received this reservation's quantity — set only for a
+    /// <see cref="FulfillmentType.Release"/> against a <see cref="PurchaseReservation"/>
+    /// (tasks/spec-purchase-reservation.md). Exactly one of the three line FKs is non-null.</summary>
+    public Guid? PurchaseLineId { get; set; }
+    public PurchaseLine? PurchaseLine { get; set; }
+
     [Precision(18, 3)] public decimal Qty { get; set; }
 
     public FulfillmentType Type { get; set; }
