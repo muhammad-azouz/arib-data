@@ -6,5 +6,6 @@ public enum InvoiceType
     SalesReturn = 101,
     Purchase = 200,
     PurchaseReturn = 201,
-    Reservation = 300
+    Reservation = 300,
+    PurchaseReservation = 301
 }
