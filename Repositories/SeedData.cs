@@ -128,7 +128,13 @@ public static class SeedData
             // AddSellOnCreditPermission migration so upgrading changes nothing until the owner
             // removes it from a role. Enforced in NewSaleViewModel.SaveBillToDb.
             // Name MUST match ExtensionMethods.PermissionNames byte-for-byte.
-            new Permission { Id = SeedGuid(TableCodes.Permission, 62), Name = "البيع الآجل", Description = "يمكنه بيع الفواتير آجلاً للعملاء (ترك مبلغ متبقي على حساب العميل)، وبدونها يجب سداد الفاتورة بالكامل" }
+            new Permission { Id = SeedGuid(TableCodes.Permission, 62), Name = "البيع الآجل", Description = "يمكنه بيع الفواتير آجلاً للعملاء (ترك مبلغ متبقي على حساب العميل)، وبدونها يجب سداد الفاتورة بالكامل" },
+            // WhatsApp connection (platform/tasks/spec-whatsapp-messaging.md) — connecting or
+            // disconnecting the shop's WhatsApp number. Every POS holds the owner's license
+            // session, so the API cannot tell owner from cashier; this is the only gate.
+            // Administrator only, with NO upgrade backfill. Sending a statement does not need it.
+            // Name MUST match ExtensionMethods.PermissionNames byte-for-byte.
+            new Permission { Id = SeedGuid(TableCodes.Permission, 63), Name = "إدارة ربط WhatsApp", Description = "يمكنه ربط رقم WhatsApp الخاص بالمحل بالبرنامج أو إلغاء ربطه" }
         );
 
         // Seed RolePermissions
@@ -195,9 +201,15 @@ public static class SeedData
         );
 
         // Sell on credit — Administrator via HasData; every other role via the
-        // AddSellOnCreditPermission migration backfill. Next free id is 91.
+        // AddSellOnCreditPermission migration backfill.
         modelBuilder.Entity<RolePermission>().HasData(
             new RolePermission { Id = SeedGuid(TableCodes.RolePermission, 90), RoleId = SeedGuid(TableCodes.Role, 1), PermissionId = SeedGuid(TableCodes.Permission, 62) } // البيع الآجل
+        );
+
+        // WhatsApp connection — Administrator only, no migration backfill (like deletion above).
+        // Next free id is 92.
+        modelBuilder.Entity<RolePermission>().HasData(
+            new RolePermission { Id = SeedGuid(TableCodes.RolePermission, 91), RoleId = SeedGuid(TableCodes.Role, 1), PermissionId = SeedGuid(TableCodes.Permission, 63) } // إدارة ربط WhatsApp
         );
 
         // Manager role permissions
